@@ -2149,7 +2149,38 @@ onUnmounted(() => {
   top: 30px;
 }
 
-/* 工具提示样式 */
+/* 次日分隔线样式 */
+.gantt-day-separator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+}
+
+.day-separator-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #ff6b6b, #ffd93d);
+  left: -1px;
+}
+
+.day-separator-label {
+  position: absolute;
+  top: -20px;
+  left: -15px;
+  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 工具提示样式优化 */
 .gantt-tooltip {
   position: absolute;
   background: rgba(0, 0, 0, 0.9);
@@ -2167,6 +2198,7 @@ onUnmounted(() => {
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0.2s ease;
   transform: translateX(-50%);
+  max-width: 300px; /* 限制最大宽度 */
 }
 
 .gantt-tooltip.show {

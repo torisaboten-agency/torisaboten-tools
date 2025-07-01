@@ -141,14 +141,42 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
 }
 
 /**
+ * 分钟数转时间字符串（用于时间轴标记，简洁格式）
+ */
+function minutesToTimeAxisLabel(minutes: number): string {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  
+  // 时间轴标记只显示时:分，不显示"次日"前缀
+  const displayHours = hours >= 24 ? hours - 24 : hours
+  return `${displayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+}
+
+/**
+ * 分钟数转时间字符串（用于时间条内容，包含次日标识）
+ */
+function minutesToTime(minutes: number): string {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  
+  if (hours >= 24) {
+    const nextDayHours = hours - 24
+    return `次日${nextDayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+  }
+  
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+}
+
+/**
  * 渲染甘特图头部（时间轴）
  */
 function renderGanttHeader(timeRange: GanttTimeRange): string {
   const totalMinutes = timeRange.end - timeRange.start
 
   let timeMarks = ''
+  let dayIndicators = '' // 次日指示器
   
-  // 根据时间范围决定时间标记的间隔，与原版保持一致
+  // 根据时间范围决定时间标记的间隔
   let interval = 60 // 默认1小时间隔
   if (totalMinutes <= 4 * 60) {
     interval = 30 // 4小时内用30分钟间隔
@@ -158,16 +186,36 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     interval = 120 // 12小时以上用2小时间隔
   }
 
-  // 生成时间标记，使用百分比定位（与原版一致）
+  // 查找次日开始的位置
+  let nextDayStart = -1
+  for (let minutes = timeRange.start; minutes <= timeRange.end; minutes += 60) {
+    if (Math.floor(minutes / 60) >= 24 && nextDayStart === -1) {
+      nextDayStart = minutes
+      break
+    }
+  }
+
+  // 生成时间标记
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
        minutes <= timeRange.end; 
        minutes += interval) {
     const position = ((minutes - timeRange.start) / totalMinutes) * 100
-    const timeLabel = minutesToTime(minutes)
+    const timeLabel = minutesToTimeAxisLabel(minutes)
     
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         ${timeLabel}
+      </div>
+    `
+  }
+
+  // 如果存在次日，添加次日指示器
+  if (nextDayStart !== -1) {
+    const nextDayPosition = ((nextDayStart - timeRange.start) / totalMinutes) * 100
+    dayIndicators = `
+      <div class="gantt-day-separator" style="left: ${nextDayPosition}%;">
+        <div class="day-separator-line"></div>
+        <div class="day-separator-label">次日</div>
       </div>
     `
   }
@@ -177,6 +225,7 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
       <div class="gantt-left-panel">团体</div>
       <div class="gantt-time-header" style="width: 100%; position: relative;">
         ${timeMarks}
+        ${dayIndicators}
       </div>
     </div>
   `
@@ -379,21 +428,6 @@ function groupTeamsByActivity(teamData: GanttTeamData[]): Record<string, GanttTe
 }
 
 /**
- * 分钟数转时间字符串
- */
-function minutesToTime(minutes: number): string {
-  const hours = Math.floor(minutes / 60)
-  const mins = minutes % 60
-  
-  if (hours >= 24) {
-    const nextDayHours = hours - 24
-    return `次日${nextDayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
-  }
-  
-  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
-}
-
-/**
  * 绑定工具提示事件
  */
 function bindTooltipEvents(container: HTMLElement): void {
@@ -407,6 +441,7 @@ function bindTooltipEvents(container: HTMLElement): void {
   const timeBars = container.querySelectorAll('.gantt-time-bar[data-tooltip]')
   
   timeBars.forEach(bar => {
+    // 桌面端鼠标事件
     bar.addEventListener('mouseenter', (e) => {
       const target = e.target as HTMLElement
       const tooltipText = target.getAttribute('data-tooltip')
@@ -415,19 +450,53 @@ function bindTooltipEvents(container: HTMLElement): void {
         tooltip.textContent = tooltipText
         tooltip.classList.add('show')
         
-        // 定位tooltip - 更贴近时间条
+        // 考虑滚动偏移的定位计算
         const rect = target.getBoundingClientRect()
         const containerRect = ganttContainer.getBoundingClientRect()
         
-        // 减少垂直偏移距离，让tooltip更贴近时间条
-        tooltip.style.left = `${rect.left - containerRect.left + rect.width / 2}px`
-        tooltip.style.top = `${rect.top - containerRect.top - 8}px` // 从-35改为-8
+        // 计算相对于甘特图容器的位置，考虑滚动偏移
+        const scrollLeft = ganttContainer.scrollLeft || 0
+        const relativeLeft = rect.left - containerRect.left + scrollLeft
+        const relativeTop = rect.top - containerRect.top
+        
+        // 居中显示tooltip
+        tooltip.style.left = `${relativeLeft + rect.width / 2}px`
+        tooltip.style.top = `${relativeTop - 8}px`
       }
     })
     
     bar.addEventListener('mouseleave', () => {
       tooltip.classList.remove('show')
     })
+    
+    // 移动端触摸事件
+    bar.addEventListener('touchstart', (e) => {
+      const target = e.target as HTMLElement
+      const tooltipText = target.getAttribute('data-tooltip')
+      
+      if (tooltipText) {
+        tooltip.textContent = tooltipText
+        tooltip.classList.add('show')
+        
+        // 移动端也需要考虑滚动偏移
+        const rect = target.getBoundingClientRect()
+        const containerRect = ganttContainer.getBoundingClientRect()
+        
+        const scrollLeft = ganttContainer.scrollLeft || 0
+        const relativeLeft = rect.left - containerRect.left + scrollLeft
+        const relativeTop = rect.top - containerRect.top
+        
+        tooltip.style.left = `${relativeLeft + rect.width / 2}px`
+        tooltip.style.top = `${relativeTop - 8}px`
+        
+        // 移动端3秒后自动隐藏
+        setTimeout(() => {
+          tooltip.classList.remove('show')
+        }, 3000)
+      }
+      
+      e.preventDefault() // 防止触发其他事件
+    }, { passive: false })
   })
 }
 
@@ -752,7 +821,7 @@ function drawGanttToCanvas(
        minutes <= endMinutes; 
        minutes += interval) {
     const xPos = leftPanelWidth + 20 + (minutes - startMinutes) / totalMinutes * chartWidth
-    const timeStr = minutesToTime(minutes)
+    const timeStr = minutesToTimeAxisLabel(minutes)
     
     ctx.beginPath()
     ctx.moveTo(xPos, startY + 20)
@@ -760,6 +829,43 @@ function drawGanttToCanvas(
     ctx.stroke()
     
     ctx.fillText(timeStr, xPos, startY + 15)
+  }
+  
+  // 绘制次日分隔线（如果存在跨日）
+  let nextDayStart = -1
+  for (let minutes = startMinutes; minutes <= endMinutes; minutes += 60) {
+    if (Math.floor(minutes / 60) >= 24 && nextDayStart === -1) {
+      nextDayStart = minutes
+      break
+    }
+  }
+  
+  if (nextDayStart !== -1) {
+    const nextDayX = leftPanelWidth + 20 + (nextDayStart - startMinutes) / totalMinutes * chartWidth
+    
+    // 绘制分隔线
+    const gradient = ctx.createLinearGradient(0, startY, 0, startY + availableHeight)
+    gradient.addColorStop(0, '#ff6b6b')
+    gradient.addColorStop(1, '#ffd93d')
+    
+    ctx.strokeStyle = gradient
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(nextDayX, startY + 20)
+    ctx.lineTo(nextDayX, startY + availableHeight)
+    ctx.stroke()
+    
+    // 绘制"次日"标签
+    ctx.fillStyle = '#ff6b6b'
+    ctx.fillRect(nextDayX - 20, startY - 5, 40, 20)
+    ctx.strokeStyle = '#ff6b6b'
+    ctx.lineWidth = 1
+    ctx.strokeRect(nextDayX - 20, startY - 5, 40, 20)
+    
+    ctx.fillStyle = 'white'
+    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('次日', nextDayX, startY + 8)
   }
   
   // 按活动分组
