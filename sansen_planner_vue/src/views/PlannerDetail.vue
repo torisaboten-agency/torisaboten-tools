@@ -1402,7 +1402,7 @@ onUnmounted(() => {
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem; /* 减少padding以保持一致的间距 */
   min-height: 400px;
   position: sticky;
   top: 1rem;
@@ -1915,6 +1915,13 @@ onUnmounted(() => {
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   max-width: 100%; /* 限制最大宽度不超过父容器 */
+  /* 添加触摸拖动支持 */
+  touch-action: pan-x; /* 允许水平拖动 */
+  cursor: grab; /* 桌面端显示可拖动光标 */
+}
+
+.gantt-chart-container:active {
+  cursor: grabbing; /* 拖动时的光标 */
 }
 
 /* iPad 优化样式 */
@@ -1924,6 +1931,10 @@ onUnmounted(() => {
     min-width: 600px; /* iPad 减少最小宽度 */
     -webkit-overflow-scrolling: touch; /* 优化触摸滚动 */
   }
+  
+  .gantt-container {
+    padding: 0.75rem; /* iPad上进一步减少padding */
+  }
 }
 
 /* 移动端优化样式 */
@@ -1931,10 +1942,19 @@ onUnmounted(() => {
   .gantt-chart-container {
     min-width: 400px; /* 移动端进一步减少最小宽度 */
     -webkit-overflow-scrolling: touch;
+    /* 移动端增强触摸体验 */
+    overscroll-behavior-x: contain; /* 防止过度滚动 */
+  }
+  
+  .gantt-container {
+    padding: 0.5rem; /* 移动端最小padding */
+    position: static; /* 移动端不使用sticky */
+    margin: 0; /* 确保没有额外margin */
   }
   
   .planner-container {
     flex-direction: column; /* 移动端垂直布局 */
+    gap: 1rem; /* 控制间距 */
   }
   
   .planner-left {

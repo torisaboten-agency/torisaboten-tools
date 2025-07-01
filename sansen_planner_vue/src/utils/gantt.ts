@@ -85,6 +85,10 @@ export function drawGanttChart(
   // 绑定工具提示事件
   bindTooltipEvents(container)
   console.log('🎯 工具提示事件已绑定')
+  
+  // 添加移动端触摸拖动支持
+  addTouchDragSupport(container)
+  console.log('�� 移动端触摸拖动支持已添加')
 }
 
 /**
@@ -429,6 +433,63 @@ function bindTooltipEvents(container: HTMLElement): void {
       tooltip.classList.remove('show')
     })
   })
+}
+
+/**
+ * 添加移动端触摸拖动支持
+ */
+function addTouchDragSupport(container: HTMLElement): void {
+  const ganttContent = container.querySelector('.gantt-chart-content') as HTMLElement
+  if (!ganttContent) return
+  
+  let isDragging = false
+  let startX = 0
+  let scrollLeft = 0
+  
+  // 鼠标事件（桌面端拖动支持）
+  ganttContent.addEventListener('mousedown', (e) => {
+    isDragging = true
+    startX = e.pageX - ganttContent.offsetLeft
+    scrollLeft = ganttContent.scrollLeft
+    ganttContent.style.cursor = 'grabbing'
+    e.preventDefault()
+  })
+  
+  ganttContent.addEventListener('mouseleave', () => {
+    isDragging = false
+    ganttContent.style.cursor = 'grab'
+  })
+  
+  ganttContent.addEventListener('mouseup', () => {
+    isDragging = false
+    ganttContent.style.cursor = 'grab'
+  })
+  
+  ganttContent.addEventListener('mousemove', (e) => {
+    if (!isDragging) return
+    e.preventDefault()
+    const x = e.pageX - ganttContent.offsetLeft
+    const walk = (x - startX) * 2 // 增加拖动灵敏度
+    ganttContent.scrollLeft = scrollLeft - walk
+  })
+  
+  // 触摸事件（移动端拖动支持）
+  ganttContent.addEventListener('touchstart', (e) => {
+    isDragging = true
+    startX = e.touches[0].pageX - ganttContent.offsetLeft
+    scrollLeft = ganttContent.scrollLeft
+  }, { passive: true })
+  
+  ganttContent.addEventListener('touchend', () => {
+    isDragging = false
+  }, { passive: true })
+  
+  ganttContent.addEventListener('touchmove', (e) => {
+    if (!isDragging) return
+    const x = e.touches[0].pageX - ganttContent.offsetLeft
+    const walk = (x - startX) * 1.5 // 移动端拖动灵敏度
+    ganttContent.scrollLeft = scrollLeft - walk
+  }, { passive: true })
 }
 
 /**
