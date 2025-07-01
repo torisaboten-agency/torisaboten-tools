@@ -8,8 +8,20 @@
   # 指定Node.js版本
   NODE_VERSION = "18"
 
-# SPA路由重定向配置 - sansen_planner_vue
-# 重定向到构建后的dist目录中的index.html
+# SPA路由重定向配置 - sansen_planner_vue  
+# 强制重定向到构建后的dist目录，避免加载源文件
+[[redirects]]
+  from = "/sansen_planner_vue"
+  to = "/sansen_planner_vue/dist/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sansen_planner_vue/"
+  to = "/sansen_planner_vue/dist/index.html"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/sansen_planner_vue/*"
   to = "/sansen_planner_vue/dist/index.html"

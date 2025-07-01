@@ -2,8 +2,10 @@
 # 如果不使用 netlify.toml，可以使用此文件
 
 # SPA路由 - sansen_planner_vue
-# 重定向到构建后的dist目录中的index.html
-/sansen_planner_vue/*  /sansen_planner_vue/dist/index.html  200
+# 强制重定向到构建后的dist目录，避免加载源文件
+/sansen_planner_vue   /sansen_planner_vue/dist/index.html  200!
+/sansen_planner_vue/  /sansen_planner_vue/dist/index.html  200!
+/sansen_planner_vue/* /sansen_planner_vue/dist/index.html  200
 
 # 注意：vuetify应用目录不存在，已移除相关配置
 
