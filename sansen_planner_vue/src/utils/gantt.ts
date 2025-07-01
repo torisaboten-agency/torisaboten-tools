@@ -1,5 +1,6 @@
 import type { GanttTeamData, GanttTimeRange } from '@/types/planner'
-import { getToolUrl, getToolSignature, generateQRCode, preloadQRCode } from './url'
+import { getToolUrl, getToolSignature } from './url'
+import { preloadLocalQRCode } from './qrcode'
 import logoSrc from '@/assets/logo.png'
 
 export interface GanttOptions {
@@ -477,11 +478,10 @@ export async function exportGanttAsImage(
 
     // 预加载二维码和logo
     const toolUrl = getToolUrl()
-    const qrCodeUrl = generateQRCode(toolUrl, 60)
     
     try {
       const [qrImage, logoImage] = await Promise.all([
-        preloadQRCode(qrCodeUrl),
+        preloadLocalQRCode(toolUrl, 60),
         loadLogoImage()
       ])
       
@@ -561,7 +561,7 @@ function drawLegend(
 function loadLogoImage(): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
-    img.crossOrigin = 'anonymous'
+    // 移除 crossOrigin 设置，因为logo是本地资源
     img.onload = () => resolve(img)
     img.onerror = reject
     img.src = logoSrc

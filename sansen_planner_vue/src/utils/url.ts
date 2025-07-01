@@ -49,6 +49,7 @@ export function getFullSignature(): string {
 }
 
 /**
+ * @deprecated 使用外部API会导致CORS问题，请使用 qrcode.ts 中的本地生成方法
  * 生成二维码的Data URL
  * 使用QR Server API生成二维码
  * @param text 要编码的文本
@@ -62,6 +63,7 @@ export function generateQRCode(text: string, size: number = 150): string {
 }
 
 /**
+ * @deprecated 使用外部API会导致CORS问题，请使用 qrcode.ts 中的本地生成方法
  * 预加载二维码图片
  * @param url 二维码URL
  * @returns Promise<HTMLImageElement>
