@@ -1397,6 +1397,23 @@ onUnmounted(() => {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* iPad 优化样式 */
+@media only screen and (max-width: 1024px) and (min-width: 768px), 
+       only screen and (-webkit-min-device-pixel-ratio: 1.5) and (max-device-width: 1024px) {
+  .gantt-chart-container {
+    min-width: 600px; /* iPad 减少最小宽度 */
+    -webkit-overflow-scrolling: touch; /* 优化触摸滚动 */
+  }
+}
+
+/* 移动端优化样式 */
+@media only screen and (max-width: 768px) {
+  .gantt-chart-container {
+    min-width: 400px; /* 移动端进一步减少最小宽度 */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .gantt-chart-content {
   min-width: 100%;
 }

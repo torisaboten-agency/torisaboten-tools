@@ -65,6 +65,12 @@ export function isTouchDevice(): boolean {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0
 }
 
+// 检测是否为iPad
+export function isIPad(): boolean {
+  return /iPad/.test(navigator.userAgent) || 
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+}
+
 // 检测是否为移动设备（基于User Agent）
 export function isMobileUserAgent(): boolean {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -73,6 +79,10 @@ export function isMobileUserAgent(): boolean {
 // 获取当前设备类型
 export function getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
   const width = window.innerWidth
+  
+  // 专门检测iPad
+  if (isIPad()) return 'tablet'
+  
   if (width <= 768) return 'mobile'
   if (width <= 1024) return 'tablet'
   return 'desktop'
@@ -83,14 +93,24 @@ export function getDeviceTypeAdvanced(): {
   type: 'mobile' | 'tablet' | 'desktop'
   confidence: 'high' | 'medium' | 'low'
   reasons: string[]
+  isIPad: boolean
 } {
   const width = window.innerWidth
   const isMobileUA = isMobileUserAgent()
   const isTouch = isTouchDevice()
+  const iPadDetected = isIPad()
   const reasons: string[] = []
   
   let type: 'mobile' | 'tablet' | 'desktop' = 'desktop'
   let confidence: 'high' | 'medium' | 'low' = 'low'
+  
+  // iPad 优先判断
+  if (iPadDetected) {
+    type = 'tablet'
+    confidence = 'high'
+    reasons.push('检测到iPad设备')
+    return { type, confidence, reasons, isIPad: true }
+  }
   
   // 基于宽度判断
   if (width <= 768) {
@@ -122,5 +142,5 @@ export function getDeviceTypeAdvanced(): {
     reasons.push('宽度和User Agent检测结果不一致')
   }
   
-  return { type, confidence, reasons }
+  return { type, confidence, reasons, isIPad: false }
 } 

@@ -1,6 +1,7 @@
 import type { GanttTeamData, GanttTimeRange } from '@/types/planner'
 import { getToolUrl, getToolSignature } from './url'
 import { preloadLocalQRCode } from './qrcode'
+import { isIPad, getDeviceType } from './device'
 import logoSrc from '@/assets/logo.png'
 
 export interface GanttOptions {
@@ -92,20 +93,36 @@ export function drawGanttChart(
 function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRange): string {
   const totalMinutes = timeRange.end - timeRange.start
   
-  // 动态调整像素比例，适应不同屏幕宽度
+  // 改进的像素比例计算，特别优化iPad体验
   const screenWidth = window.innerWidth || 800
-  const isNarrowScreen = screenWidth <= 768
+  const deviceType = getDeviceType()
+  const iPadDetected = isIPad()
   
-  // 根据屏幕宽度调整最小宽度
-  const minWidthBase = isNarrowScreen ? 500 : 800
-  const pixelsPerMinute = Math.max(1.5, minWidthBase / totalMinutes) // 窄屏时减少像素比例
+  let minWidthBase: number
+  let pixelsPerMinute: number
   
-  console.log('📱 屏幕信息:', {
+  if (deviceType === 'mobile' || screenWidth <= 768) {
+    // 手机端：紧凑布局
+    minWidthBase = 400
+    pixelsPerMinute = Math.max(1.0, minWidthBase / totalMinutes)
+  } else if (iPadDetected || deviceType === 'tablet') {
+    // iPad/平板端：平衡的布局
+    minWidthBase = Math.min(600, screenWidth * 0.8) // 动态调整，不超过屏幕宽度的80%
+    pixelsPerMinute = Math.max(1.2, minWidthBase / totalMinutes)
+  } else {
+    // 桌面端：宽松布局
+    minWidthBase = 800
+    pixelsPerMinute = Math.max(1.5, minWidthBase / totalMinutes)
+  }
+  
+  console.log('📱 设备和甘特图信息:', {
     screenWidth,
-    isNarrowScreen,
+    deviceType,
+    iPadDetected,
     minWidthBase,
     pixelsPerMinute,
-    totalMinutes
+    totalMinutes,
+    calculatedWidth: totalMinutes * pixelsPerMinute
   })
 
   let html = `
