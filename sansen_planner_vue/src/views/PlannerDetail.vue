@@ -2154,30 +2154,70 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 5;
+  z-index: 10;
+  width: 0;
 }
 
 .day-separator-line {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, #ff6b6b, #ffd93d);
-  left: -1px;
+  width: 3px;
+  background: linear-gradient(to bottom, #ff4757 0%, #ff6b7a 50%, #ff8c42 100%);
+  left: -1.5px;
+  box-shadow: 0 0 8px rgba(255, 71, 87, 0.4);
+  animation: pulse-separator 2s infinite;
 }
 
-.day-separator-label {
+.day-separator-header {
   position: absolute;
-  top: -20px;
-  left: -15px;
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+  top: -35px;
+  left: -35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 11;
+}
+
+.day-separator-badge {
+  background: linear-gradient(135deg, #ff4757, #ff6b7a);
   color: white;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 11px;
   font-weight: bold;
   white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 6px rgba(255, 71, 87, 0.3);
+  border: 2px solid white;
+  animation: glow-badge 2s infinite alternate;
+}
+
+.day-separator-arrow {
+  color: #ff4757;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse-separator {
+  0%, 100% { 
+    transform: scaleX(1);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scaleX(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes glow-badge {
+  from {
+    box-shadow: 0 3px 6px rgba(255, 71, 87, 0.3);
+  }
+  to {
+    box-shadow: 0 3px 12px rgba(255, 71, 87, 0.6), 0 0 20px rgba(255, 71, 87, 0.2);
+  }
 }
 
 /* 工具提示样式优化 */

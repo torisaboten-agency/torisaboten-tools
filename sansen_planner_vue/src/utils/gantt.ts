@@ -215,7 +215,10 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     dayIndicators = `
       <div class="gantt-day-separator" style="left: ${nextDayPosition}%;">
         <div class="day-separator-line"></div>
-        <div class="day-separator-label">次日</div>
+        <div class="day-separator-header">
+          <div class="day-separator-badge">次日开始</div>
+          <div class="day-separator-arrow">▼</div>
+        </div>
       </div>
     `
   }
@@ -843,29 +846,46 @@ function drawGanttToCanvas(
   if (nextDayStart !== -1) {
     const nextDayX = leftPanelWidth + 20 + (nextDayStart - startMinutes) / totalMinutes * chartWidth
     
-    // 绘制分隔线
+    // 绘制更明显的分隔线
     const gradient = ctx.createLinearGradient(0, startY, 0, startY + availableHeight)
-    gradient.addColorStop(0, '#ff6b6b')
-    gradient.addColorStop(1, '#ffd93d')
+    gradient.addColorStop(0, '#ff4757')
+    gradient.addColorStop(0.5, '#ff6b7a')
+    gradient.addColorStop(1, '#ff8c42')
     
     ctx.strokeStyle = gradient
-    ctx.lineWidth = 2
+    ctx.lineWidth = 4
     ctx.beginPath()
     ctx.moveTo(nextDayX, startY + 20)
     ctx.lineTo(nextDayX, startY + availableHeight)
     ctx.stroke()
     
-    // 绘制"次日"标签
-    ctx.fillStyle = '#ff6b6b'
-    ctx.fillRect(nextDayX - 20, startY - 5, 40, 20)
-    ctx.strokeStyle = '#ff6b6b'
-    ctx.lineWidth = 1
-    ctx.strokeRect(nextDayX - 20, startY - 5, 40, 20)
+    // 绘制更明显的"次日开始"标签
+    const badgeWidth = 80
+    const badgeHeight = 24
     
+    // 背景渐变
+    const badgeGradient = ctx.createLinearGradient(nextDayX - badgeWidth/2, startY - 15, nextDayX + badgeWidth/2, startY + 9)
+    badgeGradient.addColorStop(0, '#ff4757')
+    badgeGradient.addColorStop(1, '#ff6b7a')
+    
+    ctx.fillStyle = badgeGradient
+    ctx.fillRect(nextDayX - badgeWidth/2, startY - 15, badgeWidth, badgeHeight)
+    
+    // 白色边框
+    ctx.strokeStyle = 'white'
+    ctx.lineWidth = 2
+    ctx.strokeRect(nextDayX - badgeWidth/2, startY - 15, badgeWidth, badgeHeight)
+    
+    // 标签文字
     ctx.fillStyle = 'white'
-    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     ctx.textAlign = 'center'
-    ctx.fillText('次日', nextDayX, startY + 8)
+    ctx.fillText('次日开始', nextDayX, startY - 2)
+    
+    // 绘制箭头
+    ctx.fillStyle = '#ff4757'
+    ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    ctx.fillText('▼', nextDayX, startY + 18)
   }
   
   // 按活动分组
