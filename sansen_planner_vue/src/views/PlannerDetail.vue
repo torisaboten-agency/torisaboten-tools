@@ -2147,83 +2147,8 @@ onUnmounted(() => {
 
 .gantt-time-bar.tokuten-overlap {
   top: 30px;
-}
-
-/* 次日分隔线样式 */
-.gantt-day-separator {
-  position: absolute;
-  top: -40px; /* 调整位置确保徽章完全可见 */
-  bottom: 0;
-  z-index: 10;
-  width: 0;
-  pointer-events: none; /* 避免影响交互 */
-}
-
-.day-separator-line {
-  position: absolute;
-  top: 40px; /* 从徽章下方开始 */
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(to bottom, #ff4757 0%, #ff6b7a 50%, #ff8c42 100%);
-  left: -1.5px;
-  box-shadow: 0 0 8px rgba(255, 71, 87, 0.4);
-  animation: pulse-separator 2s infinite;
-}
-
-.day-separator-header {
-  position: absolute;
-  top: 0;
-  left: -40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 15;
-  pointer-events: none;
-}
-
-.day-separator-badge {
-  background: linear-gradient(135deg, #ff4757, #ff6b7a);
-  color: white;
-  padding: 6px 14px;
-  border-radius: 15px;
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-  box-shadow: 0 3px 6px rgba(255, 71, 87, 0.3);
-  border: 2px solid white;
-  animation: glow-badge 2s infinite alternate;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.day-separator-arrow {
-  color: #ff4757;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 2px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  filter: drop-shadow(0 0 3px rgba(255, 71, 87, 0.5));
-}
-
-@keyframes pulse-separator {
-  0%, 100% { 
-    transform: scaleX(1);
-    opacity: 0.8;
   }
-  50% { 
-    transform: scaleX(1.2);
-    opacity: 1;
-  }
-}
-
-@keyframes glow-badge {
-  from {
-    box-shadow: 0 3px 6px rgba(255, 71, 87, 0.3);
-  }
-  to {
-    box-shadow: 0 3px 12px rgba(255, 71, 87, 0.6), 0 0 20px rgba(255, 71, 87, 0.2);
-  }
-}
-
+  
 /* 工具提示样式优化 */
 .gantt-tooltip {
   position: absolute;

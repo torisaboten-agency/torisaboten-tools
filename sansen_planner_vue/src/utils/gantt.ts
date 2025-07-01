@@ -141,30 +141,20 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
 }
 
 /**
- * 分钟数转时间字符串（用于时间轴标记，简洁格式）
- */
-function minutesToTimeAxisLabel(minutes: number): string {
-  const hours = Math.floor(minutes / 60)
-  const mins = minutes % 60
-  
-  // 时间轴标记只显示时:分，不显示"次日"前缀
-  const displayHours = hours >= 24 ? hours - 24 : hours
-  return `${displayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
-}
-
-/**
- * 分钟数转时间字符串（用于时间条内容，包含次日标识）
+ * 分钟数转时间字符串（统一使用简洁格式）
  */
 function minutesToTime(minutes: number): string {
   const hours = Math.floor(minutes / 60)
   const mins = minutes % 60
   
-  if (hours >= 24) {
-    const nextDayHours = hours - 24
-    return `次日${nextDayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+  // 如果是午夜时间点（24:00, 48:00等），显示为"次日"
+  if (hours >= 24 && hours % 24 === 0 && mins === 0) {
+    return '次日'
   }
   
-  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+  // 其他时间统一使用简洁格式：HH:MM
+  const displayHours = hours >= 24 ? hours - 24 : hours
+  return `${displayHours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
 }
 
 /**
@@ -200,7 +190,7 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
        minutes <= timeRange.end; 
        minutes += interval) {
     const position = ((minutes - timeRange.start) / totalMinutes) * 100
-    const timeLabel = minutesToTimeAxisLabel(minutes)
+    const timeLabel = minutesToTime(minutes)
     
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
@@ -824,7 +814,7 @@ function drawGanttToCanvas(
        minutes <= endMinutes; 
        minutes += interval) {
     const xPos = leftPanelWidth + 20 + (minutes - startMinutes) / totalMinutes * chartWidth
-    const timeStr = minutesToTimeAxisLabel(minutes)
+    const timeStr = minutesToTime(minutes) // 使用统一的时间格式
     
     ctx.beginPath()
     ctx.moveTo(xPos, startY + 20)
@@ -834,59 +824,7 @@ function drawGanttToCanvas(
     ctx.fillText(timeStr, xPos, startY + 15)
   }
   
-  // 绘制次日分隔线（如果存在跨日）- 修复逻辑
-  const midnightMinutes = 1440 // 午夜24:00对应的分钟数
-  let nextDayStart = -1
-  
-  if (startMinutes < midnightMinutes && endMinutes >= midnightMinutes) {
-    // 如果时间范围跨越了午夜，则在午夜位置显示分隔线
-    nextDayStart = midnightMinutes
-  }
-  
-  if (nextDayStart !== -1) {
-    const nextDayX = leftPanelWidth + 20 + (nextDayStart - startMinutes) / totalMinutes * chartWidth
-    
-    // 绘制更明显的分隔线
-    const gradient = ctx.createLinearGradient(0, startY, 0, startY + availableHeight)
-    gradient.addColorStop(0, '#ff4757')
-    gradient.addColorStop(0.5, '#ff6b7a')
-    gradient.addColorStop(1, '#ff8c42')
-    
-    ctx.strokeStyle = gradient
-    ctx.lineWidth = 4
-    ctx.beginPath()
-    ctx.moveTo(nextDayX, startY + 20)
-    ctx.lineTo(nextDayX, startY + availableHeight)
-    ctx.stroke()
-    
-    // 绘制更明显的"次日开始"标签
-    const badgeWidth = 80
-    const badgeHeight = 24
-    
-    // 背景渐变
-    const badgeGradient = ctx.createLinearGradient(nextDayX - badgeWidth/2, startY - 15, nextDayX + badgeWidth/2, startY + 9)
-    badgeGradient.addColorStop(0, '#ff4757')
-    badgeGradient.addColorStop(1, '#ff6b7a')
-    
-    ctx.fillStyle = badgeGradient
-    ctx.fillRect(nextDayX - badgeWidth/2, startY - 15, badgeWidth, badgeHeight)
-    
-    // 白色边框
-    ctx.strokeStyle = 'white'
-    ctx.lineWidth = 2
-    ctx.strokeRect(nextDayX - badgeWidth/2, startY - 15, badgeWidth, badgeHeight)
-    
-    // 标签文字
-    ctx.fillStyle = 'white'
-    ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText('次日开始', nextDayX, startY - 2)
-    
-    // 绘制箭头
-    ctx.fillStyle = '#ff4757'
-    ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-    ctx.fillText('▼', nextDayX, startY + 18)
-  }
+
   
   // 按活动分组
   const groupedData = groupTeamsByActivity(teamData)
