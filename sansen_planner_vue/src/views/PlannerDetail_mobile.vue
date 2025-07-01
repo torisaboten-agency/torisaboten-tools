@@ -1558,6 +1558,7 @@ onUnmounted(() => {
   min-height: 56px;
   padding: 8px 0;
   background: #ffffff;
+  width: 100%; /* 确保占满宽度 */
 }
 
 .gantt-time-header {
@@ -1565,6 +1566,7 @@ onUnmounted(() => {
   position: relative;
   height: 48px;
   background: #f8f9fa;
+  width: 100%; /* 确保占满宽度 */
 }
 
 .gantt-time-mark {
@@ -1597,6 +1599,7 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 20px; /* 确保最小宽度 */
 }
 
 .gantt-time-bar:hover {

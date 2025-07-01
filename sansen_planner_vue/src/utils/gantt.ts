@@ -88,7 +88,7 @@ export function drawGanttChart(
   
   // 添加移动端触摸拖动支持
   addTouchDragSupport(container)
-  console.log('�� 移动端触摸拖动支持已添加')
+  console.log('✅ 移动端触摸拖动支持已添加')
 }
 
 /**
@@ -145,7 +145,6 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
  */
 function renderGanttHeader(timeRange: GanttTimeRange, pixelsPerMinute: number): string {
   const totalMinutes = timeRange.end - timeRange.start
-  const totalWidth = totalMinutes * pixelsPerMinute
 
   let timeMarks = ''
   
@@ -176,7 +175,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, pixelsPerMinute: number): 
   return `
     <div class="gantt-header">
       <div class="gantt-left-panel">团体</div>
-      <div class="gantt-time-header" style="min-width: ${totalWidth}px;">
+      <div class="gantt-time-header" style="width: 100%; position: relative;">
         ${timeMarks}
       </div>
     </div>
@@ -203,7 +202,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, p
       bodyHTML += `
         <div class="gantt-row gantt-activity-header">
           <div class="gantt-left-panel">${activity.name}</div>
-          <div class="gantt-timeline" style="width: ${totalWidth}px; background: #e3f2fd;">
+          <div class="gantt-timeline" style="width: 100%; background: #e3f2fd; position: relative;">
             <div class="activity-location-text">${activity.location || ''}</div>
           </div>
         </div>
@@ -217,7 +216,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, p
       bodyHTML += `
         <div class="gantt-row">
           <div class="gantt-left-panel">${teamData.team.name}</div>
-          <div class="gantt-timeline" style="width: ${totalWidth}px;">
+          <div class="gantt-timeline" style="width: 100%; position: relative;">
             ${timeBars}
           </div>
         </div>
@@ -240,18 +239,18 @@ function generateTimeBars(teamData: GanttTeamData, startMinutes: number, pixelsP
 
   // 检查重叠并调整位置
   const { hasOverlap, adjustedBars } = checkTimeOverlap(allBars)
+  
+  // 计算总时间范围
+  const totalMinutes = (startMinutes + 1440) - startMinutes // 使用一天的时间范围
 
   let barsHTML = ''
   adjustedBars.forEach(bar => {
-    const left = (bar.startMinutes - startMinutes) * pixelsPerMinute
-    const width = bar.duration * pixelsPerMinute
-    let widthPercent = (bar.duration / ((startMinutes + 1440) - startMinutes)) * 100
+    // 使用百分比定位，与时间轴标记保持一致
+    const leftPercent = ((bar.startMinutes - startMinutes) / totalMinutes) * 100
+    const widthPercent = (bar.duration / totalMinutes) * 100
     
-    // 确保最小宽度
-    const minWidth = 3
-    if (widthPercent < minWidth) {
-      widthPercent = minWidth
-    }
+    // 确保最小宽度百分比
+    const minWidthPercent = Math.max(widthPercent, 1.5) // 至少1.5%的宽度
     
     // 根据是否有重叠调整样式
     const heightClass = hasOverlap ? 'has-overlap' : ''
@@ -266,10 +265,10 @@ function generateTimeBars(teamData: GanttTeamData, startMinutes: number, pixelsP
     const timeText = `${startTime}-${endTime}`
     
     // 新的显示逻辑：特典时间大于60分钟或宽度足够时显示时间
-    if (widthPercent > 15 || (bar.type === 'tokuten' && duration > 60)) {
+    if (minWidthPercent > 8 || (bar.type === 'tokuten' && duration > 60)) {
       // 宽度足够或特典时间大于1小时：显示时间范围
       displayText = timeText
-    } else if (widthPercent > 8) {
+    } else if (minWidthPercent > 4) {
       // 中等宽度：只显示开始时间
       displayText = startTime
     } else {
@@ -279,7 +278,7 @@ function generateTimeBars(teamData: GanttTeamData, startMinutes: number, pixelsP
     
     // 如果有地点且宽度足够，准备双行显示
     let locationHTML = ''
-    if (hasLocation && widthPercent > 12) {
+    if (hasLocation && minWidthPercent > 6) {
       locationHTML = `<div style="font-size: 9px; line-height: 1.1; margin-top: 2px; color: #4a5568;">@${bar.location}</div>`
     }
     
@@ -291,12 +290,12 @@ function generateTimeBars(teamData: GanttTeamData, startMinutes: number, pixelsP
     barsHTML += `
       <div 
         class="gantt-time-bar ${bar.type} ${heightClass} ${topOffset}"
-        style="left: ${left}px; width: ${Math.max(width, 20)}px; height: 36px; line-height: 1; min-width: 20px;"
+        style="left: ${leftPercent}%; width: ${minWidthPercent}%; height: 36px; line-height: 1; position: absolute;"
         data-tooltip="${tooltipText}"
         data-type="${bar.type}"
         data-duration="${duration}"
       >
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; font-size: 11px;">
           ${displayText}
           ${locationHTML}
         </div>
