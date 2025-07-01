@@ -131,8 +131,8 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
 
   let html = `
     <div class="gantt-chart-content">
-      ${renderGanttHeader(timeRange, pixelsPerMinute)}
-      ${renderGanttBody(teamData, timeRange, pixelsPerMinute)}
+      ${renderGanttHeader(timeRange)}
+      ${renderGanttBody(teamData, timeRange)}
     </div>
     <div id="gantt-tooltip" class="gantt-tooltip"></div>
   `
@@ -143,7 +143,7 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
 /**
  * 渲染甘特图头部（时间轴）
  */
-function renderGanttHeader(timeRange: GanttTimeRange, pixelsPerMinute: number): string {
+function renderGanttHeader(timeRange: GanttTimeRange): string {
   const totalMinutes = timeRange.end - timeRange.start
 
   let timeMarks = ''
@@ -185,10 +185,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, pixelsPerMinute: number): 
 /**
  * 渲染甘特图主体
  */
-function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, pixelsPerMinute: number): string {
-  const totalMinutes = timeRange.end - timeRange.start
-  const totalWidth = totalMinutes * pixelsPerMinute
-
+function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): string {
   // 按活动分组
   const groupedData = groupTeamsByActivity(teamData)
   
@@ -211,7 +208,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, p
 
     // 团体行
     teams.forEach(teamData => {
-      const timeBars = generateTimeBars(teamData, timeRange.start, pixelsPerMinute)
+      const timeBars = generateTimeBars(teamData, timeRange.start)
       
       bodyHTML += `
         <div class="gantt-row">
@@ -231,7 +228,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, p
 /**
  * 生成时间条HTML
  */
-function generateTimeBars(teamData: GanttTeamData, startMinutes: number, pixelsPerMinute: number): string {
+function generateTimeBars(teamData: GanttTeamData, startMinutes: number): string {
   const allBars: TimeBar[] = [
     ...teamData.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
     ...teamData.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
