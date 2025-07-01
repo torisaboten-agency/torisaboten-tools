@@ -1,5 +1,6 @@
 [build]
-  # Vue应用已预构建（本地运行 npm run build）
+  # 让Netlify自动构建Vue应用
+  command = "cd sansen_planner_vue && npm ci && npm run build"
   # 发布整个项目根目录
   publish = "."
 

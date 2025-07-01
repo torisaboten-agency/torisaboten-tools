@@ -2,18 +2,24 @@
 
 本文档详细说明如何将此项目从Vercel迁移到Netlify，确保所有功能正常运行。
 
-## ⚠️ 重要提醒：Vue应用需要构建
+## ✨ 自动构建：Netlify在线构建Vue应用
 
-**在部署到Netlify之前，必须先构建Vue应用！**
+**Netlify会自动构建Vue应用，无需本地构建！**
 
-### 快速构建命令
+配置文件 `netlify.toml` 已设置自动构建命令：
+```toml
+[build]
+  command = "cd sansen_planner_vue && npm install && npm run build && cd .. && echo 'Vue app built successfully'"
+  publish = "."
+```
+
+### 本地构建（可选）
+如果你想在本地测试构建效果：
 ```bash
 cd sansen_planner_vue
 npm install
 npm run build
 ```
-
-构建完成后，确保 `sansen_planner_vue/dist/` 目录存在且包含 `index.html` 文件。
 
 ## 🏗️ 项目架构分析
 
@@ -75,6 +81,34 @@ npm run build
 
 ### 方式一：Git仓库连接（推荐）
 
+1. **推送到Git仓库**
+   ```bash
+   git add .
+   git commit -m "Add Netlify configuration with auto-build"
+   git push origin main
+   ```
+
+2. **连接Netlify**
+   - 登录 [Netlify控制台](https://app.netlify.com)
+   - 点击 "New site from Git"
+   - 选择你的Git提供商（GitHub/GitLab/Bitbucket）
+   - 选择对应的仓库
+
+3. **构建配置**（Netlify会自动读取netlify.toml）
+   - Build command: `cd sansen_planner_vue && npm install && npm run build && cd .. && echo 'Vue app built successfully'`
+   - Publish directory: `.`（项目根目录）
+   - 点击 "Deploy site"
+
+4. **等待构建完成**
+   - Netlify会自动安装依赖并构建Vue应用
+   - 构建过程大约需要2-3分钟
+   - 构建完成后，网站自动部署
+
+### 方式二：手动上传（不推荐，因为无法自动构建）
+
+⚠️ **注意**：手动上传无法触发自动构建，建议使用Git仓库连接方式。
+
+如果必须手动上传：
 1. **本地构建Vue应用**
    ```bash
    cd sansen_planner_vue
@@ -83,33 +117,12 @@ npm run build
    cd ..
    ```
 
-2. **推送到Git仓库**
-   ```bash
-   git add .
-   git commit -m "Add Netlify configuration and built Vue app"
-   git push origin main
-   ```
-
-3. **连接Netlify**
-   - 登录 [Netlify控制台](https://app.netlify.com)
-   - 点击 "New site from Git"
-   - 选择你的Git提供商（GitHub/GitLab/Bitbucket）
-   - 选择对应的仓库
-
-4. **构建配置**
-   - Build command: 留空（Vue应用已预构建）
-   - Publish directory: `.`（项目根目录）
-   - 点击 "Deploy site"
-
-### 方式二：手动上传
-
-1. **准备文件**
-   - 确保已构建Vue应用（运行 `npm run build`）
-   - 确保项目根目录包含 `netlify.toml` 配置文件
+2. **准备文件**
    - 确保 `sansen_planner_vue/dist/` 目录存在
+   - 确保项目根目录包含 `netlify.toml` 配置文件
    - 压缩整个项目文件夹为ZIP格式
 
-2. **上传部署**
+3. **上传部署**
    - 在Netlify控制台点击 "Deploy manually"
    - 拖拽ZIP文件到部署区域
    - 等待部署完成
