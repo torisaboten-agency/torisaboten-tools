@@ -4,7 +4,7 @@
  */
 
 // 简化的QR码生成（仅支持URL链接）
-export function generateQRCodeDataURL(text: string, size: number = 150): string {
+export function generateQRCodeDataURL(_text: string, size: number = 150): string {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   
