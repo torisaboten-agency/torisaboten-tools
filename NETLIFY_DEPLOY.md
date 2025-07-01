@@ -2,6 +2,19 @@
 
 本文档详细说明如何将此项目从Vercel迁移到Netlify，确保所有功能正常运行。
 
+## ⚠️ 重要提醒：Vue应用需要构建
+
+**在部署到Netlify之前，必须先构建Vue应用！**
+
+### 快速构建命令
+```bash
+cd sansen_planner_vue
+npm install
+npm run build
+```
+
+构建完成后，确保 `sansen_planner_vue/dist/` 目录存在且包含 `index.html` 文件。
+
 ## 🏗️ 项目架构分析
 
 ### 应用组成
@@ -62,28 +75,38 @@
 
 ### 方式一：Git仓库连接（推荐）
 
-1. **推送到Git仓库**
+1. **本地构建Vue应用**
+   ```bash
+   cd sansen_planner_vue
+   npm install
+   npm run build
+   cd ..
+   ```
+
+2. **推送到Git仓库**
    ```bash
    git add .
-   git commit -m "Add Netlify configuration"
+   git commit -m "Add Netlify configuration and built Vue app"
    git push origin main
    ```
 
-2. **连接Netlify**
+3. **连接Netlify**
    - 登录 [Netlify控制台](https://app.netlify.com)
    - 点击 "New site from Git"
    - 选择你的Git提供商（GitHub/GitLab/Bitbucket）
    - 选择对应的仓库
 
-3. **构建配置**
-   - Build command: 留空（或 `echo "Static deployment"`）
+4. **构建配置**
+   - Build command: 留空（Vue应用已预构建）
    - Publish directory: `.`（项目根目录）
    - 点击 "Deploy site"
 
 ### 方式二：手动上传
 
 1. **准备文件**
+   - 确保已构建Vue应用（运行 `npm run build`）
    - 确保项目根目录包含 `netlify.toml` 配置文件
+   - 确保 `sansen_planner_vue/dist/` 目录存在
    - 压缩整个项目文件夹为ZIP格式
 
 2. **上传部署**

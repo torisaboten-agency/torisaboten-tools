@@ -1,23 +1,18 @@
 [build]
+  # Vue应用已预构建（本地运行 npm run build）
   # 发布整个项目根目录
   publish = "."
 
 # SPA路由重定向配置 - sansen_planner_vue
-# 对应Vercel的 /sansen_planner_vue 重写规则
+# 重定向到构建后的dist目录中的index.html
 [[redirects]]
   from = "/sansen_planner_vue/*"
-  to = "/sansen_planner_vue/index.html"
+  to = "/sansen_planner_vue/dist/index.html"
   status = 200
   force = false
   # 排除静态资源：assets, images, logo.png, favicon.ico, manifest.webmanifest, sw.js, robots.txt, site.webmanifest
 
-# SPA路由重定向配置 - vuetify应用
-# 对应Vercel的 /vuetify 重写规则
-[[redirects]]
-  from = "/vuetify/*"
-  to = "/sansen_planner_vuetify/dist/index.html"
-  status = 200
-  force = false
+# 注意：sansen_planner_vuetify 目录不存在，已移除相关配置
 
 # 静态资源缓存配置
 [[headers]]
