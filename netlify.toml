@@ -1,0 +1,66 @@
+[build]
+  # 发布整个项目根目录
+  publish = "."
+
+# SPA路由重定向配置 - sansen_planner_vue
+# 对应Vercel的 /sansen_planner_vue 重写规则
+[[redirects]]
+  from = "/sansen_planner_vue/*"
+  to = "/sansen_planner_vue/index.html"
+  status = 200
+  force = false
+  # 排除静态资源：assets, images, logo.png, favicon.ico, manifest.webmanifest, sw.js, robots.txt, site.webmanifest
+
+# SPA路由重定向配置 - vuetify应用
+# 对应Vercel的 /vuetify 重写规则
+[[redirects]]
+  from = "/vuetify/*"
+  to = "/sansen_planner_vuetify/dist/index.html"
+  status = 200
+  force = false
+
+# 静态资源缓存配置
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML文件不缓存，确保更新及时
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 安全头配置
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-XSS-Protection = "1; mode=block" 

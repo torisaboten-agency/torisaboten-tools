@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>用户文档 - Torisaboten线下抽奖小助手</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <script src="../shared/path-resolver.js"></script>
+    <style>
+        /* 文档页面特定样式 - 保留原配色方案 */
+        .doc-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .doc-header {
+            background: linear-gradient(135deg, rgba(168, 140, 127, 0.95) 0%, rgba(122, 90, 87, 0.95) 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            text-align: center;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .doc-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .doc-header-logo {
+            width: 4rem;
+            height: 4rem;
+            flex-shrink: 0;
+        }
+
+        .doc-header .app-author {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .doc-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .doc-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .doc-nav h3 {
+            color: #7A5A57;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-item {
+            background: #F5F1EB;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #7A5A57;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #C65B78;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 91, 120, 0.3);
+            text-decoration: none;
+        }
+
+        .home-btn {
+            background: #C65B78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            background: #A8557A;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .doc-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .doc-section h2 {
+            color: #7A5A57;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #C65B78;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #7A5A57;
+            margin-bottom: 1rem;
+        }
+
+        .step-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #C65B78;
+            color: white;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: #7A5A57;
+            margin-bottom: 0.5rem;
+        }
+
+        .lottery-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .type-card {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .type-card:hover {
+            border-color: #C65B78;
+            transform: translateY(-4px);
+        }
+
+        .type-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .type-card h4 {
+            color: #7A5A57;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .type-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .feature-tag {
+            background: #C65B78;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .config-item {
+            background: #F5F1EB;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #C65B78;
+        }
+
+        .config-item h4 {
+            color: #7A5A57;
+            margin-bottom: 0.5rem;
+        }
+
+        .example {
+            background: #E8DDD1;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #5D4E47;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8F0 100%);
+            border: 2px solid #98D982;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .faq-list {
+            margin: 2rem 0;
+        }
+
+        .faq-item {
+            background: #F5F1EB;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            border-left: 4px solid #C65B78;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #F5F1EB;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #E8DDD1;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .faq-question h3 {
+            color: #7A5A57;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            background: white;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            border-color: #C65B78;
+            transform: translateY(-2px);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tip-card h3 {
+            color: #7A5A57;
+            margin-bottom: 1rem;
+        }
+
+        .tip-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tip-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .tip-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #C65B78;
+            font-weight: bold;
+        }
+
+        .prize-explanation {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .prize-level {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-a { background: #FF6B6B; color: white; }
+        .level-b { background: #4ECDC4; color: white; }
+        .level-c { background: #45B7D1; color: white; }
+        .level-last { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #8B4513; }
+
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .advanced-card {
+            background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .advanced-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .advanced-card h3 {
+            color: #7A5A57;
+            margin-bottom: 1rem;
+        }
+
+        .advanced-details ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .advanced-details li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .advanced-details li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #C65B78;
+            font-weight: bold;
+        }
+
+        /* 公益callout样式 */
+        .charity-callout {
+            background: linear-gradient(135deg, #E8F5E8 0%, #F0F8F0 100%);
+            border: 2px solid #98D982;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 2px 15px rgba(152, 217, 130, 0.2);
+        }
+
+        .charity-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .charity-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .charity-text {
+            flex: 1;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .charity-text p {
+            margin: 0;
+            color: #2D5A2D;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .charity-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .charity-link {
+            background: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .charity-link:hover {
+            background: #45A049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            text-decoration: none;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .doc-container {
+                padding: 2rem 1rem;
+            }
+
+            .doc-header {
+                padding: 3rem 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .doc-header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .doc-header-logo {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .doc-section {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charity-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .charity-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <div class="app-header">
+        <div class="app-header-content">
+            <div class="app-logo">
+                <img id="app-logo-img" src="../shared/assets/logo.png" alt="Logo" style="display: none;">
+                <span id="app-logo-icon">🎲</span>
+            </div>
+            <div class="app-title">
+                <h1>线下抽奖小助手</h1>
+                <p class="app-author">By Torisaboten</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文档内容 -->
+    <div class="doc-container">
+        <!-- 文档标题 -->
+        <header class="doc-header">
+            <h1>
+                <img id="doc-logo-img" src="../shared/assets/logo.png" alt="Logo" class="doc-header-logo" style="display: none;">
+                <span id="doc-logo-icon">🎊</span>
+                用户文档
+            </h1>
+            <p class="app-author">By Torisaboten</p>
+            <p>专为线下活动设计的多模式抽奖工具，支持一番赏和概率抽奖两种模式，让每次抽奖都充满期待和惊喜！</p>
+        </header>
+
+        <!-- 导航区域 -->
+        <nav class="doc-nav">
+            <h3>📚 快速导航</h3>
+            <div class="nav-grid">
+                <a href="#quick-start" class="nav-item">🚀 快速开始</a>
+                <a href="#create-lottery" class="nav-item">⚙️ 创建抽奖</a>
+                <a href="#draw-process" class="nav-item">🎯 进行抽奖</a>
+                <a href="#data-management" class="nav-item">📊 数据管理</a>
+                <a href="#advanced-features" class="nav-item">🔧 高级功能</a>
+                <a href="#troubleshooting" class="nav-item">🛠 常见问题</a>
+                <a href="#tips" class="nav-item">💡 使用技巧</a>
+            </div>
+            <a href="index.html" class="home-btn">🏠 返回应用首页</a>
+        </nav>
+
+        <!-- 欢迎区域 -->
+        <section class="doc-section">
+            <h2>🌟 欢迎使用</h2>
+            
+            <!-- 公益callout -->
+            <div class="charity-callout">
+                <div class="charity-content">
+                    <span class="charity-icon">🌸</span>
+                    <div class="charity-text">
+                        <p>关注春蕾计划，支持中国乡村女童的教育与可持续发展</p>
+                    </div>
+                    <div class="charity-buttons">
+                        <a href="https://www.cctf.org.cn/zt/cljh/" target="_blank" class="charity-link">项目官网</a>
+                        <a href="https://gongyi.qq.com/succor/detail.htm?id=5888" target="_blank" class="charity-link">腾讯公益</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>双重模式</h3>
+                    <p>支持传统一番赏和概率抽奖两种模式，满足不同需求</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>本地存储</h3>
+                    <p>数据完全存储在本地浏览器，不同用户数据完全隔离</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>响应式设计</h3>
+                    <p>完美适配桌面端和移动端，随时随地进行抽奖</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>高级功能</h3>
+                    <p>支持撤销、重置、数据导出等丰富功能</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 快速开始 -->
+        <section id="quick-start" class="doc-section">
+            <h2>🚀 快速开始</h2>
+            
+            <div class="step-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>第一步：访问工具</h3>
+                        <p>访问在线地址或本地部署的应用</p>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>创建抽奖</h3>
+                        <p>点击"创建新抽奖"按钮，配置抽奖信息和奖项</p>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>开始抽奖</h3>
+                        <p>进入抽奖页面，输入抽奖者信息并开始抽奖</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 小提示：</strong>
+                首次使用建议先看完整文档，了解所有功能后再开始使用。
+            </div>
+        </section>
+
+        <!-- 创建抽奖 -->
+        <section id="create-lottery" class="doc-section">
+            <h2>⚙️ 创建抽奖</h2>
+            
+            <h3>🎯 抽奖类型选择</h3>
+            <div class="lottery-types">
+                <div class="type-card">
+                    <div class="type-icon">🎲</div>
+                    <h4>一番赏模式</h4>
+                    <p>传统的一番赏抽奖规则，支持多箱设置和LAST赏机制</p>
+                    <div class="type-features">
+                        <span class="feature-tag">✅ 箱数限制</span>
+                        <span class="feature-tag">✅ LAST赏</span>
+                        <span class="feature-tag">✅ 数量控制</span>
+                    </div>
+                </div>
+                <div class="type-card">
+                    <div class="type-icon">🎯</div>
+                    <h4>概率抽奖模式</h4>
+                    <p>基于权重的概率抽奖，每个奖项设置获奖概率</p>
+                    <div class="type-features">
+                        <span class="feature-tag">✅ 自定义概率</span>
+                        <span class="feature-tag">✅ 无限抽奖</span>
+                        <span class="feature-tag">✅ 概率验证</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>📝 一番赏配置</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <h4>抽奖名称</h4>
+                    <p>为你的抽奖活动起一个有趣的名字</p>
+                    <div class="example">例：她蝶效应Psychelles - 指尖蝶变戳戳乐</div>
+                </div>
+                <div class="config-item">
+                    <h4>总箱数</h4>
+                    <p>设置抽奖的总箱数，0表示无限箱数</p>
+                    <div class="example">推荐：3-5箱（根据奖品数量调整）</div>
+                </div>
+                <div class="config-item">
+                    <h4>LAST赏</h4>
+                    <p>每箱最后一次抽奖的特殊奖励</p>
+                    <div class="example">建议：手作礼物、签名照等特殊奖品</div>
+                </div>
+            </div>
+
+            <h3>🎁 奖项等级说明</h3>
+            <div class="prize-explanation">
+                <div class="prize-level">
+                    <div class="level-badge level-a">A赏</div>
+                    <div class="level-desc">最高等级奖品，通常数量最少，价值最高</div>
+                </div>
+                <div class="prize-level">
+                    <div class="level-badge level-b">B赏</div>
+                    <div class="level-desc">中等奖品，平衡价值与数量</div>
+                </div>
+                <div class="prize-level">
+                    <div class="level-badge level-c">C赏</div>
+                    <div class="level-desc">基础奖品，数量较多，保证参与感</div>
+                </div>
+                <div class="prize-level">
+                    <div class="level-badge level-last">LAST赏</div>
+                    <div class="level-desc">每箱最后的特殊奖励，增加悬念</div>
+                </div>
+            </div>
+
+            <h3>🎯 概率抽奖配置</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <h4>🎁 奖项设置</h4>
+                    <p>为每个奖项设置等级、描述和获奖概率</p>
+                    <div class="example">总概率必须等于100%才能开始抽奖</div>
+                </div>
+                <div class="config-item">
+                    <h4>📊 概率验证</h4>
+                    <p>系统会自动验证概率总和，确保配置正确</p>
+                    <div class="example">支持小数点概率，精确到0.01%</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 进行抽奖 -->
+        <section id="draw-process" class="doc-section">
+            <h2>🎯 进行抽奖</h2>
+
+            <h3>🎲 一番赏抽奖流程</h3>
+            <div class="step-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>选择抽取数量</h3>
+                        <p>可以单次抽取1个或多个奖项，系统会随机分配</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>输入粉丝ID</h3>
+                        <p>可选输入抽奖者的ID或昵称，留空也可以</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>点击抽奖</h3>
+                        <p>点击"开始抽奖"按钮，系统会显示抽奖结果</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>LAST赏机制</h3>
+                        <p>每箱最后一次抽奖时，会自动额外获得LAST赏</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>🎯 概率抽奖流程</h3>
+            <p>概率抽奖每次只能抽取一个奖项，系统根据设置的概率权重随机选择奖项。操作流程与一番赏类似，但没有箱数限制和LAST赏机制。</p>
+
+            <div class="info-box">
+                <strong>🎊 抽奖小贴士：</strong>
+                一番赏模式支持"ALL"功能，可以一键清空当前箱的所有剩余奖品，适合活动结束时快速处理。
+            </div>
+        </section>
+
+        <!-- 数据管理 -->
+        <section id="data-management" class="doc-section">
+            <h2>📊 数据管理</h2>
+
+            <h3>💾 本地存储机制</h3>
+            <p>所有数据都存储在浏览器的本地存储中，具有以下特点：</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏠</div>
+                    <h3>本地化存储</h3>
+                    <p>数据完全本地化，不会上传到服务器，保护用户隐私</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>数据隔离</h3>
+                    <p>不同用户的数据完全独立，即使使用同一台电脑也互不影响</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>持久保存</h3>
+                    <p>除非手动清除，数据会永久保存在浏览器中</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✈️</div>
+                    <h3>离线支持</h3>
+                    <p>完全支持离线使用，无需网络连接即可正常运行</p>
+                </div>
+            </div>
+
+            <h3>📤 数据导出功能</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <h4>📊 抽奖记录导出</h4>
+                    <p>导出所有抽奖历史记录为JSON格式，包含详细信息</p>
+                    <div class="example">
+                        <strong>包含内容：</strong><br>
+                        • 抽奖时间和参与者信息<br>
+                        • 具体抽到的奖项详情<br>
+                        • 箱次和抽奖顺序<br>
+                        • 撤销状态等完整记录
+                    </div>
+                </div>
+                <div class="config-item">
+                    <h4>📸 配置快照导出</h4>
+                    <p>导出当前抽奖配置和状态，可用于备份或分享</p>
+                    <div class="example">
+                        <strong>包含内容：</strong><br>
+                        • 抽奖基本设置和奖项配置<br>
+                        • 当前进度和剩余奖品状态<br>
+                        • 历史记录和统计数据<br>
+                        • 完整的抽奖环境信息
+                    </div>
+                </div>
+                <div class="config-item">
+                    <h4>📥 快照导入功能</h4>
+                    <p>可以导入之前导出的快照，恢复抽奖状态</p>
+                    <div class="example">
+                        <strong>使用场景：</strong><br>
+                        • 备份重要抽奖活动数据<br>
+                        • 在不同设备间同步状态<br>
+                        • 分享抽奖配置给他人<br>
+                        • 恢复意外丢失的数据
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>📋 最佳实践：</strong>
+                重要活动建议定期导出快照备份，记录导出可用于后续的数据统计和分析。导出的文件可以安全保存在本地或云盘中。
+            </div>
+        </section>
+
+        <!-- 高级功能 -->
+        <section id="advanced-features" class="doc-section">
+            <h2>🔧 高级功能</h2>
+
+            <div class="advanced-grid">
+                <div class="advanced-card">
+                    <div class="advanced-icon">↶</div>
+                    <h3>撤销功能</h3>
+                    <p>可以撤销最新的抽奖记录，适合操作失误时使用</p>
+                    <div class="advanced-details">
+                        <ul>
+                            <li>只能撤销最新的未撤销记录</li>
+                            <li>撤销后记录显示"已撤销"标签</li>
+                            <li>一番赏会恢复奖品数量和箱状态</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="advanced-card">
+                    <div class="advanced-icon">∞</div>
+                    <h3>无限箱数</h3>
+                    <p>设置箱数为0可启用无限箱数模式，适合长期活动</p>
+                    <div class="advanced-details">
+                        <ul>
+                            <li>自动切换到下一箱</li>
+                            <li>永不结束的抽奖</li>
+                            <li>适合直播等场景</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="advanced-card">
+                    <div class="advanced-icon">✏️</div>
+                    <h3>编辑粉丝ID</h3>
+                    <p>可以事后修改历史记录中的抽奖者ID，适合补录或更正信息</p>
+                    <div class="advanced-details">
+                        <ul>
+                            <li>点击历史记录中ID旁的编辑按钮</li>
+                            <li>支持直接输入或回车/ESC确认/取消</li>
+                            <li>修改后自动保存并更新导出数据</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="advanced-card">
+                    <div class="advanced-icon">🔄</div>
+                    <h3>重置抽奖</h3>
+                    <p>清空当前抽奖的所有历史记录，但保留配置信息</p>
+                    <div class="advanced-details">
+                        <ul>
+                            <li>一番赏：重置状态并清空历史</li>
+                            <li>概率抽奖：仅清空历史记录</li>
+                            <li>配置信息完全保留</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题 -->
+        <section id="troubleshooting" class="doc-section">
+            <h2>🛠 常见问题</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">❓</span>
+                        <h3>数据会丢失吗？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>数据存储在浏览器本地，除非手动清除浏览器数据或清空记录，否则不会丢失。建议重要活动定期导出快照备份。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🤔</span>
+                        <h3>不同用户会看到相同数据吗？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>不会。每个用户的数据完全独立，即使访问同一个服务器地址，数据也是隔离的。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🎯</span>
+                        <h3>LAST赏什么时候给？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>LAST赏在每箱最后一次抽奖时自动给出，无论最后一次抽几个奖项，都会额外获得一个LAST赏。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🔧</span>
+                        <h3>撤销功能有什么限制？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>只能撤销最新的未撤销记录，不能跳跃式撤销。撤销后记录会显示"已撤销"标签，后续记录会变灰。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">📱</span>
+                        <h3>支持移动端使用吗？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>完全支持！界面采用响应式设计，在手机、平板上都能正常使用，功能与桌面版完全一致。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🌐</span>
+                        <h3>需要网络连接吗？</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>加载页面后完全离线运行，不需要网络连接。所有功能都在本地执行，保证稳定性。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用技巧 -->
+        <section id="tips" class="doc-section">
+            <h2>💡 使用技巧</h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎨</div>
+                    <h3>奖项设计</h3>
+                    <ul>
+                        <li>按稀有度设置A、B、C等级</li>
+                        <li>LAST赏设置特殊奖品增加悬念</li>
+                        <li>数量少的奖项会优先显示</li>
+                        <li>合理控制各等级奖品比例</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">📊</div>
+                    <h3>活动管理</h3>
+                    <ul>
+                        <li>重要活动定期导出快照备份</li>
+                        <li>使用记录导出进行数据分析</li>
+                        <li>合理设置箱数避免单箱奖品过多</li>
+                        <li>活动前可以先测试配置</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h3>现场操作</h3>
+                    <ul>
+                        <li>可以批量抽取多个奖项</li>
+                        <li>抽奖者ID可以使用编号或昵称</li>
+                        <li>抽奖时ID可留空，事后可补录编辑</li>
+                        <li>一番赏支持"ALL"功能，一键清空当前箱</li>
+                        <li>无限箱数适合直播等长期活动</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🔧</div>
+                    <h3>技术技巧</h3>
+                    <ul>
+                        <li>支持移动端操作，随时随地抽奖</li>
+                        <li>完全离线使用，无需网络连接</li>
+                        <li>可部署到任何静态网站托管</li>
+                        <li>浏览器兼容性良好</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>🎉 享受抽奖的乐趣：</strong>
+                记住，抽奖的目的是为了增加活动的趣味性和互动性，让参与者感受到惊喜和快乐！
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="app-footer">
+        <p>@Torisaboten 2025</p>
+    </footer>
+
+    <script>
+        // 页面加载完成后动态设置正确的路径
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logo检查逻辑
+            setTimeout(checkLogo, 100);
+            
+            // 平滑滚动
+            initSmoothScroll();
+        });
+        
+        function checkLogo() {
+            const logoImg = document.getElementById('app-logo-img');
+            const logoIcon = document.getElementById('app-logo-icon');
+            const docLogoImg = document.getElementById('doc-logo-img');
+            const docLogoIcon = document.getElementById('doc-logo-icon');
+            
+            if (!logoImg || !logoIcon) return;
+            
+            const testImg = new Image();
+            testImg.onload = () => {
+                logoImg.style.display = 'block';
+                logoIcon.style.display = 'none';
+                if (docLogoImg && docLogoIcon) {
+                    docLogoImg.style.display = 'block';
+                    docLogoIcon.style.display = 'none';
+                }
+            };
+            testImg.onerror = () => {
+                logoImg.style.display = 'none';
+                logoIcon.style.display = 'block';
+                if (docLogoImg && docLogoIcon) {
+                    docLogoImg.style.display = 'none';
+                    docLogoIcon.style.display = 'block';
+                }
+            };
+            
+            const logoPath = window.resolvePath ? resolvePath.shared('assets/logo.png') : '../shared/assets/logo.png';
+            testImg.src = logoPath;
+            logoImg.src = logoPath;
+            if (docLogoImg) {
+                docLogoImg.src = logoPath;
+            }
+        }
+
+        // 平滑滚动到指定区域
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html> 

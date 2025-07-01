@@ -1,0 +1,1491 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'Calibri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #F5F1EB 0%, #E8DDD1 50%, #D4C4A8 100%);
+    min-height: 100vh;
+    color: #5D4E47;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部标题栏 */
+.app-header {
+    background: rgba(168, 140, 127, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+}
+
+.app-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.app-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.app-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.app-logo span {
+    font-size: 2rem;
+}
+
+.app-title {
+    text-align: center;
+}
+
+.app-title h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.app-title .app-author {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-style: italic;
+    margin: 0.25rem 0 0 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 主应用容器 */
+#app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 页脚 */
+.app-footer {
+    background: rgba(168, 140, 127, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+.app-footer p {
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.app-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.footer-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.footer-text {
+    margin: 0;
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* 页面切换 */
+.page {
+    display: none;
+    flex: 1;
+    min-height: calc(100vh - 120px);
+}
+
+.page.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 首页页眉 */
+.page-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.page-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.page-actions .btn {
+    min-width: 160px;
+    text-align: center;
+}
+
+/* 头部样式 */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #7A5A57;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* 主内容区域 */
+.main-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+    width: 100%;
+}
+
+/* 按钮样式 - 新莫兰迪色系 */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    min-width: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #C65B78 0%, #A8557A 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(198, 91, 120, 0.3);
+}
+
+.btn-secondary {
+    background: #A8557A;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #8F4768;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: #D4987A;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #C4886A;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #7A5A57;
+    border: 2px solid #C65B78;
+}
+
+.btn-outline:hover {
+    background: #C65B78;
+    color: white;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* 抽奖列表样式 */
+.lottery-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.lottery-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lottery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.lottery-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.lottery-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #7A5A57;
+    margin-bottom: 0.25rem;
+}
+
+.lottery-card-type {
+    background: #C65B78;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.lottery-card-info {
+    color: #A8857A;
+    margin-bottom: 1rem;
+}
+
+.lottery-card-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #C65B78;
+    color: white;
+}
+
+.status-completed {
+    background: #D4987A;
+    color: white;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #7A5A57;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #A8857A;
+}
+
+/* 配置表单样式 */
+.config-form {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h3 {
+    color: #7A5A57;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #7A5A57;
+    font-weight: 600;
+}
+
+/* 复选框特殊样式 */
+.form-group label input[type="checkbox"] {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 0.75rem;
+    margin-bottom: 0;
+    vertical-align: middle;
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0;
+}
+
+.checkbox-container label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    gap: 0.5rem;
+}
+
+.checkbox-container label input[type="checkbox"] {
+    cursor: pointer;
+    margin-right: 0;
+}
+
+.checkbox-container label span {
+    font-weight: 600;
+    color: #7A5A57;
+    cursor: pointer;
+}
+
+/* 输入框placeholder样式 */
+.form-group input::placeholder,
+.form-group select::placeholder {
+    color: #B3A094;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.form-group input::-webkit-input-placeholder,
+.form-group select::-webkit-input-placeholder {
+    color: #B3A094;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.form-group input::-moz-placeholder,
+.form-group select::-moz-placeholder {
+    color: #B3A094;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.form-group input:-ms-input-placeholder,
+.form-group select:-ms-input-placeholder {
+    color: #B3A094;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #E8DDD1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #C65B78;
+    box-shadow: 0 0 0 3px rgba(198, 91, 120, 0.1);
+}
+
+/* 奖项配置 */
+.prizes-container {
+    margin-bottom: 1rem;
+}
+
+.prize-item {
+    background: #F5F1EB;
+    border: 2px solid #E8DDD1;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.prize-item.last-prize {
+    background: linear-gradient(135deg, #F0E8D7 0%, #E8DDD1 100%);
+    border-color: #D4C4A8;
+}
+
+.prize-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.prize-item-title {
+    font-weight: 600;
+    color: #7A5A57;
+}
+
+.remove-prize-btn {
+    background: #D4987A;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.prize-fields {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* 抽奖进行页面 */
+.draw-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.draw-info,
+.draw-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.box-status {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #F5F1EB;
+    border-radius: 8px;
+}
+
+.current-box,
+.remaining-count {
+    text-align: center;
+}
+
+.current-box span:first-child,
+.remaining-count span:first-child {
+    display: block;
+    color: #A8857A;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.current-box span:last-child,
+.remaining-count span:last-child {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #7A5A57;
+}
+
+.remaining-prizes h4 {
+    color: #7A5A57;
+    margin-bottom: 1rem;
+}
+
+.prizes-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.prize-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #F5F1EB;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.prize-display.last-prize {
+    background: linear-gradient(135deg, #F0E8D7 0%, #E8DDD1 100%);
+    animation: glow 2s ease-in-out infinite alternate;
+    border: 2px solid #D4C4A8;
+    position: relative;
+}
+
+.prize-display.sold-out {
+    background: #EDEAE6;
+    opacity: 0.6;
+    text-decoration: line-through;
+    color: #B3A094;
+}
+
+.prize-display.sold-out .prize-level,
+.prize-display.sold-out .prize-name,
+.prize-display.sold-out .prize-count {
+    color: #B3A094;
+}
+
+.prize-display.last-prize::before {
+    content: "👑";
+    position: absolute;
+    left: -10px;
+    top: -10px;
+    font-size: 1.2rem;
+    background: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(212, 196, 168, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(212, 196, 168, 0.8), 0 0 30px rgba(212, 196, 168, 0.4);
+    }
+}
+
+.prize-level {
+    font-weight: 700;
+    color: #7A5A57;
+}
+
+.prize-name {
+    color: #7A5A57;
+    flex: 1;
+    margin: 0 1rem;
+}
+
+.prize-count {
+    background: #C65B78;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.draw-controls {
+    margin-bottom: 1.5rem;
+}
+
+.draw-count-group {
+    max-width: none;
+    width: 100%;
+}
+
+.draw-count-group input {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+.draw-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.draw-buttons .btn {
+    width: 200px;
+    text-align: center;
+    justify-content: center;
+}
+
+.draw-result {
+    min-height: 100px;
+    padding: 1rem;
+    background: #F5F1EB;
+    border-radius: 8px;
+    display: none;
+}
+
+.draw-result.show {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.result-item.last-prize {
+    background: linear-gradient(135deg, #F0E8D7 0%, #E8DDD1 100%);
+    animation: celebration 1s ease-in-out;
+}
+
+@keyframes celebration {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* 抽奖历史 */
+.draw-history {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.history-header h4 {
+    color: #7A5A57;
+    margin: 0;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.history-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 1rem;
+    border-bottom: 1px solid #E8DDD1;
+    transition: background-color 0.3s ease;
+}
+
+.history-item:hover {
+    background: #F5F1EB;
+}
+
+.history-item.revoked {
+    opacity: 0.7;
+    text-decoration: line-through;
+    background: #F0F0F0;
+}
+
+.history-item .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+}
+
+.history-drawer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.history-drawer {
+    font-weight: 600;
+    color: #7A5A57;
+}
+
+.history-drawer-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.edit-drawer-btn {
+    background: transparent;
+    color: #A8857A;
+    border: 1px solid rgba(168, 133, 122, 0.3);
+    border-radius: 4px;
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+}
+
+.edit-drawer-btn:hover {
+    background: rgba(168, 133, 122, 0.1);
+    border-color: #A8857A;
+    transform: scale(1.05);
+}
+
+.edit-drawer-input {
+    background: white;
+    border: 2px solid #C65B78;
+    border-radius: 4px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7A5A57;
+    min-width: 90px;
+    max-width: 140px;
+    outline: none;
+}
+
+.edit-drawer-input:focus {
+    border-color: #A8557A;
+    box-shadow: 0 0 0 2px rgba(168, 85, 122, 0.2);
+}
+
+.history-box {
+    background: #E8DDD1;
+    color: #7A5A57;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.history-status {
+    color: #D4987A;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.history-time {
+    color: #A8857A;
+    font-size: 0.9rem;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.revoke-btn {
+    background: transparent;
+    color: #D4987A;
+    border: 1px solid rgba(212, 152, 122, 0.3);
+    border-radius: 4px;
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+}
+
+.revoke-btn:hover {
+    background: rgba(212, 152, 122, 0.1);
+    border-color: #D4987A;
+    transform: scale(1.05);
+}
+
+.revoke-btn:disabled {
+    background: transparent;
+    color: #B3A094;
+    border-color: rgba(179, 160, 148, 0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.history-prizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.history-prize {
+    background: #C65B78;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.history-prize.last-prize {
+    background: linear-gradient(135deg, #F0E8D7 0%, #E8DDD1 100%);
+    color: #7A5A57;
+    font-weight: 600;
+}
+
+.history-prize.grayed {
+    background: #B3A094;
+    color: white;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .app-title h1 {
+        font-size: 1.4rem;
+    }
+    
+    .app-title .app-author {
+        font-size: 0.9rem;
+    }
+    
+    .page-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        justify-items: center;
+    }
+    
+    .header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .draw-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .box-status {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .prize-fields {
+        grid-template-columns: 1fr;
+    }
+    
+    .lottery-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .app-footer {
+        padding: 0.75rem 1rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .footer-link {
+        display: inline-block;
+    }
+    
+    .charity-callout {
+        padding: 1rem;
+    }
+    
+    .charity-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .charity-icon {
+        font-size: 1.5rem;
+    }
+    
+    .charity-text p {
+        font-size: 0.9rem;
+    }
+    
+    .charity-buttons {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+    
+    .charity-link {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .all-btn {
+        font-size: 0.7rem;
+        padding: 0.35rem 0.5rem;
+        min-width: 35px;
+        margin-left: 0.25rem;
+    }
+    
+    /* 优化抽奖记录标题和按钮区域 */
+    .history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .history-item .history-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .history-drawer-info {
+        flex: 1;
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .history-time {
+        font-size: 0.8rem;
+        white-space: nowrap;
+        min-width: fit-content;
+    }
+    
+    .history-actions {
+        flex-shrink: 0;
+        gap: 0.25rem;
+    }
+
+    .history-header h4 {
+        font-size: 1.1rem;
+        white-space: nowrap;
+    }
+    
+    .history-actions .btn-small {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.5rem;
+        white-space: nowrap;
+        text-align: center;
+        min-width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        line-height: 1.2;
+    }
+    
+    /* 如果按钮文字仍然太长，使用更紧凑的布局 */
+    @media (max-width: 480px) {
+        .history-actions {
+            gap: 0.25rem;
+        }
+        
+        .history-actions .btn-small {
+            font-size: 0.7rem;
+            padding: 0.35rem 0.4rem;
+        }
+        
+        /* 确保按钮内容不溢出 */
+        #reset-lottery-btn,
+        #export-snapshot-btn,
+        #export-csv-btn {
+            max-width: 100%;
+            text-overflow: ellipsis;
+        }
+    }
+    
+    /* 极小屏幕优化 */
+    @media (max-width: 360px) {
+        .history-actions .btn-small {
+            font-size: 0.65rem;
+            padding: 0.3rem 0.3rem;
+        }
+        
+        .history-header h4 {
+            font-size: 1rem;
+        }
+    }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 表单节标题 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+/* 总数信息文字 */
+.total-items-text {
+    margin-top: 10px;
+    padding: 8px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #7A5A57;
+    font-weight: 500;
+}
+
+/* 总数信息 - 保留原样式以防其他地方使用 */
+.total-items-info {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    border-left: 4px solid #A0737C;
+}
+
+/* 数字输入组 */
+.number-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 200px;
+}
+
+.number-btn {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #C65B78;
+    background: white;
+    color: #C65B78;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.number-btn:hover {
+    background: #C65B78;
+    color: white;
+    transform: scale(1.1);
+}
+
+.number-btn:active {
+    transform: scale(0.95);
+}
+
+.number-input-group input {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    background: white;
+    border: 2px solid #E8DDD1;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+.number-input-group input::-webkit-outer-spin-button,
+.number-input-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.number-input-group input:focus {
+    border-color: #C65B78;
+    outline: none;
+}
+
+/* 概率输入组特殊样式 */
+.probability-input-group {
+    position: relative;
+}
+
+.probability-input-group input {
+    padding-right: 2rem; /* 为百分号留出空间 */
+}
+
+.probability-suffix {
+    position: absolute;
+    right: 50px; /* 在加号按钮左侧 */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7A5A57;
+    font-weight: 600;
+    pointer-events: none; /* 不响应鼠标事件 */
+    z-index: 1;
+}
+
+/* 概率抽奖样式 - 移除不需要的配置区域样式 */
+.total-probability-display {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #7A5A57;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.probability-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.probability-status.success {
+    background: #D4E8D4;
+    color: #2D5A2D;
+}
+
+.probability-status.warning {
+    background: #FFF3CD;
+    color: #856404;
+}
+
+.probability-status.error {
+    background: #F8D7DA;
+    color: #721C24;
+}
+
+.probability-prize .prize-probability {
+    background: #A8557A;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* 公益callout样式 */
+.charity-callout {
+    background: linear-gradient(135deg, #E8F5E8 0%, #F0F8F0 100%);
+    border: 2px solid #98D982;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 15px rgba(152, 217, 130, 0.2);
+}
+
+.charity-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.charity-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.charity-text {
+    flex: 1;
+    text-align: center;
+}
+
+.charity-text p {
+    margin: 0;
+    color: #2D5A2D;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.charity-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.charity-link {
+    background: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.charity-link:hover {
+    background: #45A049;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Tooltip 和通知样式 */
+.tooltip-trigger {
+    margin-left: 0.5rem;
+    color: #A8857A;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 0.1rem 0.2rem;
+}
+
+.tooltip-trigger:hover {
+    background: #A8857A;
+    color: white;
+    transform: scale(1.1);
+}
+
+.tooltip-content {
+    display: none;
+    background: linear-gradient(135deg, #C65B78 0%, #A8557A 100%);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(198, 91, 120, 0.3);
+    animation: tooltipFadeIn 0.3s ease-out;
+    position: relative;
+}
+
+.tooltip-content::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #C65B78;
+}
+
+.tooltip-content.show {
+    display: block;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 改进的通知样式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    animation: notificationSlideIn 0.3s ease-out;
+}
+
+.notification.error {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    border-left: 4px solid #A93226;
+}
+
+.notification.success {
+    background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+    color: white;
+    border-left: 4px solid #1E8449;
+}
+
+.notification.warning {
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+    color: white;
+    border-left: 4px solid #D35400;
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.all-btn {
+    padding: 0.5rem 0.75rem;
+    background: #A8857A;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.all-btn:hover {
+    background: #978175;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(168, 133, 122, 0.3);
+}
+
+.all-btn:active {
+    transform: scale(0.95);
+} 

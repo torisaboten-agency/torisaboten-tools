@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torisaboten 工具集 - 偶活相关工具集合</title>
+    <link rel="stylesheet" href="shared/styles.css" id="main-css">
+    <script src="shared/path-resolver.js"></script>
+    <style>
+        /* 工具卡片样式 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-color: #667eea;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .tool-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .tool-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-card-description {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-card-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .tool-card-features li {
+            color: #4a5568;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .tool-card-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+        
+        .page-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .page-intro h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-intro p {
+            color: #718096;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* 主内容区域改进间距 */
+        .main-content {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+        
+        /* 改进公益callout的按钮间距 */
+        .charity-callout .charity-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .charity-callout .charity-link {
+            background: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+        }
+
+        .charity-callout .charity-link:hover {
+            background: #45A049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+            text-decoration: none;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+            
+            .tool-card {
+                padding: 2rem;
+            }
+            
+            .page-intro {
+                margin-bottom: 3rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .page-intro h2 {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            /* 移动端公益callout优化 */
+            .charity-callout {
+                margin-bottom: 3rem !important;
+                padding: 1.5rem !important;
+            }
+
+            .charity-callout .charity-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .charity-callout .charity-buttons {
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .charity-callout .charity-link {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <div class="app-header">
+        <div class="app-header-content">
+            <div class="app-logo">
+                <img id="app-logo-img" src="shared/assets/logo.png" alt="Logo" style="display: none;">
+                <span id="app-logo-icon">🛠️</span>
+            </div>
+            <div class="app-title">
+                <h1>Torisaboten 工具集</h1>
+                <p class="app-author">By Torisaboten</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="app">
+        <main class="main-content">
+            <!-- 页面介绍 -->
+            <div class="page-intro">
+                <h2>🎯 偶活相关工具集合</h2>
+                <p>为偶活粉丝打造的专业工具集，包含一番赏计算器和参战规划助手，让您的追星生活更加有序和高效。</p>
+            </div>
+            
+            <!-- 公益callout -->
+            <div class="charity-callout" style="margin-bottom: 4rem;">
+                <div class="charity-content">
+                    <span class="charity-icon">🌸</span>
+                    <div class="charity-text">
+                        <p>关注春蕾计划，支持中国乡村女童的教育与可持续发展</p>
+                    </div>
+                    <div class="charity-buttons">
+                        <a href="https://www.cctf.org.cn/zt/cljh/" target="_blank" class="charity-link">项目官网</a>
+                        <a href="https://gongyi.qq.com/succor/detail.htm?id=5888" target="_blank" class="charity-link">腾讯公益</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 工具网格 -->
+            <div class="tools-grid">
+                <!-- 线下抽奖小助手 -->
+                <a href="ichibankuji/index.html" class="tool-card">
+                    <span class="tool-card-icon">🎲</span>
+                    <div class="tool-card-title">线下抽奖小助手</div>
+                    <div class="tool-card-description">
+                        专业的线下抽奖工具，支持一番赏和概率抽奖两种模式，让您的抽奖活动更加公平有趣。
+                    </div>
+                    <ul class="tool-card-features">
+                        <li>多种抽奖模式（一番赏/概率抽奖）</li>
+                        <li>实时概率计算和成本分析</li>
+                        <li>详细的抽奖历史记录</li>
+                        <li>数据导入导出功能</li>
+                        <li>多箱连抽管理</li>
+                    </ul>
+                </a>
+                
+                <!-- 偶活参战规划小助手 (新的描述) -->
+                <a href="sansen_planner_vue/" class="tool-card">
+                    <span class="tool-card-icon">🎭</span>
+                    <div class="tool-card-title">参战计划作成工具</div>
+                    <div class="tool-card-description">
+                        高效规划偶像活动日程，管理多团体演出与特典。直观生成甘特图，轻松导出为图片或日历(ICS)文件，完美适配移动端与微信环境。
+                    </div>
+                    <ul class="tool-card-features">
+                        <li>单一活动与多活动模式</li>
+                        <li>可视化甘特图与时间轴</li>
+                        <li>演出与特典分别管理</li>
+                        <li>图片 (PNG) 与日历 (ICS) 导出</li>
+                        <li>响应式设计，支持移动端</li>
+                        <li>本地存储数据，保障隐私</li>
+                    </ul>
+                </a>
+                
+                <!-- 偶活参战规划小助手 (Vuetify版本) -->
+                <!--
+                <a href="#" id="vuetify-link" class="tool-card">
+                    <span class="tool-card-icon">🎨</span>
+                    <div class="tool-card-title">参战计划作成工具 (Vuetify版)</div>
+                    <div class="tool-card-description">
+                        基于Material Design的现代化UI版本。采用Vuetify组件库重构，提供更优雅的交互体验和现代化的设计语言。<br>
+                        <strong style="color: #48bb78;">🚀 Vercel部署中，即将上线</strong>
+                    </div>
+                    <ul class="tool-card-features">
+                        <li>Material Design风格界面</li>
+                        <li>现代化的组件库支持</li>
+                        <li>改进的响应式布局</li>
+                        <li>更优雅的表单和对话框</li>
+                        <li>统一的主题色彩系统</li>
+                        <li>保持所有原有功能</li>
+                    </ul>
+                </a>
+                -->
+            </div>
+        </main>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="app-footer">
+        <p>@Torisaboten 2025</p>
+    </footer>
+    
+    <script>
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查Logo
+            checkLogo();
+            
+            // 设置Vuetify版本链接
+            setupVuetifyLink();
+        });
+        
+        function checkLogo() {
+            const logoImg = document.getElementById('app-logo-img');
+            const logoIcon = document.getElementById('app-logo-icon');
+            
+            const testImg = new Image();
+            testImg.onload = () => {
+                logoImg.style.display = 'block';
+                logoIcon.style.display = 'none';
+            };
+            testImg.onerror = () => {
+                logoImg.style.display = 'none';
+                logoIcon.style.display = 'block';
+            };
+            testImg.src = resolvePath.shared('assets/logo.png');
+            
+            // 动态设置logo src
+            logoImg.src = resolvePath.shared('assets/logo.png');
+        }
+        
+        function setupVuetifyLink() {
+            const vuetifyLink = document.getElementById('vuetify-link');
+            
+            // 检查是否为本地开发环境
+            if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                // 本地环境，尝试本地构建版本
+                vuetifyLink.href = 'sansen_planner_vuetify/dist/';
+            } else {
+                // 生产环境，根据观察到的有效路径修改
+                vuetifyLink.href = '/sansen_planner_vuetify/'; 
+            }
+        }
+    </script>
+</body>
+</html> 

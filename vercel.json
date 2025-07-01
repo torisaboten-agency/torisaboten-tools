@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "sansen_planner_vue/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "sansen_planner_vuetify/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "shared/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "ichibankuji/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/sansen_planner_vue((?!/assets|/images|/logo\\.png|/favicon\\.ico|/manifest\\.webmanifest|/sw\\.js|/robots\\.txt|/site\\.webmanifest).*)",
+      "destination": "/sansen_planner_vue/index.html"
+    },
+    {
+      "source": "/vuetify((?!/assets|/images|/logo\\.png|/favicon\\.ico|/manifest\\.webmanifest|/sw\\.js|/robots\\.txt|/site\\.webmanifest).*)",
+      "destination": "/sansen_planner_vuetify/dist/index.html"
+    }
+  ]
+} 
