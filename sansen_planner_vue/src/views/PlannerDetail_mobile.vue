@@ -898,6 +898,7 @@ onUnmounted(() => {
 .planner-right {
   flex: 1;
   min-width: 0;
+  overflow: hidden; /* 防止内容溢出 */
 }
 
 .form-section {
@@ -1106,6 +1107,7 @@ onUnmounted(() => {
 }
 
 .gantt-container {
+  width: 100%;
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -1113,6 +1115,7 @@ onUnmounted(() => {
   min-height: 400px;
   position: sticky;
   top: 1rem;
+  overflow: hidden; /* 确保容器边界 */
 }
 
 .export-actions {
@@ -1395,6 +1398,7 @@ onUnmounted(() => {
   overflow-y: hidden;
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 100%; /* 限制最大宽度不超过父容器 */
 }
 
 /* iPad 优化样式 */
@@ -1411,6 +1415,23 @@ onUnmounted(() => {
   .gantt-chart-container {
     min-width: 400px; /* 移动端进一步减少最小宽度 */
     -webkit-overflow-scrolling: touch;
+  }
+  
+  .planner-container {
+    flex-direction: column; /* 移动端垂直布局 */
+  }
+  
+  .planner-left {
+    flex: none;
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+  }
+  
+  .planner-right {
+    flex: none;
+    width: 100%;
+    min-width: auto;
   }
 }
 
