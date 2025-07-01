@@ -1,8 +1,12 @@
 [build]
-  # 让Netlify自动构建Vue应用
+  # 让Netlify在线构建Vue应用
   command = "cd sansen_planner_vue && npm ci && npm run build"
   # 发布整个项目根目录
   publish = "."
+
+[build.environment]
+  # 指定Node.js版本
+  NODE_VERSION = "18"
 
 # SPA路由重定向配置 - sansen_planner_vue
 # 重定向到构建后的dist目录中的index.html

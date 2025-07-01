@@ -2,24 +2,14 @@
 
 本文档详细说明如何将此项目从Vercel迁移到Netlify，确保所有功能正常运行。
 
-## ✨ 自动构建：Netlify在线构建Vue应用
+## 🔧 构建配置
 
-**Netlify会自动构建Vue应用，无需本地构建！**
+**Netlify已配置为自动在线构建Vue应用！**
 
-配置文件 `netlify.toml` 已设置自动构建命令：
-```toml
-[build]
-  command = "cd sansen_planner_vue && npm install && npm run build && cd .. && echo 'Vue app built successfully'"
-  publish = "."
-```
-
-### 本地构建（可选）
-如果你想在本地测试构建效果：
-```bash
-cd sansen_planner_vue
-npm install
-npm run build
-```
+### 自动构建配置
+- ✅ Netlify会自动运行：`cd sansen_planner_vue && npm ci && npm run build`
+- ✅ 使用Node.js 18环境
+- ✅ 无需本地预构建
 
 ## 🏗️ 项目架构分析
 
@@ -84,7 +74,7 @@ npm run build
 1. **推送到Git仓库**
    ```bash
    git add .
-   git commit -m "Add Netlify configuration with auto-build"
+   git commit -m "Add Netlify configuration"
    git push origin main
    ```
 
@@ -94,38 +84,27 @@ npm run build
    - 选择你的Git提供商（GitHub/GitLab/Bitbucket）
    - 选择对应的仓库
 
-3. **构建配置**（Netlify会自动读取netlify.toml）
-   - Build command: `cd sansen_planner_vue && npm install && npm run build && cd .. && echo 'Vue app built successfully'`
+3. **构建配置**
+   - Build command: 留空（自动从netlify.toml读取）
    - Publish directory: `.`（项目根目录）
    - 点击 "Deploy site"
 
-4. **等待构建完成**
-   - Netlify会自动安装依赖并构建Vue应用
-   - 构建过程大约需要2-3分钟
-   - 构建完成后，网站自动部署
+4. **等待自动构建**
+   - Netlify会自动检测到netlify.toml配置
+   - 自动安装依赖并构建Vue应用
+   - 构建完成后自动部署
 
-### 方式二：手动上传（不推荐，因为无法自动构建）
+### 方式二：手动上传
 
-⚠️ **注意**：手动上传无法触发自动构建，建议使用Git仓库连接方式。
-
-如果必须手动上传：
-1. **本地构建Vue应用**
-   ```bash
-   cd sansen_planner_vue
-   npm install
-   npm run build
-   cd ..
-   ```
-
-2. **准备文件**
-   - 确保 `sansen_planner_vue/dist/` 目录存在
+1. **准备文件**
    - 确保项目根目录包含 `netlify.toml` 配置文件
+   - 确保 `sansen_planner_vue/package.json` 存在
    - 压缩整个项目文件夹为ZIP格式
 
-3. **上传部署**
+2. **上传部署**
    - 在Netlify控制台点击 "Deploy manually"
    - 拖拽ZIP文件到部署区域
-   - 等待部署完成
+   - Netlify会自动构建并部署
 
 ## 🔧 关键配置说明
 
@@ -280,6 +259,27 @@ Netlify自动启用Gzip压缩，但可以进一步优化：
 - [ ] 配置环境变量（如需要）
 - [ ] 更新DNS解析
 - [ ] 测试HTTPS访问
+
+## 🔍 构建状态检查
+
+### Netlify构建日志验证
+在Netlify控制台查看构建过程：
+1. 进入你的站点 → "Deploys" 页面
+2. 点击最新部署查看构建日志
+3. 确认看到以下成功信息：
+   ```
+   ✓ Installing dependencies
+   ✓ cd sansen_planner_vue && npm ci && npm run build
+   ✓ Build script "vue-tsc && vite build" completed
+   ✓ Deploy completed
+   ```
+
+### 构建故障排除
+如果构建失败，常见问题：
+- **Node.js版本**：确认使用v18（已在配置中指定）
+- **依赖安装**：检查npm ci是否成功
+- **TypeScript编译**：检查vue-tsc是否通过
+- **Vite构建**：确认vite build是否成功
 
 ## 📞 技术支持
 
