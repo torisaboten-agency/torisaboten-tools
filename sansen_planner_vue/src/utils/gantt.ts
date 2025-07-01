@@ -186,13 +186,13 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     interval = 120 // 12小时以上用2小时间隔
   }
 
-  // 查找次日开始的位置
+  // 查找次日开始的位置 - 修复逻辑
+  const midnightMinutes = 1440 // 午夜24:00对应的分钟数
   let nextDayStart = -1
-  for (let minutes = timeRange.start; minutes <= timeRange.end; minutes += 60) {
-    if (Math.floor(minutes / 60) >= 24 && nextDayStart === -1) {
-      nextDayStart = minutes
-      break
-    }
+  
+  if (timeRange.start < midnightMinutes && timeRange.end >= midnightMinutes) {
+    // 如果时间范围跨越了午夜，则在午夜位置显示分隔线
+    nextDayStart = midnightMinutes
   }
 
   // 生成时间标记
@@ -834,13 +834,13 @@ function drawGanttToCanvas(
     ctx.fillText(timeStr, xPos, startY + 15)
   }
   
-  // 绘制次日分隔线（如果存在跨日）
+  // 绘制次日分隔线（如果存在跨日）- 修复逻辑
+  const midnightMinutes = 1440 // 午夜24:00对应的分钟数
   let nextDayStart = -1
-  for (let minutes = startMinutes; minutes <= endMinutes; minutes += 60) {
-    if (Math.floor(minutes / 60) >= 24 && nextDayStart === -1) {
-      nextDayStart = minutes
-      break
-    }
+  
+  if (startMinutes < midnightMinutes && endMinutes >= midnightMinutes) {
+    // 如果时间范围跨越了午夜，则在午夜位置显示分隔线
+    nextDayStart = midnightMinutes
   }
   
   if (nextDayStart !== -1) {
