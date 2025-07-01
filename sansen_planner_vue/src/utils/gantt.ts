@@ -208,7 +208,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
 
     // 团体行
     teams.forEach(teamData => {
-      const timeBars = generateTimeBars(teamData, timeRange.start)
+      const timeBars = generateTimeBars(teamData, timeRange)
       
       bodyHTML += `
         <div class="gantt-row">
@@ -228,7 +228,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
 /**
  * 生成时间条HTML
  */
-function generateTimeBars(teamData: GanttTeamData, startMinutes: number): string {
+function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): string {
   const allBars: TimeBar[] = [
     ...teamData.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
     ...teamData.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
@@ -237,13 +237,13 @@ function generateTimeBars(teamData: GanttTeamData, startMinutes: number): string
   // 检查重叠并调整位置
   const { hasOverlap, adjustedBars } = checkTimeOverlap(allBars)
   
-  // 计算总时间范围
-  const totalMinutes = (startMinutes + 1440) - startMinutes // 使用一天的时间范围
+  // 使用实际的时间范围，而不是固定的1440分钟
+  const totalMinutes = timeRange.end - timeRange.start
 
   let barsHTML = ''
   adjustedBars.forEach(bar => {
     // 使用百分比定位，与时间轴标记保持一致
-    const leftPercent = ((bar.startMinutes - startMinutes) / totalMinutes) * 100
+    const leftPercent = ((bar.startMinutes - timeRange.start) / totalMinutes) * 100
     const widthPercent = (bar.duration / totalMinutes) * 100
     
     // 确保最小宽度百分比
@@ -797,7 +797,7 @@ function drawGanttToCanvas(
     }
 
     // 团体行
-    teams.forEach(teamDataItem => {
+    teams.forEach(teamData => {
       // 检查是否超出可用高度
       if (currentY + rowHeight > startY + availableHeight) {
         return // 跳过超出范围的内容
@@ -830,17 +830,17 @@ function drawGanttToCanvas(
       ctx.fillStyle = '#5f6368'
       ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'right'
-      ctx.fillText(teamDataItem.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
+      ctx.fillText(teamData.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
       
       // 检查时间重叠
       const allBars = [
-        ...teamDataItem.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
-        ...teamDataItem.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
+        ...teamData.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
+        ...teamData.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
       ]
       const { hasOverlap } = checkTimeOverlap(allBars)
       
       // Live时间条
-      teamDataItem.liveBars.forEach(bar => {
+      teamData.liveBars.forEach(bar => {
         const barX = leftPanelWidth + 20 + (bar.startMinutes - startMinutes) / totalMinutes * chartWidth
         const barWidth = Math.max(20, bar.duration / totalMinutes * chartWidth)
         const barY = hasOverlap ? currentY + 4 : currentY + 10
@@ -874,7 +874,7 @@ function drawGanttToCanvas(
       })
       
       // 特典时间条
-      teamDataItem.tokutenBars.forEach(bar => {
+      teamData.tokutenBars.forEach(bar => {
         const barX = leftPanelWidth + 20 + (bar.startMinutes - startMinutes) / totalMinutes * chartWidth
         const barWidth = Math.max(20, bar.duration / totalMinutes * chartWidth)
         const barY = hasOverlap ? currentY + 36 : currentY + 10
