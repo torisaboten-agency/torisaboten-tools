@@ -9,15 +9,17 @@
     "vercel-build": "npm run build"
   },
   "dependencies": {
+    "@types/qrcode": "^1.5.5",
+    "pinia": "^2.1.0",
+    "qrcode": "^1.5.4",
     "vue": "^3.4.0",
-    "vue-router": "^4.2.0",
-    "pinia": "^2.1.0"
+    "vue-router": "^4.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "typescript": "5.6.2",
-    "vue-tsc": "2.0.29",
     "vite": "^5.0.0",
-    "@types/node": "^20.11.0"
+    "vue-tsc": "2.0.29"
   }
-} 
+}
