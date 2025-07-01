@@ -22,12 +22,23 @@
   status = 200
   force = true
 
+# 排除静态资源的重定向 - 让这些文件正常提供服务
+[[redirects]]
+  from = "/sansen_planner_vue/assets/*"
+  to = "/sansen_planner_vue/dist/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/sansen_planner_vue/dist/*"
+  to = "/sansen_planner_vue/dist/:splat"
+  status = 200
+
+# SPA路由重定向（除了上述静态资源）
 [[redirects]]
   from = "/sansen_planner_vue/*"
   to = "/sansen_planner_vue/dist/index.html"
   status = 200
   force = false
-  # 排除静态资源：assets, images, logo.png, favicon.ico, manifest.webmanifest, sw.js, robots.txt, site.webmanifest
 
 # 注意：sansen_planner_vuetify 目录不存在，已移除相关配置
 

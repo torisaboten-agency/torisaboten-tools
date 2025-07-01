@@ -2,9 +2,17 @@
 # 如果不使用 netlify.toml，可以使用此文件
 
 # SPA路由 - sansen_planner_vue
-# 强制重定向到构建后的dist目录，避免加载源文件
+# 重要：静态资源规则必须在SPA重定向之前，按顺序处理
+
+# 静态资源直接映射到dist目录
+/sansen_planner_vue/assets/*  /sansen_planner_vue/dist/assets/:splat  200
+/sansen_planner_vue/dist/*    /sansen_planner_vue/dist/:splat         200
+
+# 强制重定向主页面到构建版本
 /sansen_planner_vue   /sansen_planner_vue/dist/index.html  200!
 /sansen_planner_vue/  /sansen_planner_vue/dist/index.html  200!
+
+# SPA路由重定向（其他所有路径）
 /sansen_planner_vue/* /sansen_planner_vue/dist/index.html  200
 
 # 注意：vuetify应用目录不存在，已移除相关配置
