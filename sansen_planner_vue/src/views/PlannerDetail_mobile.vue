@@ -335,7 +335,9 @@
 
     <!-- 页脚 -->
     <footer class="app-footer">
-      <p>@Torisaboten 2025</p>
+      <div class="container">
+        <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+      </div>
     </footer>
     
     <!-- 团体创建/编辑模态框 -->
@@ -1882,5 +1884,20 @@ onUnmounted(() => {
 
 .gantt-desktop-view {
   display: block;
+}
+
+/* 页脚样式 */
+.app-footer {
+  background: #2d3748;
+  color: white;
+  padding: 2rem 0;
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.footer-text {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
 }
 </style> 
