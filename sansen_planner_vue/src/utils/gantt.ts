@@ -1090,9 +1090,21 @@ function drawTimeDetailPanel(
   activityEntries.forEach(([activityId, teams], activityIndex) => {
     // 多活动模式：绘制活动标题
     if (activityId !== 'single-activity') {
-      // 活动间间距（除了第一个活动）
+      // 从第二个活动开始，在其与上一个活动之间绘制分割线
       if (activityIndex > 0) {
-        currentY += interActivitySpacing
+        // 先向下移动一半的间距
+        currentY += interActivitySpacing / 2
+        
+        // 绘制分割线
+        ctx.strokeStyle = '#e5e7eb' // 使用浅灰色，与边框颜色统一
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(panelX + 15, currentY) // 左右留出边距
+        ctx.lineTo(panelX + panelWidth - 15, currentY)
+        ctx.stroke()
+        
+        // 再向下移动剩下的一半间距
+        currentY += interActivitySpacing / 2
       }
       
       const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
