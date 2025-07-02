@@ -1497,6 +1497,10 @@ onUnmounted(() => {
   background: #f8f9fa;
 }
 
+.gantt-row:hover .gantt-left-panel {
+  background: #f8f9fa; /* hover时左侧面板也跟随变色 */
+}
+
 .gantt-activity-header {
   background: #e3f2fd;
   font-weight: 600;
@@ -1541,7 +1545,7 @@ onUnmounted(() => {
   width: 160px;
   min-width: 160px;
   padding: 0 12px;
-  background: #fafbfc;
+  background: #ffffff;
   border-right: 1px solid #e1e5e9;
   text-align: right;
   font-size: 14px;
