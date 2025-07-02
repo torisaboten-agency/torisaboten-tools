@@ -1031,8 +1031,8 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     }
     
     teams.forEach((team, teamIndex) => {
-      // 团体间紧凑间距（多活动模式下第一个团体也要有间距）
-      if (teamIndex > 0 || (activityId !== 'single-activity' && teamIndex === 0)) {
+      // 团体间紧凑间距 - 统一逻辑：除了活动下的第一个团体，所有团体前都有间距
+      if (teamIndex > 0) {
         contentHeight += teamSpacing
       }
       
@@ -1107,8 +1107,8 @@ function drawTimeDetailPanel(
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间紧凑间距（多活动模式下第一个团体也要有间距）
-      if (teamIndex > 0 || (activityId !== 'single-activity' && teamIndex === 0)) {
+      // 团体间紧凑间距 - 统一逻辑：除了活动下的第一个团体，所有团体前都有间距
+      if (teamIndex > 0) {
         currentY += teamSpacing
       }
       
