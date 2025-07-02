@@ -1010,12 +1010,12 @@ async function exportDetailedGanttAsImage(
  * 计算时间明细表所需的高度
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
-  const lineHeight = 18
-  const groupSpacing = 15
-  const activitySpacing = 20
-  const titleHeight = 35 // 标题区域高度
-  const topPadding = 15 // 标题下方的间距（currentY = startY + 50 = titleHeight + 15）
-  const bottomPadding = 20 // 底部留白
+  const lineHeight = 16      // 与绘制函数保持一致
+  const teamSpacing = 8      // 团体间紧凑间距
+  const activitySpacing = 12 // 活动间紧凑间距
+  const titleHeight = 35     // 标题区域高度
+  const topPadding = 10      // 标题下方的间距（currentY = startY + 45 = titleHeight + 10）
+  const bottomPadding = 15   // 底部留白
   
   let contentHeight = 0
   
@@ -1023,18 +1023,18 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
   const activityEntries = Object.entries(groupedData)
   
   activityEntries.forEach(([activityId, teams], activityIndex) => {
-    // 多活动模式：活动标题高度和分割线
+    // 多活动模式：活动标题高度
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        contentHeight += 6 + 6 // 分割线前后间距
+        contentHeight += activitySpacing // 活动间间距
       }
-      contentHeight += activitySpacing
+      contentHeight += activitySpacing // 活动标题后的间距
     }
     
     teams.forEach((team, teamIndex) => {
-      // 团体间小间距
+      // 团体间紧凑间距
       if (teamIndex > 0) {
-        contentHeight += 8
+        contentHeight += teamSpacing
       }
       
       // 团体名称行
@@ -1045,14 +1045,11 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
       
       // 特典时间段行数
       contentHeight += team.tokutenBars.length * lineHeight
-      
-      // 团体间距
-      contentHeight += groupSpacing
     })
   })
   
   const totalHeight = titleHeight + topPadding + contentHeight + bottomPadding
-  return Math.max(400, totalHeight)
+  return Math.max(350, totalHeight) // 降低最小高度
 }
 
 /**
@@ -1099,27 +1096,20 @@ function drawTimeDetailPanel(
   ctx.stroke()
   
   // 绘制团体时间信息
-  let currentY = startY + 50
-  const lineHeight = 18
-  const groupSpacing = 15
-  const activitySpacing = 20
+  let currentY = startY + 45  // 减少顶部间距
+  const lineHeight = 16      // 减少行高
+  const teamSpacing = 8      // 团体间紧凑间距
+  const activitySpacing = 12 // 活动间紧凑间距
   
   const groupedData = groupTeamsByActivity(teamData)
   const activityEntries = Object.entries(groupedData)
   
   activityEntries.forEach(([activityId, teams], activityIndex) => {
-    // 多活动模式：绘制活动标题和分割线
+    // 多活动模式：绘制活动标题
     if (activityId !== 'single-activity') {
-      // 活动间分割线（除了第一个活动）
+      // 活动间间距（除了第一个活动）
       if (activityIndex > 0) {
-        currentY += 6
-        ctx.strokeStyle = '#d1d5db'
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.moveTo(panelX + 15, currentY)
-        ctx.lineTo(panelX + panelWidth - 15, currentY)
-        ctx.stroke()
-        currentY += 6
+        currentY += activitySpacing
       }
       
       // 获取活动名称
@@ -1137,9 +1127,9 @@ function drawTimeDetailPanel(
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间小间距（除了第一个团体）
+      // 团体间紧凑间距（除了第一个团体）
       if (teamIndex > 0) {
-        currentY += 8
+        currentY += teamSpacing
       }
       
       // 绘制团体名称（黑色，加粗）
@@ -1158,7 +1148,7 @@ function drawTimeDetailPanel(
         // 绘制圆形项目符号
         ctx.fillStyle = '#6b7280'
         ctx.beginPath()
-        ctx.arc(panelX + 28, currentY - 4, 2, 0, 2 * Math.PI)
+        ctx.arc(panelX + 28, currentY - 3, 2, 0, 2 * Math.PI)
         ctx.fill()
         
         // 绘制时间段信息（灰色，向右缩进）
@@ -1177,7 +1167,7 @@ function drawTimeDetailPanel(
         // 绘制圆形项目符号
         ctx.fillStyle = '#6b7280'
         ctx.beginPath()
-        ctx.arc(panelX + 28, currentY - 4, 2, 0, 2 * Math.PI)
+        ctx.arc(panelX + 28, currentY - 3, 2, 0, 2 * Math.PI)
         ctx.fill()
         
         // 绘制时间段信息（灰色，向右缩进）
@@ -1186,8 +1176,6 @@ function drawTimeDetailPanel(
         ctx.fillText(`${prefix}: ${timeText}${locationText}`, panelX + 35, currentY)
         currentY += lineHeight
       })
-      
-      currentY += groupSpacing // 团体间距
     })
   })
 }
