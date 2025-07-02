@@ -1011,9 +1011,9 @@ async function exportDetailedGanttAsImage(
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
   const lineHeight = 14      // 与绘制函数保持一致
-  const teamSpacing = 16     // 团体之间的间距
-  const activityHeaderSpacing = 22 // 活动标题与其下方内容的间距
-  const interActivitySpacing = 24  // 不同活动分组之间的间距
+  const teamSpacing = 14     // 团体之间的间距
+  const activityHeaderSpacing = 18 // 活动标题与其下方内容的间距
+  const interActivitySpacing = 20  // 不同活动分组之间的间距
   const topPadding = 20      // 顶部间距
   const bottomPadding = 15   // 底部留白
   
@@ -1080,9 +1080,9 @@ function drawTimeDetailPanel(
   // 绘制团体时间信息 - 从更高的位置开始，增加顶部间距
   let currentY = startY + 20
   const lineHeight = 14
-  const teamSpacing = 16          // 团体之间的间距
-  const activityHeaderSpacing = 22 // 活动标题与其下方内容的间距
-  const interActivitySpacing = 24  // 不同活动分组之间的间距
+  const teamSpacing = 14          // 团体之间的间距
+  const activityHeaderSpacing = 18 // 活动标题与其下方内容的间距
+  const interActivitySpacing = 20  // 不同活动分组之间的间距
   
   const groupedData = groupTeamsByActivity(teamData)
   const activityEntries = Object.entries(groupedData)
