@@ -1997,11 +1997,7 @@ onUnmounted(() => {
   min-height: 56px;
   border-bottom: 1px solid #f1f3f4;
   background: #ffffff;
-  transition: background-color 0.2s ease;
-}
-
-.gantt-row:hover {
-  background: #f8f9fa;
+  /* 移除hover效果，保持视觉稳定 */
 }
 
 .gantt-activity-header {
@@ -2062,10 +2058,6 @@ onUnmounted(() => {
 /* 只有非header行才使用白色背景 */
 .gantt-row .gantt-left-panel {
   background: #ffffff;
-}
-
-.gantt-row:hover .gantt-left-panel {
-  background: #f8f9fa; /* hover时变为灰色 */
 }
 
 .gantt-timeline {
