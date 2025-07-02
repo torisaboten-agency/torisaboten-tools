@@ -947,6 +947,9 @@ function drawGanttToCanvas(
     interval = 120 // 12小时以上用2小时间隔
   }
 
+  // 先收集时间标记位置，稍后绘制垂直分割线
+  const timeMarkPositions: number[] = []
+  
   for (let minutes = Math.ceil(startMinutes / interval) * interval; 
        minutes <= endMinutes; 
        minutes += interval) {
@@ -956,13 +959,8 @@ function drawGanttToCanvas(
     // 绘制时间标签
     ctx.fillText(timeStr, xPos, startY + 15)
     
-    // 绘制垂直分割线，从时间标签下方延伸到整个甘特图
-    ctx.strokeStyle = '#dadce0'
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
-    ctx.lineTo(xPos, startY + 24 + (teamData.length * 60)) // 简单估算高度，后面会被实际内容覆盖
-    ctx.stroke()
+    // 收集位置，稍后绘制垂直分割线
+    timeMarkPositions.push(xPos)
   }
   
 
@@ -1108,6 +1106,16 @@ function drawGanttToCanvas(
       
       currentY += rowHeight
     })
+  })
+  
+  // 绘制垂直分割线，从时间标签下方延伸到甘特图底部
+  timeMarkPositions.forEach(xPos => {
+    ctx.strokeStyle = '#dadce0'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
+    ctx.lineTo(xPos, currentY) // 延伸到甘特图底部
+    ctx.stroke()
   })
 }
 
