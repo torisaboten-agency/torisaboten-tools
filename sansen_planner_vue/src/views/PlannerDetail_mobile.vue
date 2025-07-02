@@ -1571,6 +1571,7 @@ onUnmounted(() => {
   height: 48px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
+  overflow: visible; /* 允许分割线延伸到容器外 */
 }
 
 /* 确保时间轴头部不受gantt-timeline白色背景影响 */
@@ -1586,14 +1587,37 @@ onUnmounted(() => {
 .gantt-time-mark {
   position: absolute;
   top: 0;
-  bottom: 0;
-  border-left: 1px solid #dadce0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%); /* 居中对齐到精确时间点 */
+  pointer-events: none;
+}
+
+.time-separator-line {
+  width: 1px;
+  background: #dadce0;
+  position: absolute;
+  top: 0;
+  bottom: -2000px; /* 延伸到整个甘特图高度 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.time-label {
   font-size: 12px;
   color: #5f6368;
-  padding-left: 6px;
-  display: flex;
-  align-items: center;
   font-weight: 500;
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #e1e5e9;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+  white-space: nowrap;
 }
 
 .gantt-time-bar {
@@ -1811,9 +1835,9 @@ onUnmounted(() => {
     top: 22px;
   }
   
-  .gantt-time-mark {
+  .time-label {
     font-size: 10px;
-    padding-left: 3px;
+    padding: 2px 4px;
   }
   
   /* 手机端活动头部样式 */

@@ -194,7 +194,8 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
-        ${timeLabel}
+        <div class="time-separator-line"></div>
+        <div class="time-label">${timeLabel}</div>
       </div>
     `
   }
