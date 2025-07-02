@@ -1010,32 +1010,32 @@ async function exportDetailedGanttAsImage(
  * 计算时间明细表所需的高度
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
-  const lineHeight = 20  // 更新为新的行高
-  const groupSpacing = 25  // 更新为新的团体间距
-  const activitySpacing = 30  // 更新为新的活动间距
-  const titleHeight = 35 // 更新标题区域高度
-  const padding = 20 // 上下padding
+  const lineHeight = 18  // 更新为紧凑的行高
+  const groupSpacing = 15  // 更新为紧凑的团体间距
+  const activitySpacing = 20  // 更新为紧凑的活动间距
+  const titleHeight = 35 // 标题区域高度
+  const padding = 15 // 更紧凑的上下padding
   
   let totalHeight = titleHeight + padding
   
   const groupedData = groupTeamsByActivity(teamData)
   Object.entries(groupedData).forEach(([activityId, teams], activityIndex) => {
-    // 多活动模式：活动标题高度
+    // 多活动模式：活动标题高度和分割线
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        totalHeight += 10 // 活动间分隔
+        totalHeight += 10 + 15 // 分割线前后间距
       }
       totalHeight += activitySpacing
     }
     
     teams.forEach((team, teamIndex) => {
-      // 团体间分隔
-      if (teamIndex > 0 || (activityId === 'single-activity' && activityIndex > 0)) {
-        totalHeight += 5
+      // 团体间小间距
+      if (teamIndex > 0) {
+        totalHeight += 8
       }
       
       // 团体名称行
-      totalHeight += lineHeight + 3
+      totalHeight += lineHeight
       
       // Live时间段行数
       totalHeight += team.liveBars.length * lineHeight
@@ -1095,28 +1095,35 @@ function drawTimeDetailPanel(
   ctx.stroke()
   
   // 绘制团体时间信息
-  let currentY = startY + 55
-  const lineHeight = 20
-  const groupSpacing = 25
-  const activitySpacing = 30
+  let currentY = startY + 50
+  const lineHeight = 18
+  const groupSpacing = 15
+  const activitySpacing = 20
   
   const groupedData = groupTeamsByActivity(teamData)
   Object.entries(groupedData).forEach(([activityId, teams], activityIndex) => {
-    // 多活动模式：绘制活动标题
+    // 多活动模式：绘制活动标题和分割线
     if (activityId !== 'single-activity') {
+      // 活动间分割线（除了第一个活动）
+      if (activityIndex > 0) {
+        currentY += 10
+        ctx.strokeStyle = '#d1d5db'
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(panelX + 15, currentY)
+        ctx.lineTo(panelX + panelWidth - 15, currentY)
+        ctx.stroke()
+        currentY += 15
+      }
+      
       // 获取活动名称
       const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
       
-      // 活动间分隔（除了第一个活动）
-      if (activityIndex > 0) {
-        currentY += 10
-      }
-      
-      // 绘制活动标题
-      ctx.fillStyle = '#6b7280'
+      // 绘制活动标题（紫色，加粗）
+      ctx.fillStyle = '#8b5cf6'
       ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'left'
-      ctx.fillText(`## ${activityName}`, panelX + 20, currentY)
+      ctx.fillText(activityName, panelX + 15, currentY)
       
       currentY += activitySpacing
     }
@@ -1124,17 +1131,17 @@ function drawTimeDetailPanel(
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间分隔（除了第一个团体）
-      if (teamIndex > 0 || (activityId === 'single-activity' && activityIndex > 0)) {
-        currentY += 5
+      // 团体间小间距（除了第一个团体）
+      if (teamIndex > 0) {
+        currentY += 8
       }
       
-      // 绘制团体名称
+      // 绘制团体名称（黑色，加粗）
       ctx.fillStyle = '#1f2937'
-      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'left'
-      ctx.fillText(`### ${teamName}`, panelX + 20, currentY)
-      currentY += lineHeight + 3
+      ctx.fillText(teamName, panelX + 15, currentY)
+      currentY += lineHeight
       
       // 绘制Live时间段
       team.liveBars.forEach((bar, index) => {
@@ -1142,9 +1149,16 @@ function drawTimeDetailPanel(
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        ctx.fillStyle = '#4b5563'
+        // 绘制圆形项目符号
+        ctx.fillStyle = '#6b7280'
+        ctx.beginPath()
+        ctx.arc(panelX + 28, currentY - 4, 2, 0, 2 * Math.PI)
+        ctx.fill()
+        
+        // 绘制时间段信息（灰色，向右缩进）
+        ctx.fillStyle = '#6b7280'
         ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-        ctx.fillText(`- ${prefix}: ${timeText}${locationText}`, panelX + 30, currentY)
+        ctx.fillText(`${prefix}: ${timeText}${locationText}`, panelX + 35, currentY)
         currentY += lineHeight
       })
       
@@ -1154,9 +1168,16 @@ function drawTimeDetailPanel(
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        ctx.fillStyle = '#4b5563'
+        // 绘制圆形项目符号
+        ctx.fillStyle = '#6b7280'
+        ctx.beginPath()
+        ctx.arc(panelX + 28, currentY - 4, 2, 0, 2 * Math.PI)
+        ctx.fill()
+        
+        // 绘制时间段信息（灰色，向右缩进）
+        ctx.fillStyle = '#6b7280'
         ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-        ctx.fillText(`- ${prefix}: ${timeText}${locationText}`, panelX + 30, currentY)
+        ctx.fillText(`${prefix}: ${timeText}${locationText}`, panelX + 35, currentY)
         currentY += lineHeight
       })
       
