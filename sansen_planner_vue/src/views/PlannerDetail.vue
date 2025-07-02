@@ -1978,7 +1978,7 @@ onUnmounted(() => {
 .gantt-header {
   position: sticky;
   top: 0;
-  background: #f8f9fa;
+  background: #ffffff; /* 改为白色，与下方内容保持一致 */
   border-bottom: 1px solid #e1e5e9;
   z-index: 10;
   height: 48px;
@@ -2075,7 +2075,7 @@ onUnmounted(() => {
   display: flex;
   position: relative;
   height: 48px;
-  background: #f8f9fa;
+  background: #ffffff; /* 改为白色，与整体保持一致 */
   width: 100%; /* 确保占满宽度 */
 }
 
