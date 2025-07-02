@@ -468,10 +468,23 @@ function bindTooltipEvents(container: HTMLElement): void {
       let relativeLeft = rect.left - containerRect.left + (ganttContainer.scrollLeft || 0)
       let relativeTop = rect.top - containerRect.top + (ganttContainer.scrollTop || 0)
       
-      // 确保tooltip不会超出容器边界
-      const tooltipRect = tooltip.getBoundingClientRect()
-      const maxLeft = ganttContainer.clientWidth - tooltipRect.width
-      relativeLeft = Math.max(0, Math.min(relativeLeft + rect.width / 2, maxLeft))
+      // 移动端特殊处理：调整位置确保可见性
+      const isMobile = window.innerWidth <= 768
+      if (isMobile) {
+        // 移动端向上偏移更多，避免被手指遮挡
+        relativeTop -= 20
+        
+        // 确保不会超出视窗
+        const viewportWidth = window.innerWidth
+        const tooltipWidth = tooltip.offsetWidth || 200
+        
+        relativeLeft = Math.max(tooltipWidth / 2, Math.min(relativeLeft + rect.width / 2, viewportWidth - tooltipWidth / 2))
+      } else {
+        // 确保tooltip不会超出容器边界
+        const tooltipRect = tooltip.getBoundingClientRect()
+        const maxLeft = ganttContainer.clientWidth - tooltipRect.width
+        relativeLeft = Math.max(0, Math.min(relativeLeft + rect.width / 2, maxLeft))
+      }
       
       tooltip.style.left = `${relativeLeft}px`
       tooltip.style.top = `${relativeTop - 8}px`
@@ -481,7 +494,7 @@ function bindTooltipEvents(container: HTMLElement): void {
     if (immediate) {
       action()
     } else {
-      showTimeout = window.setTimeout(action, 100)
+      showTimeout = window.setTimeout(action, 50) // 缩短延迟
     }
   }
   
@@ -496,7 +509,7 @@ function bindTooltipEvents(container: HTMLElement): void {
     if (immediate) {
       action()
     } else {
-      hideTimeout = window.setTimeout(action, 200)
+      hideTimeout = window.setTimeout(action, 150) // 缩短延迟
     }
   }
   
@@ -508,6 +521,9 @@ function bindTooltipEvents(container: HTMLElement): void {
       bar.removeEventListener('mouseleave', oldHandlers.mouseleave)
       bar.removeEventListener('touchstart', oldHandlers.touchstart)
       bar.removeEventListener('touchend', oldHandlers.touchend)
+      if (oldHandlers.touchmove) {
+        bar.removeEventListener('touchmove', oldHandlers.touchmove)
+      }
     }
     
     // 创建新的事件处理器
@@ -523,16 +539,26 @@ function bindTooltipEvents(container: HTMLElement): void {
       },
       
       touchstart: (e: Event) => {
-        e.preventDefault()
-        e.stopPropagation()
-        showTooltip(e.target as HTMLElement, true)
+        const touchEvent = e as TouchEvent
+        // 只阻止默认行为，不阻止事件传播
+        touchEvent.preventDefault()
         
-        // 移动端3秒后自动隐藏
-        setTimeout(() => hideTooltip(true), 3000)
+        const target = e.target as HTMLElement
+        showTooltip(target, true)
+        
+        // 移动端延长显示时间到5秒
+        setTimeout(() => hideTooltip(true), 5000)
       },
       
-      touchend: (e: Event) => {
-        e.stopPropagation()
+      touchend: (_e: Event) => {
+        // 移动端点击后不立即隐藏tooltip
+        // e.stopPropagation()
+      },
+      
+      // 添加新的触摸移动处理
+      touchmove: (_e: Event) => {
+        // 触摸移动时隐藏tooltip，避免位置错乱
+        hideTooltip(true)
       }
     }
     
@@ -541,6 +567,7 @@ function bindTooltipEvents(container: HTMLElement): void {
     bar.addEventListener('mouseleave', handlers.mouseleave)
     bar.addEventListener('touchstart', handlers.touchstart, { passive: false })
     bar.addEventListener('touchend', handlers.touchend)
+    bar.addEventListener('touchmove', handlers.touchmove, { passive: true })
     
     // 存储处理器引用以便后续清理
     ;(bar as any)._tooltipHandlers = handlers

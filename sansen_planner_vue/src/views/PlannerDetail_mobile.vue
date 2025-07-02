@@ -1637,22 +1637,25 @@ onUnmounted(() => {
 /* 工具提示样式优化 */
 .gantt-tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
-  z-index: 1000;
+  z-index: 9999;
   pointer-events: none;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   transform: translateX(-50%);
-  max-width: 300px; /* 限制最大宽度 */
+  max-width: 280px;
+  min-width: 120px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .gantt-tooltip.show {
@@ -1666,8 +1669,8 @@ onUnmounted(() => {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border: 4px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.95);
 }
 
 /* 空状态样式 */
