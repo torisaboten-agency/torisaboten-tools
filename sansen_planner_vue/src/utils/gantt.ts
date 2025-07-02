@@ -460,52 +460,47 @@ function bindTooltipEvents(container: HTMLElement): void {
       tooltip.textContent = tooltipText
       tooltip.classList.add('show')
       
-      // 改进的定位计算
+      // 使用fixed定位，相对于viewport而不是容器
       const rect = target.getBoundingClientRect()
-      const containerRect = ganttContainer.getBoundingClientRect()
-      
-      // 计算相对于甘特图容器的位置
-      let relativeLeft = rect.left - containerRect.left + (ganttContainer.scrollLeft || 0)
-      let relativeTop = rect.top - containerRect.top + (ganttContainer.scrollTop || 0)
-      
-      // 移动端特殊处理：调整位置确保可见性
       const isMobile = window.innerWidth <= 768
-      let tooltipOffset = -8 // 默认向上偏移
-      let showBelow = false // 是否显示在下方
+      
+      // 计算tooltip的显示位置
+      let left = rect.left + rect.width / 2
+      let top = rect.top
+      let showBelow = false
       
       if (isMobile) {
-        // 检测是否是第一行或接近顶部的元素
-        const isNearTop = relativeTop < 50 // 如果距离容器顶部小于50px
-        
-        if (isNearTop) {
-          // 第一行或接近顶部：显示在下方
+        // 移动端：检测是否接近屏幕顶部
+        if (rect.top < 80) {
+          // 接近顶部：显示在下方
           showBelow = true
-          tooltipOffset = rect.height + 8 // 显示在元素下方
+          top = rect.bottom + 10
         } else {
-          // 其他行：向上偏移更多，避免被手指遮挡
-          tooltipOffset = -28 // 向上偏移28px
+          // 其他位置：显示在上方，避开手指遮挡
+          top = rect.top - 35
         }
         
-        // 确保不会超出视窗
-        const viewportWidth = window.innerWidth
-        const tooltipWidth = tooltip.offsetWidth || 200
-        
-        relativeLeft = Math.max(tooltipWidth / 2, Math.min(relativeLeft + rect.width / 2, viewportWidth - tooltipWidth / 2))
+        // 确保不会超出屏幕左右边界
+        const tooltipWidth = 200 // 估算宽度
+        left = Math.max(tooltipWidth / 2 + 10, Math.min(left, window.innerWidth - tooltipWidth / 2 - 10))
       } else {
-        // 桌面端：检测是否会超出容器顶部
-        if (relativeTop < 40) {
+        // 桌面端：检测是否接近顶部
+        if (rect.top < 60) {
           showBelow = true
-          tooltipOffset = rect.height + 8
+          top = rect.bottom + 10
+        } else {
+          top = rect.top - 10
         }
         
-        // 确保tooltip不会超出容器边界
-        const tooltipRect = tooltip.getBoundingClientRect()
-        const maxLeft = ganttContainer.clientWidth - tooltipRect.width
-        relativeLeft = Math.max(0, Math.min(relativeLeft + rect.width / 2, maxLeft))
+        // 桌面端边界检测
+        const tooltipWidth = 200
+        left = Math.max(tooltipWidth / 2 + 10, Math.min(left, window.innerWidth - tooltipWidth / 2 - 10))
       }
       
-      tooltip.style.left = `${relativeLeft}px`
-      tooltip.style.top = `${relativeTop + tooltipOffset}px`
+      // 使用fixed定位
+      tooltip.style.position = 'fixed'
+      tooltip.style.left = `${left}px`
+      tooltip.style.top = `${top}px`
       tooltip.style.transform = 'translateX(-50%)'
       
       // 根据显示位置调整箭头方向
@@ -605,8 +600,16 @@ function bindTooltipEvents(container: HTMLElement): void {
   
   ganttContainer.addEventListener('scroll', scrollHandler)
   
+  // 为页面添加滚动监听（因为tooltip现在是fixed定位）
+  const pageScrollHandler = () => {
+    hideTooltip(true)
+  }
+  
+  window.addEventListener('scroll', pageScrollHandler, { passive: true })
+  
   // 存储滚动处理器引用
   ;(container as any)._scrollHandler = scrollHandler
+  ;(container as any)._pageScrollHandler = pageScrollHandler
 }
 
 /**

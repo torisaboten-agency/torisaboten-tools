@@ -1636,7 +1636,7 @@ onUnmounted(() => {
 
 /* 工具提示样式优化 */
 .gantt-tooltip {
-  position: absolute;
+  position: fixed; /* 改为fixed定位，避免被容器overflow裁剪 */
   background: rgba(0, 0, 0, 0.95);
   color: white;
   padding: 10px 14px;
