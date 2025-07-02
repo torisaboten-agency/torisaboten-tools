@@ -199,19 +199,19 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     `
   }
 
-  // 如果存在次日，添加次日指示器
-  if (nextDayStart !== -1) {
-    const nextDayPosition = ((nextDayStart - timeRange.start) / totalMinutes) * 100
-    dayIndicators = `
-      <div class="gantt-day-separator" style="left: ${nextDayPosition}%;">
-        <div class="day-separator-line"></div>
-        <div class="day-separator-header">
-          <div class="day-separator-badge">次日开始</div>
-          <div class="day-separator-arrow">▼</div>
-        </div>
-      </div>
-    `
-  }
+  // 注释掉次日指示器 - 用户反馈不需要
+  // if (nextDayStart !== -1) {
+  //   const nextDayPosition = ((nextDayStart - timeRange.start) / totalMinutes) * 100
+  //   dayIndicators = `
+  //     <div class="gantt-day-separator" style="left: ${nextDayPosition}%;">
+  //       <div class="day-separator-line"></div>
+  //       <div class="day-separator-header">
+  //         <div class="day-separator-badge">次日开始</div>
+  //         <div class="day-separator-arrow">▼</div>
+  //       </div>
+  //     </div>
+  //   `
+  // }
 
   return `
     <div class="gantt-header">
@@ -427,70 +427,134 @@ function bindTooltipEvents(container: HTMLElement): void {
   const tooltip = container.querySelector('#gantt-tooltip') as HTMLElement
   if (!tooltip) return
 
-  // 获取甘特图容器的位置
   const ganttContainer = container.closest('.gantt-chart-container') as HTMLElement
   if (!ganttContainer) return
   
+  // 清除之前的事件监听器（避免重复绑定）
   const timeBars = container.querySelectorAll('.gantt-time-bar[data-tooltip]')
   
-  timeBars.forEach(bar => {
-    // 桌面端鼠标事件
-    bar.addEventListener('mouseenter', (e) => {
-      const target = e.target as HTMLElement
-      const tooltipText = target.getAttribute('data-tooltip')
-      
-      if (tooltipText) {
-        tooltip.textContent = tooltipText
-        tooltip.classList.add('show')
-        
-        // 考虑滚动偏移的定位计算
-        const rect = target.getBoundingClientRect()
-        const containerRect = ganttContainer.getBoundingClientRect()
-        
-        // 计算相对于甘特图容器的位置，考虑滚动偏移
-        const scrollLeft = ganttContainer.scrollLeft || 0
-        const relativeLeft = rect.left - containerRect.left + scrollLeft
-        const relativeTop = rect.top - containerRect.top
-        
-        // 居中显示tooltip
-        tooltip.style.left = `${relativeLeft + rect.width / 2}px`
-        tooltip.style.top = `${relativeTop - 8}px`
-      }
-    })
+  // 防抖函数
+  let hideTimeout: number | null = null
+  let showTimeout: number | null = null
+  
+  // 清除所有定时器的函数
+  const clearTimeouts = () => {
+    if (hideTimeout) {
+      clearTimeout(hideTimeout)
+      hideTimeout = null
+    }
+    if (showTimeout) {
+      clearTimeout(showTimeout)
+      showTimeout = null
+    }
+  }
+  
+  // 显示tooltip的函数
+  const showTooltip = (target: HTMLElement, immediate = false) => {
+    clearTimeouts()
     
-    bar.addEventListener('mouseleave', () => {
+    const action = () => {
+      const tooltipText = target.getAttribute('data-tooltip')
+      if (!tooltipText) return
+      
+      tooltip.textContent = tooltipText
+      tooltip.classList.add('show')
+      
+      // 改进的定位计算
+      const rect = target.getBoundingClientRect()
+      const containerRect = ganttContainer.getBoundingClientRect()
+      
+      // 计算相对于甘特图容器的位置
+      let relativeLeft = rect.left - containerRect.left + (ganttContainer.scrollLeft || 0)
+      let relativeTop = rect.top - containerRect.top + (ganttContainer.scrollTop || 0)
+      
+      // 确保tooltip不会超出容器边界
+      const tooltipRect = tooltip.getBoundingClientRect()
+      const maxLeft = ganttContainer.clientWidth - tooltipRect.width
+      relativeLeft = Math.max(0, Math.min(relativeLeft + rect.width / 2, maxLeft))
+      
+      tooltip.style.left = `${relativeLeft}px`
+      tooltip.style.top = `${relativeTop - 8}px`
+      tooltip.style.transform = 'translateX(-50%)'
+    }
+    
+    if (immediate) {
+      action()
+    } else {
+      showTimeout = window.setTimeout(action, 100)
+    }
+  }
+  
+  // 隐藏tooltip的函数
+  const hideTooltip = (immediate = false) => {
+    clearTimeouts()
+    
+    const action = () => {
       tooltip.classList.remove('show')
-    })
+    }
     
-    // 移动端触摸事件
-    bar.addEventListener('touchstart', (e) => {
-      const target = e.target as HTMLElement
-      const tooltipText = target.getAttribute('data-tooltip')
+    if (immediate) {
+      action()
+    } else {
+      hideTimeout = window.setTimeout(action, 200)
+    }
+  }
+  
+  timeBars.forEach(bar => {
+    // 移除可能存在的旧事件监听器
+    const oldHandlers = (bar as any)._tooltipHandlers
+    if (oldHandlers) {
+      bar.removeEventListener('mouseenter', oldHandlers.mouseenter)
+      bar.removeEventListener('mouseleave', oldHandlers.mouseleave)
+      bar.removeEventListener('touchstart', oldHandlers.touchstart)
+      bar.removeEventListener('touchend', oldHandlers.touchend)
+    }
+    
+    // 创建新的事件处理器
+    const handlers = {
+      mouseenter: (e: Event) => {
+        e.stopPropagation()
+        showTooltip(e.target as HTMLElement)
+      },
       
-      if (tooltipText) {
-        tooltip.textContent = tooltipText
-        tooltip.classList.add('show')
-        
-        // 移动端也需要考虑滚动偏移
-        const rect = target.getBoundingClientRect()
-        const containerRect = ganttContainer.getBoundingClientRect()
-        
-        const scrollLeft = ganttContainer.scrollLeft || 0
-        const relativeLeft = rect.left - containerRect.left + scrollLeft
-        const relativeTop = rect.top - containerRect.top
-        
-        tooltip.style.left = `${relativeLeft + rect.width / 2}px`
-        tooltip.style.top = `${relativeTop - 8}px`
+      mouseleave: (e: Event) => {
+        e.stopPropagation()
+        hideTooltip()
+      },
+      
+      touchstart: (e: Event) => {
+        e.preventDefault()
+        e.stopPropagation()
+        showTooltip(e.target as HTMLElement, true)
         
         // 移动端3秒后自动隐藏
-        setTimeout(() => {
-          tooltip.classList.remove('show')
-        }, 3000)
-      }
+        setTimeout(() => hideTooltip(true), 3000)
+      },
       
-      e.preventDefault() // 防止触发其他事件
-    }, { passive: false })
+      touchend: (e: Event) => {
+        e.stopPropagation()
+      }
+    }
+    
+    // 绑定新的事件监听器
+    bar.addEventListener('mouseenter', handlers.mouseenter)
+    bar.addEventListener('mouseleave', handlers.mouseleave)
+    bar.addEventListener('touchstart', handlers.touchstart, { passive: false })
+    bar.addEventListener('touchend', handlers.touchend)
+    
+    // 存储处理器引用以便后续清理
+    ;(bar as any)._tooltipHandlers = handlers
   })
+  
+  // 为容器添加滚动事件监听，滚动时隐藏tooltip
+  const scrollHandler = () => {
+    hideTooltip(true)
+  }
+  
+  ganttContainer.addEventListener('scroll', scrollHandler)
+  
+  // 存储滚动处理器引用
+  ;(container as any)._scrollHandler = scrollHandler
 }
 
 /**
