@@ -1466,7 +1466,6 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   background: #f8f9fa; /* 改回灰色，保持视觉统一 */
-  border-bottom: 1px solid #e1e5e9;
   z-index: 10;
   height: 48px;
   display: flex;
