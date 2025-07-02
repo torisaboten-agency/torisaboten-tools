@@ -240,8 +240,8 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
     if (activityId !== 'single-activity' && activity) {
       bodyHTML += `
         <div class="gantt-row gantt-activity-header">
-          <div class="gantt-left-panel">${activity.name}</div>
-          <div class="gantt-timeline" style="width: 100%; background: #e3f2fd !important; position: relative;">
+          <div class="gantt-left-panel activity-name">${activity.name}</div>
+          <div class="activity-header-timeline">
             <div class="activity-location-text">${activity.location || ''}</div>
           </div>
         </div>

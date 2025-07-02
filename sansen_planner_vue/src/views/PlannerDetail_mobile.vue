@@ -1493,26 +1493,32 @@ onUnmounted(() => {
   border-top: 1px solid #bbdefb;
   min-height: 48px;
   color: #1565c0;
+  display: flex;
+  align-items: center;
 }
 
-.gantt-activity-header .gantt-left-panel {
+.gantt-activity-header .activity-name {
   background: #e3f2fd;
   font-weight: 600;
   font-size: 15px;
   color: #1565c0;
-  /* 移除右边框，简化视觉效果 */
+  width: 160px;
+  min-width: 160px;
+  padding: 0 12px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.gantt-activity-header .gantt-timeline {
-  background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
+.activity-header-timeline {
+  flex: 1;
+  background: #e3f2fd;
   position: relative;
-  width: 100% !important;
-  min-width: 100% !important;
-}
-
-/* 最高优先级确保活动头部背景不被覆盖 */
-.gantt-row.gantt-activity-header .gantt-timeline {
-  background: #e3f2fd !important;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .activity-location-text {
@@ -1783,10 +1789,7 @@ onUnmounted(() => {
     min-width: 520px; /* 相应减少时间轴宽度 */
   }
   
-  /* 响应式样式中也要确保活动头部背景不被覆盖 */
-  .gantt-row.gantt-activity-header .gantt-timeline {
-    background: #e3f2fd !important;
-  }
+
   
   .gantt-time-bar {
     height: 28px;
@@ -1813,17 +1816,22 @@ onUnmounted(() => {
     padding-left: 3px;
   }
   
-  /* 确保活动头部在手机端也能正常显示 */
-  .gantt-activity-header .gantt-left-panel {
+  /* 手机端活动头部样式 */
+  .gantt-activity-header .activity-name {
     background: #e3f2fd;
     font-weight: 600;
     font-size: 11px;
     color: #1565c0;
-    /* 移除右边框，简化视觉效果 */
+    min-width: 80px;
+    width: 80px;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
-  .gantt-activity-header .gantt-timeline {
-    background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
+  .activity-header-timeline {
+    background: #e3f2fd;
     min-width: 520px;
   }
   
