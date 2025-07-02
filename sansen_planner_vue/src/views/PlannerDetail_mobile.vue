@@ -1599,7 +1599,7 @@ onUnmounted(() => {
   width: 1px;
   background: #dadce0;
   position: absolute;
-  top: 0;
+  top: 24px; /* 从时间标签下面开始 */
   bottom: -2000px; /* 延伸到整个甘特图高度 */
   left: 50%;
   transform: translateX(-50%);
@@ -1610,10 +1610,6 @@ onUnmounted(() => {
   font-size: 12px;
   color: #5f6368;
   font-weight: 500;
-  background: #f8f9fa;
-  padding: 2px 6px;
-  border-radius: 3px;
-  border: 1px solid #e1e5e9;
   position: relative;
   z-index: 2;
   margin-top: 4px;
@@ -1837,7 +1833,6 @@ onUnmounted(() => {
   
   .time-label {
     font-size: 10px;
-    padding: 2px 4px;
   }
   
   /* 手机端活动头部样式 */

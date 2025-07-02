@@ -937,19 +937,32 @@ function drawGanttToCanvas(
   ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
   ctx.textAlign = 'center'
   
-  const interval = totalMinutes <= 120 ? 15 : totalMinutes <= 240 ? 30 : 60
+  // 根据时间范围决定时间标记的间隔 - 与网页版保持一致
+  let interval = 60 // 默认1小时间隔
+  if (totalMinutes <= 4 * 60) {
+    interval = 30 // 4小时内用30分钟间隔
+  } else if (totalMinutes <= 12 * 60) {
+    interval = 60 // 12小时内用1小时间隔
+  } else {
+    interval = 120 // 12小时以上用2小时间隔
+  }
+
   for (let minutes = Math.ceil(startMinutes / interval) * interval; 
        minutes <= endMinutes; 
        minutes += interval) {
     const xPos = leftPanelWidth + 20 + (minutes - startMinutes) / totalMinutes * chartWidth
     const timeStr = minutesToTime(minutes) // 使用统一的时间格式
     
-    ctx.beginPath()
-    ctx.moveTo(xPos, startY + 20)
-    ctx.lineTo(xPos, startY + 30)
-    ctx.stroke()
-    
+    // 绘制时间标签
     ctx.fillText(timeStr, xPos, startY + 15)
+    
+    // 绘制垂直分割线，从时间标签下方延伸到整个甘特图
+    ctx.strokeStyle = '#dadce0'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
+    ctx.lineTo(xPos, startY + 24 + (teamData.length * 60)) // 简单估算高度，后面会被实际内容覆盖
+    ctx.stroke()
   }
   
 
