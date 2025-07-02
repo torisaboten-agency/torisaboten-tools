@@ -1388,20 +1388,14 @@ onUnmounted(() => {
 <!-- 甘特图全局样式 -->
 <style>
 .gantt-chart-container {
+  /* 移动端甘特图容器样式优化 */
+  min-width: 100%;
   width: 100%;
-  min-height: 400px;
-  min-width: 800px; /* 确保最小宽度 */
-  border: 1px solid #e1e5e9;
-  border-radius: 6px;
-  background: #ffffff;
+  max-height: calc(100vh - 100px); /* 移动端更宽松的高度限制 */
   overflow-x: auto;
-  overflow-y: hidden;
-  position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 100%; /* 限制最大宽度不超过父容器 */
-  /* 添加触摸拖动支持 */
-  touch-action: pan-x; /* 允许水平拖动 */
-  cursor: grab; /* 桌面端显示可拖动光标 */
+  overflow-y: auto; /* 启用垂直滚动 */
+  -webkit-overflow-scrolling: touch;
+  border-radius: 6px;
 }
 
 .gantt-chart-container:active {
@@ -1743,8 +1737,9 @@ onUnmounted(() => {
     /* 简化手机端甘特图容器样式 */
     min-width: 100%;
     width: 100%;
+    max-height: calc(100vh - 100px); /* 移动端更宽松的高度限制 */
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto; /* 启用垂直滚动 */
     -webkit-overflow-scrolling: touch;
     border-radius: 6px;
   }

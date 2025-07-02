@@ -1906,12 +1906,13 @@ onUnmounted(() => {
 .gantt-chart-container {
   width: 100%;
   min-height: 400px;
+  max-height: calc(100vh - 200px); /* 最大高度为视窗高度减去顶部空间，避免无限拉长 */
   min-width: 800px; /* 确保最小宽度 */
   border: 1px solid #e1e5e9;
   border-radius: 6px;
   background: #ffffff;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto; /* 启用垂直滚动 */
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   max-width: 100%; /* 限制最大宽度不超过父容器 */

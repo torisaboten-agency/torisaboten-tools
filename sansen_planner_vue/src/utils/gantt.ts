@@ -693,13 +693,30 @@ export async function exportGanttAsImage(
       throw new Error('无法创建Canvas上下文')
     }
 
-    // 设置canvas大小（增加底部脚注空间和顶部标题栏空间以及图例空间）
+    // 计算所需的甘特图高度（基于团体数量）
+    const rowHeight = 56
+    const activityHeaderHeight = 48
+    let totalRows = 0
+    
+    // 计算总行数（团体行 + 活动头部行）
+    const groupedData = groupTeamsByActivity(teamData)
+    Object.entries(groupedData).forEach(([activityId, teams]) => {
+      // 多活动模式需要活动头部
+      if (activityId !== 'single-activity') {
+        totalRows += 1 // 活动头部行
+      }
+      totalRows += teams.length // 团体行
+    })
+    
+    const estimatedGanttHeight = Math.max(400, totalRows * rowHeight + 100) // 至少400px高度
+    
+    // 设置canvas大小（让高度足够容纳所有内容）
     const ganttRect = container.getBoundingClientRect()
     const headerHeight = 60 // 顶部标题栏高度
     const legendHeight = 40 // 图例区域高度
     const footerHeight = 80 // 脚注区域高度
     canvas.width = Math.max(1200, ganttRect.width)
-    canvas.height = Math.max(600, ganttRect.height) + headerHeight + legendHeight + footerHeight
+    canvas.height = headerHeight + legendHeight + estimatedGanttHeight + footerHeight
 
     // 填充白色背景
     ctx.fillStyle = '#ffffff'
@@ -722,9 +739,9 @@ export async function exportGanttAsImage(
     // 绘制图例
     drawLegend(ctx, canvas.width, headerHeight, legendHeight)
 
-    // 重新绘制甘特图到canvas
-    const ganttHeight = canvas.height - headerHeight - legendHeight - footerHeight
-    drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10, ganttHeight - 20)
+    // 重新绘制甘特图到canvas（移除高度限制，确保所有团体都能显示）
+    const ganttHeight = estimatedGanttHeight
+    drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10, ganttHeight)
 
     // 预加载二维码和logo
     const toolUrl = getToolUrl()
@@ -946,10 +963,7 @@ function drawGanttToCanvas(
   Object.entries(groupedData).forEach(([activityId, teams]) => {
     const activity = teams[0]?.activity
     
-    // 检查是否超出可用高度
-    if (currentY + rowHeight > startY + availableHeight) {
-      return // 跳过超出范围的内容
-    }
+    // 移除高度限制检查，允许无限扩展以确保所有团体都能显示在导出图片中
     
     // 活动头部（仅多活动模式）
     if (activityId !== 'single-activity' && activity) {
@@ -976,10 +990,7 @@ function drawGanttToCanvas(
 
     // 团体行
     teams.forEach(teamData => {
-      // 检查是否超出可用高度
-      if (currentY + rowHeight > startY + availableHeight) {
-        return // 跳过超出范围的内容
-      }
+      // 移除高度限制检查，确保所有团体都能显示在导出图片中
       
       // 团体行背景
       ctx.fillStyle = '#ffffff'
