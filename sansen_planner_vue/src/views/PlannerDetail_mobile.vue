@@ -1634,6 +1634,7 @@ onUnmounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 20px; /* 确保最小宽度 */
+  z-index: 5; /* 确保活动时段块覆盖在时间轴竖直线之上 */
 }
 
 .gantt-time-bar:hover {

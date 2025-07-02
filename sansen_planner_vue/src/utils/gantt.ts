@@ -963,6 +963,15 @@ function drawGanttToCanvas(
     timeMarkPositions.push(xPos)
   }
   
+  // 先绘制垂直分割线，再绘制活动时段块，确保活动块覆盖在时间轴线之上
+  timeMarkPositions.forEach(xPos => {
+    ctx.strokeStyle = '#dadce0'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
+    ctx.lineTo(xPos, startY + 24 + 2000) // 预绘制足够长的线，后续被活动块覆盖
+    ctx.stroke()
+  })
 
   
   // 按活动分组
@@ -1106,16 +1115,6 @@ function drawGanttToCanvas(
       
       currentY += rowHeight
     })
-  })
-  
-  // 绘制垂直分割线，从时间标签下方延伸到甘特图底部
-  timeMarkPositions.forEach(xPos => {
-    ctx.strokeStyle = '#dadce0'
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
-    ctx.lineTo(xPos, currentY) // 延伸到甘特图底部
-    ctx.stroke()
   })
 }
 
