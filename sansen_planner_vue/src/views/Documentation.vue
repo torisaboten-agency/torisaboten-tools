@@ -70,9 +70,11 @@
               <li><strong>双模式支持：</strong>单一活动模式适合简单场景，多活动模式支持复杂规划</li>
               <li><strong>Live演出管理：</strong>添加演出时间、地点等详细信息</li>
               <li><strong>特典会管理：</strong>独立管理特典时间，支持与演出时间重叠显示</li>
+              <li><strong>智能交互：</strong>优化的tooltip系统，支持智能定位和触摸友好操作</li>
               <li><strong>时区支持：</strong>支持多个时区设置，适应不同地区的活动</li>
-              <li><strong>图片导出：</strong>将甘特图导出为PNG图片，方便分享</li>
+              <li><strong>双模式导出：</strong>简洁模式和详细模式图片导出，满足不同需求</li>
               <li><strong>日历导出：</strong>导出为ICS格式，导入到手机日历</li>
+              <li><strong>响应式优化：</strong>特别针对移动端和iPad进行了深度优化</li>
               <li><strong>微信环境适配：</strong>针对微信浏览器进行了特别优化</li>
             </ul>
           </section>
@@ -153,22 +155,33 @@
 
           <section id="gantt-chart" class="doc-section">
             <h2>📊 甘特图功能</h2>
-            <p>甘特图是工具的核心功能，提供直观的时间可视化。</p>
+            <p>甘特图是工具的核心功能，提供直观的时间可视化。经过多次优化，现已具备出色的交互体验。</p>
             
             <h4>甘特图特性：</h4>
             <ul>
               <li><span class="color-demo live"></span> <strong>绿色条块：</strong>Live演出时间</li>
               <li><span class="color-demo tokuten"></span> <strong>粉色条块：</strong>特典会时间</li>
               <li><strong>时间冲突检测：</strong>重叠时间会自动调整显示位置</li>
-              <li><strong>悬浮提示：</strong>鼠标悬停显示详细信息</li>
-              <li><strong>响应式布局：</strong>自适应不同屏幕尺寸</li>
+              <li><strong>智能时间显示：</strong>根据时间段宽度自动决定是否显示时间文字</li>
+              <li><strong>层级关系优化：</strong>活动时段块始终覆盖在时间轴竖直线之上</li>
+              <li><strong>响应式布局：</strong>自适应不同屏幕尺寸，特别优化iPad体验</li>
             </ul>
 
             <h4>交互功能：</h4>
             <ul>
-              <li>水平滚动查看完整时间线</li>
-              <li>悬浮查看时间段详情</li>
-              <li>特典时间大于1小时自动显示时间文本</li>
+              <li><strong>悬浮提示：</strong>桌面端鼠标悬停显示详细信息，移动端触摸显示</li>
+              <li><strong>智能定位：</strong>tooltip会根据屏幕位置智能调整显示方向</li>
+              <li><strong>触摸优化：</strong>移动端小时间段增大触摸区域，提升操作体验</li>
+              <li><strong>水平滚动：</strong>支持滑动查看完整时间线</li>
+              <li><strong>固定定位：</strong>tooltip使用固定定位，不受容器滚动影响</li>
+            </ul>
+
+            <h4>显示规则：</h4>
+            <ul>
+              <li>时间段宽度 ≥ 85像素：显示完整时间范围（如"14:00-17:00"）</li>
+              <li>时间段宽度 ≥ 110像素：额外显示地点信息</li>
+              <li>宽度不足时：仅通过颜色区分，悬浮显示完整信息</li>
+              <li>移动端最小宽度3%，确保可触摸操作</li>
             </ul>
           </section>
 
@@ -176,12 +189,36 @@
             <h2>📤 导出功能</h2>
             
             <h4>图片导出 📷</h4>
-            <p>将甘特图导出为PNG图片，方便保存和分享：</p>
+            <p>将甘特图导出为PNG图片，提供两种模式选择：</p>
+            
+            <div class="export-modes">
+              <div class="export-mode">
+                <h5>🎯 简洁模式</h5>
+                <ul>
+                  <li>仅包含甘特图主体内容</li>
+                  <li>适合日常分享和保存</li>
+                  <li>文件更小，加载更快</li>
+                </ul>
+              </div>
+              
+              <div class="export-mode">
+                <h5>📋 详细模式</h5>
+                <ul>
+                  <li>甘特图 + 右侧时间明细表</li>
+                  <li>保留所有时间信息，无遗漏</li>
+                  <li>适合小时间段较多的复杂规划</li>
+                  <li>明细表包含：活动分组、团体名称、具体时间段</li>
+                </ul>
+              </div>
+            </div>
+
+            <h4>导出特性：</h4>
             <ul>
-              <li>包含完整的甘特图信息</li>
-              <li>添加规划名称和日期标题</li>
-              <li>支持多种下载方式，兼容不同浏览器</li>
-              <li>微信环境下提供特别的保存指引</li>
+              <li>高分辨率输出，适合打印和高清显示</li>
+              <li>自动添加规划名称和日期标题</li>
+              <li>兼容不同浏览器的下载方式</li>
+              <li>微信环境提供特别的保存指引</li>
+              <li>详细模式的明细表采用优雅的视觉设计</li>
             </ul>
 
             <h4>日历导出 📅</h4>
@@ -191,6 +228,7 @@
               <li>兼容Google Calendar、Outlook等</li>
               <li>包含活动时间、地点等完整信息</li>
               <li>自动设置提醒功能</li>
+              <li>正确处理时区信息</li>
             </ul>
           </section>
 
@@ -211,8 +249,10 @@
                 <h4>📱 移动端使用</h4>
                 <ul>
                   <li>甘特图支持水平滚动查看</li>
-                  <li>长按时间条查看详细信息</li>
+                  <li>触摸时间条查看详细信息，小时间段已优化触摸区域</li>
+                  <li>tooltip会智能避开手指位置，确保信息可见</li>
                   <li>导出图片可长按保存到相册</li>
+                  <li>推荐使用详细模式导出，保留完整时间信息</li>
                 </ul>
               </div>
               
@@ -246,7 +286,7 @@
 
             <div class="faq-item">
               <h4>Q: 甘特图中的时间为什么显示不全？</h4>
-              <p>A: 时间条长度取决于时间段长短和屏幕宽度。短时间段的文字可能被隐藏，可以悬浮鼠标查看完整信息。特典时间大于1小时会强制显示时间文本。</p>
+              <p>A: 工具会根据时间段的实际像素宽度智能决定是否显示时间文字。当时间段宽度不足85像素时，为避免文字重叠和显示不清，会隐藏文字只保留颜色区分。您可以悬浮鼠标或触摸查看完整信息，或选择详细模式导出以保留所有时间信息。</p>
             </div>
 
             <div class="faq-item">
@@ -262,6 +302,21 @@
             <div class="faq-item">
               <h4>Q: 为什么导出的图片在手机上看不清？</h4>
               <p>A: 导出的图片已针对高分辨率优化。如果仍有问题，可以尝试在桌面端导出，或使用系统截图功能。</p>
+            </div>
+
+            <div class="faq-item">
+              <h4>Q: 移动端触摸小时间段很难点中怎么办？</h4>
+              <p>A: 工具已经特别优化了移动端体验。小于5%宽度的时间段会自动扩展触摸区域，确保易于操作。如果仍有困难，可以尝试放大页面或使用横屏模式增加可视区域。</p>
+            </div>
+
+            <div class="faq-item">
+              <h4>Q: tooltip（悬浮提示）有时候看不到怎么办？</h4>
+              <p>A: 工具使用智能定位系统，会根据屏幕边界自动调整tooltip位置。移动端会避开手指遮挡，自动选择合适的显示方向。如果仍有问题，可以尝试滚动页面到合适位置再操作。</p>
+            </div>
+
+            <div class="faq-item">
+              <h4>Q: 什么时候选择详细模式导出？</h4>
+              <p>A: 当规划包含较多短时间段（如30分钟以内的特典）或时间安排较为密集时，建议选择详细模式。这样可以确保所有时间信息都完整保留在导出图片中，方便后续查看和分享。</p>
             </div>
           </section>
 
@@ -614,6 +669,38 @@ import logoSrc from '@/assets/logo.png'
 .support-charity p {
   margin: 0;
   color: #2d5a2d;
+}
+
+.export-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.export-mode {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid #667eea;
+}
+
+.export-mode h5 {
+  margin: 0 0 1rem 0;
+  color: #2d3748;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.export-mode ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.export-mode li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #4a5568;
 }
 
 .doc-footer {
