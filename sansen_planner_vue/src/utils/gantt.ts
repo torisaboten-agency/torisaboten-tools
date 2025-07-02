@@ -922,7 +922,7 @@ async function exportDetailedGanttAsImage(
     // 计算时间明细表的宽度
     const detailPanelWidth = 240
     
-    // 计算所需的甘特图高度（基于团体数量）
+    // 计算甘特图所需的高度（基于团体数量）
     const rowHeight = 56
     let totalRows = 0
     
@@ -936,7 +936,13 @@ async function exportDetailedGanttAsImage(
       totalRows += teams.length // 团体行
     })
     
-    const estimatedGanttHeight = Math.max(400, totalRows * rowHeight + 100) // 至少400px高度
+    const ganttHeight = Math.max(400, totalRows * rowHeight + 100) // 至少400px高度
+    
+    // 计算时间明细表所需的高度
+    const detailHeight = calculateDetailPanelHeight(teamData)
+    
+    // 取甘特图和明细表高度的最大值，确保两者都能完整显示
+    const contentHeight = Math.max(ganttHeight, detailHeight)
     
     // 设置canvas大小（增加侧边明细表宽度）
     const ganttRect = container.getBoundingClientRect()
@@ -945,7 +951,7 @@ async function exportDetailedGanttAsImage(
     const footerHeight = 80 // 脚注区域高度
     const ganttWidth = Math.max(1200, ganttRect.width)
     canvas.width = ganttWidth + detailPanelWidth
-    canvas.height = headerHeight + legendHeight + estimatedGanttHeight + footerHeight
+    canvas.height = headerHeight + legendHeight + contentHeight + footerHeight
 
     // 填充白色背景
     ctx.fillStyle = '#ffffff'
@@ -971,8 +977,8 @@ async function exportDetailedGanttAsImage(
     // 绘制甘特图主体（只在甘特图区域）
     drawGanttToCanvas(ctx, teamData, timeRange, ganttWidth, headerHeight + legendHeight + 10)
 
-    // 绘制侧边时间明细表
-    drawTimeDetailPanel(ctx, teamData, ganttWidth, headerHeight + legendHeight, detailPanelWidth, estimatedGanttHeight)
+    // 绘制侧边时间明细表（使用计算出的完整高度）
+    drawTimeDetailPanel(ctx, teamData, ganttWidth, headerHeight + legendHeight, detailPanelWidth, contentHeight)
 
     // 预加载二维码和logo
     const toolUrl = getToolUrl()
@@ -1001,6 +1007,48 @@ async function exportDetailedGanttAsImage(
 }
 
 /**
+ * 计算时间明细表所需的高度
+ */
+function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
+  const lineHeight = 18
+  const groupSpacing = 15
+  const activitySpacing = 25
+  const titleHeight = 40 // 标题区域高度
+  const padding = 20 // 上下padding
+  
+  let totalHeight = titleHeight + padding
+  
+  const groupedData = groupTeamsByActivity(teamData)
+  Object.entries(groupedData).forEach(([activityId, teams]) => {
+    // 多活动模式：活动标题高度
+    if (activityId !== 'single-activity') {
+      totalHeight += activitySpacing
+    }
+    
+    teams.forEach(team => {
+      // 团体名称行
+      totalHeight += lineHeight + 5
+      
+      // Live时间段行数
+      totalHeight += team.liveBars.length * lineHeight
+      
+      // 特典时间段行数
+      totalHeight += team.tokutenBars.length * lineHeight
+      
+      // 团体间距
+      totalHeight += groupSpacing
+    })
+    
+    // 活动间额外间距
+    if (activityId !== 'single-activity' && Object.keys(groupedData).length > 1) {
+      totalHeight += 10
+    }
+  })
+  
+  return Math.max(400, totalHeight) // 至少400px高度
+}
+
+/**
  * 绘制侧边时间明细表
  */
 function drawTimeDetailPanel(
@@ -1013,80 +1061,107 @@ function drawTimeDetailPanel(
 ): void {
   const panelX = ganttWidth
   
-  // 绘制面板背景
-  ctx.fillStyle = '#f8f9fa'
+  // 绘制面板背景（更温和的颜色）
+  ctx.fillStyle = '#fafbfc'
   ctx.fillRect(panelX, startY, panelWidth, panelHeight)
   
-  // 绘制面板边框
-  ctx.strokeStyle = '#e1e5e9'
-  ctx.lineWidth = 1
+  // 绘制面板左边框（更明显的分隔）
+  ctx.strokeStyle = '#d1d5db'
+  ctx.lineWidth = 2
   ctx.beginPath()
   ctx.moveTo(panelX, startY)
   ctx.lineTo(panelX, startY + panelHeight)
   ctx.stroke()
   
-  // 绘制标题
-  ctx.fillStyle = '#2d3748'
-  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-  ctx.textAlign = 'left'
-  ctx.fillText('时间明细', panelX + 15, startY + 25)
+  // 绘制标题背景
+  ctx.fillStyle = '#667eea'
+  ctx.fillRect(panelX, startY, panelWidth, 40)
   
-  // 绘制分隔线
-  ctx.strokeStyle = '#e1e5e9'
-  ctx.lineWidth = 1
-  ctx.beginPath()
-  ctx.moveTo(panelX + 15, startY + 35)
-  ctx.lineTo(panelX + panelWidth - 15, startY + 35)
-  ctx.stroke()
+  // 绘制标题文字（白色）
+  ctx.fillStyle = '#ffffff'
+  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.fillText('时间明细', panelX + panelWidth / 2, startY + 25)
   
   // 绘制团体时间信息
-  let currentY = startY + 50
+  let currentY = startY + 55
   const lineHeight = 18
-  const groupSpacing = 10
+  const groupSpacing = 15
+  const activitySpacing = 25
   
   const groupedData = groupTeamsByActivity(teamData)
-  Object.entries(groupedData).forEach(([_, teams]) => {
+  Object.entries(groupedData).forEach(([activityId, teams]) => {
+    // 多活动模式：绘制活动标题
+    if (activityId !== 'single-activity') {
+      // 绘制活动分隔背景
+      ctx.fillStyle = '#e5e7eb'
+      ctx.fillRect(panelX + 10, currentY - 5, panelWidth - 20, 25)
+      
+      // 获取活动名称
+      const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
+      
+      // 绘制活动名称
+      ctx.fillStyle = '#374151'
+      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.textAlign = 'left'
+      ctx.fillText(`📅 ${activityName}`, panelX + 15, currentY + 10)
+      
+      currentY += activitySpacing
+    }
+    
     teams.forEach(team => {
       const teamName = team.team.name
       
-      // 检查是否超出面板高度
-      if (currentY > startY + panelHeight - 60) {
-        // 如果空间不够，停止绘制更多团体
-        return
-      }
+      // 绘制团体名称背景
+      ctx.fillStyle = '#f3f4f6'
+      ctx.fillRect(panelX + 15, currentY - 2, panelWidth - 30, 20)
       
       // 绘制团体名称
-      ctx.fillStyle = '#2d3748'
-      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-      ctx.fillText(teamName, panelX + 15, currentY)
-      currentY += lineHeight + 2
+      ctx.fillStyle = '#1f2937'
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.textAlign = 'left'
+      ctx.fillText(teamName, panelX + 20, currentY + 12)
+      currentY += lineHeight + 5
       
       // 绘制Live时间段
       team.liveBars.forEach((bar, index) => {
-        const prefix = team.liveBars.length > 1 ? `L${index + 1}:` : 'L:'
+        const prefix = team.liveBars.length > 1 ? `Live ${index + 1}:` : 'Live:'
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        ctx.fillStyle = '#4a5568'
+        // Live 图标和文字
+        ctx.fillStyle = '#10b981' // 绿色
         ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 25, currentY)
+        ctx.fillText('🎤', panelX + 25, currentY)
+        
+        ctx.fillStyle = '#374151'
+        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 45, currentY)
         currentY += lineHeight
       })
       
       // 绘制特典时间段
       team.tokutenBars.forEach((bar, index) => {
-        const prefix = team.tokutenBars.length > 1 ? `T${index + 1}:` : 'T:'
+        const prefix = team.tokutenBars.length > 1 ? `特典 ${index + 1}:` : '特典:'
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        ctx.fillStyle = '#4a5568'
+        // 特典 图标和文字
+        ctx.fillStyle = '#f59e0b' // 橙色
         ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 25, currentY)
+        ctx.fillText('🤝', panelX + 25, currentY)
+        
+        ctx.fillStyle = '#374151'
+        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 45, currentY)
         currentY += lineHeight
       })
       
       currentY += groupSpacing // 团体间距
     })
+    
+    // 活动间额外间距
+    if (activityId !== 'single-activity' && Object.keys(groupedData).length > 1) {
+      currentY += 10
+    }
   })
 }
 
@@ -1341,7 +1416,7 @@ function drawGanttToCanvas(
     }
 
     // 团体行
-    teams.forEach(teamData => {
+    teams.forEach(team => {
       // 移除高度限制检查，确保所有团体都能显示在导出图片中
       
       // 移除团体行白色背景，让垂直分割线自然贯穿
@@ -1371,17 +1446,17 @@ function drawGanttToCanvas(
       ctx.fillStyle = '#5f6368'
       ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'right'
-      ctx.fillText(teamData.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
+      ctx.fillText(team.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
       
       // 检查时间重叠
       const allBars = [
-        ...teamData.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
-        ...teamData.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
+        ...team.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
+        ...team.tokutenBars.map(bar => ({ ...bar, type: 'tokuten' as const }))
       ]
       const { hasOverlap } = checkTimeOverlap(allBars)
       
       // Live时间条
-      teamData.liveBars.forEach(bar => {
+      team.liveBars.forEach(bar => {
         const barX = leftPanelWidth + 20 + (bar.startMinutes - startMinutes) / totalMinutes * chartWidth
         const barWidth = Math.max(20, bar.duration / totalMinutes * chartWidth)
         const barY = hasOverlap ? currentY + 4 : currentY + 10
@@ -1418,7 +1493,7 @@ function drawGanttToCanvas(
       })
       
       // 特典时间条
-      teamData.tokutenBars.forEach(bar => {
+      team.tokutenBars.forEach(bar => {
         const barX = leftPanelWidth + 20 + (bar.startMinutes - startMinutes) / totalMinutes * chartWidth
         const barWidth = Math.max(20, bar.duration / totalMinutes * chartWidth)
         const barY = hasOverlap ? currentY + 36 : currentY + 10
