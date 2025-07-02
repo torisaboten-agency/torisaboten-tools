@@ -2060,19 +2060,11 @@ onUnmounted(() => {
   background: #ffffff;
 }
 
-.gantt-timeline {
-  flex: 1;
-  position: relative;
-  min-height: 56px;
-  padding: 8px 0;
-  background: #ffffff;
-}
-
 .gantt-time-header {
   display: flex;
   position: relative;
   height: 48px;
-  background: #f8f9fa; /* 改回灰色，与header保持一致 */
+  background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
 }
 
@@ -2083,6 +2075,11 @@ onUnmounted(() => {
   padding: 8px 0;
   background: #ffffff;
   width: 100%; /* 确保占满宽度 */
+}
+
+/* 确保时间轴头部不受gantt-timeline白色背景影响 */
+.gantt-header .gantt-time-header {
+  background: #f8f9fa !important;
 }
 
 .gantt-time-mark {
