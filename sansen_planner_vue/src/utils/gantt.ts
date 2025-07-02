@@ -1010,45 +1010,49 @@ async function exportDetailedGanttAsImage(
  * 计算时间明细表所需的高度
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
-  const lineHeight = 18  // 更新为紧凑的行高
-  const groupSpacing = 15  // 更新为紧凑的团体间距
-  const activitySpacing = 20  // 更新为紧凑的活动间距
+  const lineHeight = 18
+  const groupSpacing = 15
+  const activitySpacing = 20
   const titleHeight = 35 // 标题区域高度
-  const padding = 15 // 更紧凑的上下padding
+  const topPadding = 15 // 标题下方的间距（currentY = startY + 50 = titleHeight + 15）
+  const bottomPadding = 20 // 底部留白
   
-  let totalHeight = titleHeight + padding
+  let contentHeight = 0
   
   const groupedData = groupTeamsByActivity(teamData)
-  Object.entries(groupedData).forEach(([activityId, teams], activityIndex) => {
+  const activityEntries = Object.entries(groupedData)
+  
+  activityEntries.forEach(([activityId, teams], activityIndex) => {
     // 多活动模式：活动标题高度和分割线
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        totalHeight += 6 + 6 // 分割线前后间距
+        contentHeight += 6 + 6 // 分割线前后间距
       }
-      totalHeight += activitySpacing
+      contentHeight += activitySpacing
     }
     
     teams.forEach((team, teamIndex) => {
       // 团体间小间距
       if (teamIndex > 0) {
-        totalHeight += 8
+        contentHeight += 8
       }
       
       // 团体名称行
-      totalHeight += lineHeight
+      contentHeight += lineHeight
       
       // Live时间段行数
-      totalHeight += team.liveBars.length * lineHeight
+      contentHeight += team.liveBars.length * lineHeight
       
       // 特典时间段行数
-      totalHeight += team.tokutenBars.length * lineHeight
+      contentHeight += team.tokutenBars.length * lineHeight
       
       // 团体间距
-      totalHeight += groupSpacing
+      contentHeight += groupSpacing
     })
   })
   
-  return Math.max(400, totalHeight) // 至少400px高度
+  const totalHeight = titleHeight + topPadding + contentHeight + bottomPadding
+  return Math.max(400, totalHeight)
 }
 
 /**
@@ -1101,7 +1105,9 @@ function drawTimeDetailPanel(
   const activitySpacing = 20
   
   const groupedData = groupTeamsByActivity(teamData)
-  Object.entries(groupedData).forEach(([activityId, teams], activityIndex) => {
+  const activityEntries = Object.entries(groupedData)
+  
+  activityEntries.forEach(([activityId, teams], activityIndex) => {
     // 多活动模式：绘制活动标题和分割线
     if (activityId !== 'single-activity') {
       // 活动间分割线（除了第一个活动）
