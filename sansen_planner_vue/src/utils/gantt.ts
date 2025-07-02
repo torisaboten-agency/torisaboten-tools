@@ -176,14 +176,14 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
     interval = 120 // 12小时以上用2小时间隔
   }
 
-  // 查找次日开始的位置 - 修复逻辑
-  const midnightMinutes = 1440 // 午夜24:00对应的分钟数
-  let nextDayStart = -1
-  
-  if (timeRange.start < midnightMinutes && timeRange.end >= midnightMinutes) {
-    // 如果时间范围跨越了午夜，则在午夜位置显示分隔线
-    nextDayStart = midnightMinutes
-  }
+  // 注释掉次日检测逻辑 - 用户反馈不需要次日指示器
+  // const midnightMinutes = 1440 // 午夜24:00对应的分钟数
+  // let nextDayStart = -1
+  // 
+  // if (timeRange.start < midnightMinutes && timeRange.end >= midnightMinutes) {
+  //   // 如果时间范围跨越了午夜，则在午夜位置显示分隔线
+  //   nextDayStart = midnightMinutes
+  // }
 
   // 生成时间标记
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
