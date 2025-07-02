@@ -1563,6 +1563,7 @@ onUnmounted(() => {
   padding: 8px 0;
   background: #ffffff;
   width: 100%; /* 确保占满宽度 */
+  z-index: 10; /* 确保timeline容器覆盖在时间轴线之上 */
 }
 
 .gantt-time-header {

@@ -2088,6 +2088,7 @@ onUnmounted(() => {
   padding: 8px 0;
   background: #ffffff;
   width: 100%; /* 确保占满宽度 */
+  z-index: 10; /* 确保timeline容器覆盖在时间轴线之上 */
 }
 
 /* 确保时间轴头部不受gantt-timeline白色背景影响 */
