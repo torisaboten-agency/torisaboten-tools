@@ -1025,14 +1025,14 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     // 多活动模式：活动标题高度
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        contentHeight += activitySpacing // 活动间间距
+        contentHeight += activitySpacing * 2 // 活动间更大间距
       }
-      contentHeight += activitySpacing // 活动标题后的间距
+      contentHeight += activitySpacing + 4 // 活动标题后的间距
     }
     
     teams.forEach((team, teamIndex) => {
-      // 团体间紧凑间距
-      if (teamIndex > 0) {
+      // 团体间紧凑间距（多活动模式下第一个团体也要有间距）
+      if (teamIndex > 0 || (activityId !== 'single-activity' && teamIndex === 0)) {
         contentHeight += teamSpacing
       }
       
@@ -1088,9 +1088,9 @@ function drawTimeDetailPanel(
   activityEntries.forEach(([activityId, teams], activityIndex) => {
     // 多活动模式：绘制活动标题
     if (activityId !== 'single-activity') {
-      // 统一的活动间距（包括第一个活动）
+      // 活动间间距（除了第一个活动）
       if (activityIndex > 0) {
-        currentY += activitySpacing
+        currentY += activitySpacing * 2 // 活动间要更大的间距
       }
       
       const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
@@ -1101,14 +1101,14 @@ function drawTimeDetailPanel(
       ctx.textAlign = 'left'
       ctx.fillText(activityName, panelX + 15, currentY)
       
-      currentY += activitySpacing
+      currentY += activitySpacing + 4 // 活动标题后增加更多间距
     }
     
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间紧凑间距
-      if (teamIndex > 0) {
+      // 团体间紧凑间距（多活动模式下第一个团体也要有间距）
+      if (teamIndex > 0 || (activityId !== 'single-activity' && teamIndex === 0)) {
         currentY += teamSpacing
       }
       
