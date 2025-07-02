@@ -2147,8 +2147,26 @@ onUnmounted(() => {
 
 .gantt-time-bar.tokuten-overlap {
   top: 30px;
-  }
-  
+}
+
+/* 移动端小元素触摸优化 */
+.gantt-time-bar.touch-friendly {
+  /* 增大小元素的触摸区域 */
+  min-width: 20px !important;
+  position: relative;
+}
+
+.gantt-time-bar.touch-friendly::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  top: -6px;
+  bottom: -6px;
+  z-index: -1;
+  background: transparent;
+}
+
 /* 工具提示样式优化 */
 .gantt-tooltip {
   position: fixed; /* 改为fixed定位，避免被容器overflow裁剪 */

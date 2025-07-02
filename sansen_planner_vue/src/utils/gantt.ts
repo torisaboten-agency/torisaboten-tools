@@ -288,8 +288,15 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
     const leftPercent = ((bar.startMinutes - timeRange.start) / totalMinutes) * 100
     const widthPercent = (bar.duration / totalMinutes) * 100
     
-    // 确保最小宽度百分比
-    const minWidthPercent = Math.max(widthPercent, 1.5) // 至少1.5%的宽度
+    // 确保最小宽度百分比 - 移动端优化触摸体验
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+    const minWidthPercent = isMobile ? 
+      Math.max(widthPercent, 3.0) :  // 移动端至少3%的宽度，更容易点击
+      Math.max(widthPercent, 1.5)    // 桌面端保持1.5%
+    
+    // 为小元素添加触摸友好的CSS类
+    const isSmallElement = minWidthPercent < 5
+    const touchFriendlyClass = isMobile && isSmallElement ? 'touch-friendly' : ''
     
     // 根据是否有重叠调整样式
     const heightClass = hasOverlap ? 'has-overlap' : ''
@@ -328,7 +335,7 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
 
     barsHTML += `
       <div 
-        class="gantt-time-bar ${bar.type} ${heightClass} ${topOffset}"
+        class="gantt-time-bar ${bar.type} ${heightClass} ${topOffset} ${touchFriendlyClass}"
         style="left: ${leftPercent}%; width: ${minWidthPercent}%; height: 36px; line-height: 1; position: absolute;"
         data-tooltip="${tooltipText}"
         data-type="${bar.type}"
@@ -511,10 +518,11 @@ function bindTooltipEvents(container: HTMLElement): void {
       }
     }
     
-    if (immediate) {
+    // 移动端或immediate模式立即显示，桌面端保持少量延迟
+    if (immediate || window.innerWidth <= 768) {
       action()
     } else {
-      showTimeout = window.setTimeout(action, 50) // 缩短延迟
+      showTimeout = window.setTimeout(action, 100)
     }
   }
   
@@ -541,9 +549,6 @@ function bindTooltipEvents(container: HTMLElement): void {
       bar.removeEventListener('mouseleave', oldHandlers.mouseleave)
       bar.removeEventListener('touchstart', oldHandlers.touchstart)
       bar.removeEventListener('touchend', oldHandlers.touchend)
-      if (oldHandlers.touchmove) {
-        bar.removeEventListener('touchmove', oldHandlers.touchmove)
-      }
     }
     
     // 创建新的事件处理器
@@ -558,36 +563,26 @@ function bindTooltipEvents(container: HTMLElement): void {
         hideTooltip()
       },
       
+      // 简化移动端触摸事件处理
       touchstart: (e: Event) => {
-        const touchEvent = e as TouchEvent
-        // 只阻止默认行为，不阻止事件传播
-        touchEvent.preventDefault()
-        
+        // 移动端直接显示，不使用preventDefault避免干扰正常触摸
         const target = e.target as HTMLElement
-        showTooltip(target, true)
+        showTooltip(target, true) // 立即显示
         
-        // 移动端延长显示时间到5秒
-        setTimeout(() => hideTooltip(true), 5000)
+        // 移动端延长显示时间到4秒
+        setTimeout(() => hideTooltip(true), 4000)
       },
       
       touchend: (_e: Event) => {
-        // 移动端点击后不立即隐藏tooltip
-        // e.stopPropagation()
-      },
-      
-      // 添加新的触摸移动处理
-      touchmove: (_e: Event) => {
-        // 触摸移动时隐藏tooltip，避免位置错乱
-        hideTooltip(true)
+        // 触摸结束不做处理，让自动隐藏处理
       }
     }
     
     // 绑定新的事件监听器
     bar.addEventListener('mouseenter', handlers.mouseenter)
     bar.addEventListener('mouseleave', handlers.mouseleave)
-    bar.addEventListener('touchstart', handlers.touchstart, { passive: false })
+    bar.addEventListener('touchstart', handlers.touchstart, { passive: true })
     bar.addEventListener('touchend', handlers.touchend)
-    bar.addEventListener('touchmove', handlers.touchmove, { passive: true })
     
     // 存储处理器引用以便后续清理
     ;(bar as any)._tooltipHandlers = handlers
