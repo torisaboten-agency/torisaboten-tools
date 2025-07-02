@@ -671,6 +671,109 @@ function addTouchDragSupport(container: HTMLElement): void {
 }
 
 /**
+ * 显示导出模式选择弹窗
+ */
+function showExportModeModal(): Promise<'simple' | 'detailed' | null> {
+  return new Promise((resolve) => {
+    const modal = document.createElement('div')
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    `
+
+    const content = document.createElement('div')
+    content.style.cssText = `
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    `
+
+    content.innerHTML = `
+      <h3 style="margin: 0 0 1.5rem 0; color: #2d3748; font-size: 1.2rem;">导出图片设置</h3>
+      <div style="text-align: left; margin-bottom: 2rem;">
+        <label style="display: flex; align-items: center; margin-bottom: 1rem; cursor: pointer;">
+          <input type="radio" name="exportMode" value="simple" checked style="margin-right: 0.5rem;">
+          <span style="color: #4a5568;">
+            <strong>简洁模式</strong><br>
+            <small style="color: #718096;">仅导出甘特图，适合一般使用</small>
+          </span>
+        </label>
+        <label style="display: flex; align-items: center; cursor: pointer;">
+          <input type="radio" name="exportMode" value="detailed" style="margin-right: 0.5rem;">
+          <span style="color: #4a5568;">
+            <strong>详细模式</strong><br>
+            <small style="color: #718096;">含侧边时间明细表，保留完整时间信息</small>
+          </span>
+        </label>
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <button id="cancelExport" style="
+          flex: 1;
+          padding: 0.75rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          background: white;
+          color: #4a5568;
+          cursor: pointer;
+        ">取消</button>
+        <button id="confirmExport" style="
+          flex: 1;
+          padding: 0.75rem;
+          border: none;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          cursor: pointer;
+        ">确定</button>
+      </div>
+    `
+
+    modal.appendChild(content)
+    document.body.appendChild(modal)
+
+    // 绑定事件
+    const cancelBtn = content.querySelector('#cancelExport') as HTMLButtonElement
+    const confirmBtn = content.querySelector('#confirmExport') as HTMLButtonElement
+
+    const cleanup = () => {
+      document.body.removeChild(modal)
+    }
+
+    cancelBtn.addEventListener('click', () => {
+      cleanup()
+      resolve(null)
+    })
+
+    confirmBtn.addEventListener('click', () => {
+      const selectedMode = (content.querySelector('input[name="exportMode"]:checked') as HTMLInputElement)?.value
+      cleanup()
+      resolve(selectedMode as 'simple' | 'detailed')
+    })
+
+    // 点击背景关闭
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        cleanup()
+        resolve(null)
+      }
+    })
+  })
+}
+
+/**
  * 导出甘特图为图片（含降级逻辑）
  */
 export async function exportGanttAsImage(
@@ -690,6 +793,30 @@ export async function exportGanttAsImage(
     return
   }
 
+  // 显示导出模式选择弹窗
+  const exportMode = await showExportModeModal()
+  if (!exportMode) {
+    return // 用户取消
+  }
+
+  // 根据选择的模式调用对应的导出函数
+  if (exportMode === 'detailed') {
+    await exportDetailedGanttAsImage(container, teamData, timeRange, plannerName, plannerDate)
+  } else {
+    await exportSimpleGanttAsImage(container, teamData, timeRange, plannerName, plannerDate)
+  }
+}
+
+/**
+ * 导出简洁模式甘特图（原逻辑）
+ */
+async function exportSimpleGanttAsImage(
+  container: HTMLElement, 
+  teamData: GanttTeamData[], 
+  timeRange: GanttTimeRange,
+  plannerName: string = '参战规划',
+  plannerDate: string = ''
+): Promise<void> {
   try {
     // 创建canvas
     const canvas = document.createElement('canvas')
@@ -771,6 +898,196 @@ export async function exportGanttAsImage(
     console.warn('Canvas导出失败：', error)
     showAppWarningModal('抱歉，您的浏览器不支持Canvas导出功能')
   }
+}
+
+/**
+ * 导出详细模式甘特图（含侧边时间明细表）
+ */
+async function exportDetailedGanttAsImage(
+  container: HTMLElement, 
+  teamData: GanttTeamData[], 
+  timeRange: GanttTimeRange,
+  plannerName: string = '参战规划',
+  plannerDate: string = ''
+): Promise<void> {
+  try {
+    // 创建canvas
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    
+    if (!ctx) {
+      throw new Error('无法创建Canvas上下文')
+    }
+
+    // 计算时间明细表的宽度
+    const detailPanelWidth = 240
+    
+    // 计算所需的甘特图高度（基于团体数量）
+    const rowHeight = 56
+    let totalRows = 0
+    
+    // 计算总行数（团体行 + 活动头部行）
+    const groupedData = groupTeamsByActivity(teamData)
+    Object.entries(groupedData).forEach(([activityId, teams]) => {
+      // 多活动模式需要活动头部
+      if (activityId !== 'single-activity') {
+        totalRows += 1 // 活动头部行
+      }
+      totalRows += teams.length // 团体行
+    })
+    
+    const estimatedGanttHeight = Math.max(400, totalRows * rowHeight + 100) // 至少400px高度
+    
+    // 设置canvas大小（增加侧边明细表宽度）
+    const ganttRect = container.getBoundingClientRect()
+    const headerHeight = 60 // 顶部标题栏高度
+    const legendHeight = 40 // 图例区域高度
+    const footerHeight = 80 // 脚注区域高度
+    const ganttWidth = Math.max(1200, ganttRect.width)
+    canvas.width = ganttWidth + detailPanelWidth
+    canvas.height = headerHeight + legendHeight + estimatedGanttHeight + footerHeight
+
+    // 填充白色背景
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // 绘制顶部标题栏（紫色渐变背景）
+    const headerGradient = ctx.createLinearGradient(0, 0, canvas.width, 0)
+    headerGradient.addColorStop(0, '#667eea')
+    headerGradient.addColorStop(1, '#764ba2')
+    
+    ctx.fillStyle = headerGradient
+    ctx.fillRect(0, 0, canvas.width, headerHeight)
+
+    // 绘制标题文字（白色）
+    ctx.fillStyle = '#ffffff'
+    ctx.font = 'bold 20px Arial, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText(`${plannerName} - ${plannerDate}`, ganttWidth / 2, headerHeight / 2 + 7)
+
+    // 绘制图例（只在甘特图区域）
+    drawLegend(ctx, ganttWidth, headerHeight, legendHeight)
+
+    // 绘制甘特图主体（只在甘特图区域）
+    drawGanttToCanvas(ctx, teamData, timeRange, ganttWidth, headerHeight + legendHeight + 10)
+
+    // 绘制侧边时间明细表
+    drawTimeDetailPanel(ctx, teamData, ganttWidth, headerHeight + legendHeight, detailPanelWidth, estimatedGanttHeight)
+
+    // 预加载二维码和logo
+    const toolUrl = getToolUrl()
+    
+    try {
+      const [qrImage, logoImage] = await Promise.all([
+        preloadLocalQRCode(toolUrl, 60),
+        loadLogoImage()
+      ])
+      
+      // 绘制底部脚注条（整个宽度）
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage, logoImage)
+    } catch (error) {
+      console.warn('图片资源加载失败，继续导出:', error)
+      // 即使资源加载失败，也绘制脚注（不含图片）
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
+    }
+
+    // 尝试多种下载方法
+    await tryDownloadMethods(canvas, `${plannerName}_${plannerDate}_详细.png`)
+
+  } catch (error) {
+    console.warn('Canvas导出失败：', error)
+    showAppWarningModal('抱歉，您的浏览器不支持Canvas导出功能')
+  }
+}
+
+/**
+ * 绘制侧边时间明细表
+ */
+function drawTimeDetailPanel(
+  ctx: CanvasRenderingContext2D,
+  teamData: GanttTeamData[],
+  ganttWidth: number,
+  startY: number,
+  panelWidth: number,
+  panelHeight: number
+): void {
+  const panelX = ganttWidth
+  
+  // 绘制面板背景
+  ctx.fillStyle = '#f8f9fa'
+  ctx.fillRect(panelX, startY, panelWidth, panelHeight)
+  
+  // 绘制面板边框
+  ctx.strokeStyle = '#e1e5e9'
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(panelX, startY)
+  ctx.lineTo(panelX, startY + panelHeight)
+  ctx.stroke()
+  
+  // 绘制标题
+  ctx.fillStyle = '#2d3748'
+  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  ctx.textAlign = 'left'
+  ctx.fillText('时间明细', panelX + 15, startY + 25)
+  
+  // 绘制分隔线
+  ctx.strokeStyle = '#e1e5e9'
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(panelX + 15, startY + 35)
+  ctx.lineTo(panelX + panelWidth - 15, startY + 35)
+  ctx.stroke()
+  
+  // 绘制团体时间信息
+  let currentY = startY + 50
+  const lineHeight = 18
+  const groupSpacing = 10
+  
+  const groupedData = groupTeamsByActivity(teamData)
+  Object.entries(groupedData).forEach(([_, teams]) => {
+    teams.forEach(team => {
+      const teamName = team.team.name
+      
+      // 检查是否超出面板高度
+      if (currentY > startY + panelHeight - 60) {
+        // 如果空间不够，停止绘制更多团体
+        return
+      }
+      
+      // 绘制团体名称
+      ctx.fillStyle = '#2d3748'
+      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.fillText(teamName, panelX + 15, currentY)
+      currentY += lineHeight + 2
+      
+      // 绘制Live时间段
+      team.liveBars.forEach((bar, index) => {
+        const prefix = team.liveBars.length > 1 ? `L${index + 1}:` : 'L:'
+        const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
+        const locationText = bar.location ? ` @${bar.location}` : ''
+        
+        ctx.fillStyle = '#4a5568'
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 25, currentY)
+        currentY += lineHeight
+      })
+      
+      // 绘制特典时间段
+      team.tokutenBars.forEach((bar, index) => {
+        const prefix = team.tokutenBars.length > 1 ? `T${index + 1}:` : 'T:'
+        const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
+        const locationText = bar.location ? ` @${bar.location}` : ''
+        
+        ctx.fillStyle = '#4a5568'
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.fillText(`${prefix} ${timeText}${locationText}`, panelX + 25, currentY)
+        currentY += lineHeight
+      })
+      
+      currentY += groupSpacing // 团体间距
+    })
+  })
 }
 
 /**
