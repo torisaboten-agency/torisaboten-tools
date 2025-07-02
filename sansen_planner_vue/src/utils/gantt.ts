@@ -249,19 +249,19 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
       `
     }
 
-          // 团体行
-      teams.forEach(teamData => {
-        const timeBars = generateTimeBars(teamData, timeRange)
-        
-        bodyHTML += `
-          <div class="gantt-row">
-            <div class="gantt-left-panel">${teamData.team.name}</div>
-            <div class="gantt-timeline" style="width: 100%; position: relative;">
-              ${timeBars}
-            </div>
+    // 团体行
+    teams.forEach(teamData => {
+      const timeBars = generateTimeBars(teamData, timeRange)
+      
+      bodyHTML += `
+        <div class="gantt-row">
+          <div class="gantt-left-panel">${teamData.team.name}</div>
+          <div class="gantt-timeline" style="width: 100%; position: relative;">
+            ${timeBars}
           </div>
-        `
-      })
+        </div>
+      `
+    })
   })
 
   bodyHTML += '</div>'
@@ -470,11 +470,11 @@ function bindTooltipEvents(container: HTMLElement): void {
       const tooltipText = target.getAttribute('data-tooltip')
       if (!tooltipText) return
       
-      tooltip.textContent = tooltipText
-      tooltip.classList.add('show')
-      
+        tooltip.textContent = tooltipText
+        tooltip.classList.add('show')
+        
       // 使用fixed定位，相对于viewport而不是容器
-      const rect = target.getBoundingClientRect()
+        const rect = target.getBoundingClientRect()
       const isMobile = window.innerWidth <= 768
       
       // 计算tooltip的显示位置
@@ -537,7 +537,7 @@ function bindTooltipEvents(container: HTMLElement): void {
     clearTimeouts()
     
     const action = () => {
-      tooltip.classList.remove('show')
+          tooltip.classList.remove('show')
     }
     
     if (immediate) {
@@ -1023,7 +1023,7 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     // 多活动模式：活动标题高度和分割线
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        totalHeight += 8 + 12 // 分割线前后间距
+        totalHeight += 6 + 6 // 分割线前后间距
       }
       totalHeight += activitySpacing
     }
@@ -1106,14 +1106,14 @@ function drawTimeDetailPanel(
     if (activityId !== 'single-activity') {
       // 活动间分割线（除了第一个活动）
       if (activityIndex > 0) {
-        currentY += 8
+        currentY += 6
         ctx.strokeStyle = '#d1d5db'
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(panelX + 15, currentY)
         ctx.lineTo(panelX + panelWidth - 15, currentY)
         ctx.stroke()
-        currentY += 12
+        currentY += 6
       }
       
       // 获取活动名称
