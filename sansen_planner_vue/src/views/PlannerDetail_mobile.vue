@@ -1673,6 +1673,13 @@ onUnmounted(() => {
   border-top-color: rgba(0, 0, 0, 0.95);
 }
 
+/* 当tooltip显示在下方时，箭头指向上方 */
+.gantt-tooltip.tooltip-below::after {
+  top: -10px;
+  border-top-color: transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.95);
+}
+
 /* 空状态样式 */
 .empty-gantt {
   display: flex;

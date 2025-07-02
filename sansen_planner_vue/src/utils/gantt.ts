@@ -470,9 +470,21 @@ function bindTooltipEvents(container: HTMLElement): void {
       
       // 移动端特殊处理：调整位置确保可见性
       const isMobile = window.innerWidth <= 768
+      let tooltipOffset = -8 // 默认向上偏移
+      let showBelow = false // 是否显示在下方
+      
       if (isMobile) {
-        // 移动端向上偏移更多，避免被手指遮挡
-        relativeTop -= 20
+        // 检测是否是第一行或接近顶部的元素
+        const isNearTop = relativeTop < 50 // 如果距离容器顶部小于50px
+        
+        if (isNearTop) {
+          // 第一行或接近顶部：显示在下方
+          showBelow = true
+          tooltipOffset = rect.height + 8 // 显示在元素下方
+        } else {
+          // 其他行：向上偏移更多，避免被手指遮挡
+          tooltipOffset = -28 // 向上偏移28px
+        }
         
         // 确保不会超出视窗
         const viewportWidth = window.innerWidth
@@ -480,6 +492,12 @@ function bindTooltipEvents(container: HTMLElement): void {
         
         relativeLeft = Math.max(tooltipWidth / 2, Math.min(relativeLeft + rect.width / 2, viewportWidth - tooltipWidth / 2))
       } else {
+        // 桌面端：检测是否会超出容器顶部
+        if (relativeTop < 40) {
+          showBelow = true
+          tooltipOffset = rect.height + 8
+        }
+        
         // 确保tooltip不会超出容器边界
         const tooltipRect = tooltip.getBoundingClientRect()
         const maxLeft = ganttContainer.clientWidth - tooltipRect.width
@@ -487,8 +505,15 @@ function bindTooltipEvents(container: HTMLElement): void {
       }
       
       tooltip.style.left = `${relativeLeft}px`
-      tooltip.style.top = `${relativeTop - 8}px`
+      tooltip.style.top = `${relativeTop + tooltipOffset}px`
       tooltip.style.transform = 'translateX(-50%)'
+      
+      // 根据显示位置调整箭头方向
+      if (showBelow) {
+        tooltip.classList.add('tooltip-below')
+      } else {
+        tooltip.classList.remove('tooltip-below')
+      }
     }
     
     if (immediate) {
