@@ -1023,7 +1023,7 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     // 多活动模式：活动标题高度和分割线
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        totalHeight += 10 + 15 // 分割线前后间距
+        totalHeight += 8 + 12 // 分割线前后间距
       }
       totalHeight += activitySpacing
     }
@@ -1106,14 +1106,14 @@ function drawTimeDetailPanel(
     if (activityId !== 'single-activity') {
       // 活动间分割线（除了第一个活动）
       if (activityIndex > 0) {
-        currentY += 10
+        currentY += 8
         ctx.strokeStyle = '#d1d5db'
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(panelX + 15, currentY)
         ctx.lineTo(panelX + panelWidth - 15, currentY)
         ctx.stroke()
-        currentY += 15
+        currentY += 12
       }
       
       // 获取活动名称
