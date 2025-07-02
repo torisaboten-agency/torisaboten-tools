@@ -695,7 +695,6 @@ export async function exportGanttAsImage(
 
     // 计算所需的甘特图高度（基于团体数量）
     const rowHeight = 56
-    const activityHeaderHeight = 48
     let totalRows = 0
     
     // 计算总行数（团体行 + 活动头部行）
@@ -740,8 +739,7 @@ export async function exportGanttAsImage(
     drawLegend(ctx, canvas.width, headerHeight, legendHeight)
 
     // 重新绘制甘特图到canvas（移除高度限制，确保所有团体都能显示）
-    const ganttHeight = estimatedGanttHeight
-    drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10, ganttHeight)
+    drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10)
 
     // 预加载二维码和logo
     const toolUrl = getToolUrl()
@@ -916,8 +914,7 @@ function drawGanttToCanvas(
   teamData: GanttTeamData[],
   timeRange: GanttTimeRange,
   canvasWidth: number,
-  startY: number,
-  maxHeight?: number
+  startY: number
 ): void {
   if (teamData.length === 0) {
     return
@@ -930,7 +927,6 @@ function drawGanttToCanvas(
   const leftPanelWidth = 160
   const chartWidth = canvasWidth - leftPanelWidth - 40
   const rowHeight = 56
-  const availableHeight = maxHeight || (ctx.canvas.height - startY)
   
   let currentY = startY + 30
   
