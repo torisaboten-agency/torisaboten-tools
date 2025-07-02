@@ -1010,11 +1010,11 @@ async function exportDetailedGanttAsImage(
  * 计算时间明细表所需的高度
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
-  const lineHeight = 16      // 与绘制函数保持一致
-  const teamSpacing = 8      // 团体间紧凑间距
-  const activitySpacing = 12 // 活动间紧凑间距
+  const lineHeight = 14      // 与绘制函数保持一致
+  const teamSpacing = 5      // 团体间紧凑间距
+  const activitySpacing = 8  // 活动间紧凑间距
   const titleHeight = 35     // 标题区域高度
-  const topPadding = 10      // 标题下方的间距（currentY = startY + 45 = titleHeight + 10）
+  const topPadding = 15      // 标题下方的间距（currentY = startY + 50 = titleHeight + 15）
   const bottomPadding = 15   // 底部留白
   
   let contentHeight = 0
@@ -1049,7 +1049,7 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
   })
   
   const totalHeight = titleHeight + topPadding + contentHeight + bottomPadding
-  return Math.max(350, totalHeight) // 降低最小高度
+  return Math.max(300, totalHeight) // 进一步降低最小高度
 }
 
 /**
@@ -1095,11 +1095,11 @@ function drawTimeDetailPanel(
   ctx.lineTo(panelX + panelWidth, startY + 35)
   ctx.stroke()
   
-  // 绘制团体时间信息
-  let currentY = startY + 45  // 减少顶部间距
-  const lineHeight = 16      // 减少行高
-  const teamSpacing = 8      // 团体间紧凑间距
-  const activitySpacing = 12 // 活动间紧凑间距
+  // 绘制团体时间信息 - 优化版本
+  let currentY = startY + 50
+  const lineHeight = 14
+  const teamSpacing = 5     // 减少团体间距
+  const activitySpacing = 8 // 减少活动间距
   
   const groupedData = groupTeamsByActivity(teamData)
   const activityEntries = Object.entries(groupedData)
@@ -1107,12 +1107,11 @@ function drawTimeDetailPanel(
   activityEntries.forEach(([activityId, teams], activityIndex) => {
     // 多活动模式：绘制活动标题
     if (activityId !== 'single-activity') {
-      // 活动间间距（除了第一个活动）
+      // 统一的活动间距（包括第一个活动）
       if (activityIndex > 0) {
         currentY += activitySpacing
       }
       
-      // 获取活动名称
       const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
       
       // 绘制活动标题（紫色，加粗）
@@ -1127,7 +1126,7 @@ function drawTimeDetailPanel(
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间紧凑间距（除了第一个团体）
+      // 团体间紧凑间距
       if (teamIndex > 0) {
         currentY += teamSpacing
       }
@@ -1145,15 +1144,13 @@ function drawTimeDetailPanel(
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        // 绘制圆形项目符号
+        // 绘制项目符号
         ctx.fillStyle = '#6b7280'
-        ctx.beginPath()
-        ctx.arc(panelX + 28, currentY - 3, 2, 0, 2 * Math.PI)
-        ctx.fill()
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.fillText('•', panelX + 25, currentY)
         
         // 绘制时间段信息（灰色，向右缩进）
         ctx.fillStyle = '#6b7280'
-        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         ctx.fillText(`${prefix}: ${timeText}${locationText}`, panelX + 35, currentY)
         currentY += lineHeight
       })
@@ -1164,15 +1161,13 @@ function drawTimeDetailPanel(
         const timeText = `${minutesToTime(bar.startMinutes)}-${minutesToTime(bar.startMinutes + bar.duration)}`
         const locationText = bar.location ? ` @${bar.location}` : ''
         
-        // 绘制圆形项目符号
+        // 绘制项目符号
         ctx.fillStyle = '#6b7280'
-        ctx.beginPath()
-        ctx.arc(panelX + 28, currentY - 3, 2, 0, 2 * Math.PI)
-        ctx.fill()
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.fillText('•', panelX + 25, currentY)
         
         // 绘制时间段信息（灰色，向右缩进）
         ctx.fillStyle = '#6b7280'
-        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         ctx.fillText(`${prefix}: ${timeText}${locationText}`, panelX + 35, currentY)
         currentY += lineHeight
       })
