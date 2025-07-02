@@ -1498,7 +1498,7 @@ onUnmounted(() => {
 }
 
 .gantt-activity-header .activity-name {
-  background: #e3f2fd;
+  background: #e3f2fd !important; /* 强制保持蓝色背景 */
   font-weight: 600;
   font-size: 15px;
   color: #1565c0;
@@ -1550,8 +1550,8 @@ onUnmounted(() => {
   justify-content: flex-end;
 }
 
-/* 只有非header行才使用白色背景 */
-.gantt-row .gantt-left-panel {
+/* 只有非活动头部的行才使用白色背景 */
+.gantt-row:not(.gantt-activity-header) .gantt-left-panel {
   background: #ffffff;
 }
 
@@ -1818,7 +1818,7 @@ onUnmounted(() => {
   
   /* 手机端活动头部样式 */
   .gantt-activity-header .activity-name {
-    background: #e3f2fd;
+    background: #e3f2fd !important; /* 强制保持蓝色背景 */
     font-weight: 600;
     font-size: 11px;
     color: #1565c0;
