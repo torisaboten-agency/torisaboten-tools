@@ -2019,7 +2019,7 @@ onUnmounted(() => {
 }
 
 .gantt-activity-header .gantt-timeline {
-  background: #e3f2fd;
+  background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
   position: relative;
   width: 100% !important;
   min-width: 100% !important;
@@ -2323,7 +2323,7 @@ onUnmounted(() => {
     font-weight: 600;
     font-size: 11px;
     color: #1565c0;
-    border-right: 1px solid #bbdefb;
+    /* 移除右边框，保持简化视觉效果 */
     min-width: 80px;
     width: 80px;
     text-align: right;
@@ -2333,7 +2333,7 @@ onUnmounted(() => {
   }
   
   .gantt-activity-header .gantt-timeline {
-    background: #e3f2fd;
+    background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
     min-width: 520px;
   }
   

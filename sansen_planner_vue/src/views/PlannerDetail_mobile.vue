@@ -1504,7 +1504,7 @@ onUnmounted(() => {
 }
 
 .gantt-activity-header .gantt-timeline {
-  background: #e3f2fd;
+  background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
   position: relative;
   width: 100% !important;
   min-width: 100% !important;
@@ -1801,7 +1801,7 @@ onUnmounted(() => {
   }
   
   .gantt-activity-header .gantt-timeline {
-    background: #e3f2fd;
+    background: #e3f2fd !important; /* 强制使用蓝色背景，避免被白色背景覆盖 */
     min-width: 520px;
   }
   
