@@ -971,8 +971,8 @@ async function exportDetailedGanttAsImage(
     ctx.textAlign = 'center'
     ctx.fillText(`${plannerName} - ${plannerDate}`, ganttWidth / 2, headerHeight / 2 + 7)
 
-    // 绘制图例（只在甘特图区域）
-    drawLegend(ctx, ganttWidth, headerHeight, legendHeight)
+    // 绘制图例（包含明细面板标题）
+    drawLegend(ctx, canvas.width, headerHeight, legendHeight, detailPanelWidth)
 
     // 绘制甘特图主体（只在甘特图区域）
     drawGanttToCanvas(ctx, teamData, timeRange, ganttWidth, headerHeight + legendHeight + 10)
@@ -1013,8 +1013,7 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
   const lineHeight = 14      // 与绘制函数保持一致
   const teamSpacing = 5      // 团体间紧凑间距
   const activitySpacing = 8  // 活动间紧凑间距
-  const titleHeight = 35     // 标题区域高度
-  const topPadding = 15      // 标题下方的间距（currentY = startY + 50 = titleHeight + 15）
+  const topPadding = 20      // 顶部间距（currentY = startY + 20）
   const bottomPadding = 15   // 底部留白
   
   let contentHeight = 0
@@ -1048,8 +1047,8 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     })
   })
   
-  const totalHeight = titleHeight + topPadding + contentHeight + bottomPadding
-  return Math.max(300, totalHeight) // 进一步降低最小高度
+  const totalHeight = topPadding + contentHeight + bottomPadding
+  return Math.max(250, totalHeight) // 移除标题高度，进一步降低最小高度
 }
 
 /**
@@ -1077,26 +1076,8 @@ function drawTimeDetailPanel(
   ctx.lineTo(panelX, startY + panelHeight)
   ctx.stroke()
   
-  // 绘制标题背景
-  ctx.fillStyle = '#f8f9fa'
-  ctx.fillRect(panelX, startY, panelWidth, 35)
-  
-  // 绘制标题文字
-  ctx.fillStyle = '#374151'
-  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-  ctx.textAlign = 'center'
-  ctx.fillText('时间明细', panelX + panelWidth / 2, startY + 23)
-  
-  // 绘制标题下方分隔线
-  ctx.strokeStyle = '#e5e7eb'
-  ctx.lineWidth = 1
-  ctx.beginPath()
-  ctx.moveTo(panelX, startY + 35)
-  ctx.lineTo(panelX + panelWidth, startY + 35)
-  ctx.stroke()
-  
-  // 绘制团体时间信息 - 优化版本
-  let currentY = startY + 50
+  // 绘制团体时间信息 - 从更高的位置开始，增加顶部间距
+  let currentY = startY + 20
   const lineHeight = 14
   const teamSpacing = 5     // 减少团体间距
   const activitySpacing = 8 // 减少活动间距
@@ -1182,7 +1163,8 @@ function drawLegend(
   ctx: CanvasRenderingContext2D,
   canvasWidth: number,
   startY: number,
-  legendHeight: number
+  legendHeight: number,
+  detailPanelWidth?: number
 ): void {
   const legendY = startY
   
@@ -1226,6 +1208,25 @@ function drawLegend(
   
   ctx.fillStyle = '#2d3748'
   ctx.fillText('特典会', tokutenX + legendItemHeight + 8, legendCenterY + 5)
+  
+  // 如果有明细面板，在右侧绘制"时间明细"标题
+  if (detailPanelWidth) {
+    const ganttWidth = canvasWidth - detailPanelWidth
+    
+    // 绘制明细面板标题区域分隔线
+    ctx.strokeStyle = '#e5e7eb'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(ganttWidth, legendY)
+    ctx.lineTo(ganttWidth, legendY + legendHeight)
+    ctx.stroke()
+    
+    // 绘制"时间明细"标题
+    ctx.fillStyle = '#374151'
+    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('时间明细', ganttWidth + detailPanelWidth / 2, legendCenterY + 6)
+  }
 }
 
 /**
