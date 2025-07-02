@@ -687,7 +687,7 @@ function showExportModeModal(): Promise<'simple' | 'detailed' | null> {
       align-items: center;
       justify-content: center;
       z-index: 10000;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     `
 
     const content = document.createElement('div')
@@ -864,7 +864,7 @@ async function exportSimpleGanttAsImage(
 
     // 绘制标题文字（白色）
     ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 20px Arial, sans-serif'
+    ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
     ctx.textAlign = 'center'
     ctx.fillText(`${plannerName} - ${plannerDate}`, canvas.width / 2, headerHeight / 2 + 7)
 
@@ -967,7 +967,7 @@ async function exportDetailedGanttAsImage(
 
     // 绘制标题文字（白色）
     ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 20px Arial, sans-serif'
+    ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
     ctx.textAlign = 'center'
     ctx.fillText(`${plannerName} - ${plannerDate}`, ganttWidth / 2, headerHeight / 2 + 7)
 
@@ -1097,7 +1097,7 @@ function drawTimeDetailPanel(
       
       // 绘制活动标题（紫色，加粗）
       ctx.fillStyle = '#8b5cf6'
-      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
       ctx.textAlign = 'left'
       ctx.fillText(activityName, panelX + 15, currentY)
       
@@ -1114,7 +1114,7 @@ function drawTimeDetailPanel(
       
       // 绘制团体名称（黑色，加粗）
       ctx.fillStyle = '#1f2937'
-      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
       ctx.textAlign = 'left'
       ctx.fillText(teamName, panelX + 15, currentY)
       currentY += lineHeight
@@ -1127,7 +1127,7 @@ function drawTimeDetailPanel(
         
         // 绘制项目符号
         ctx.fillStyle = '#6b7280'
-        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
         ctx.fillText('•', panelX + 25, currentY)
         
         // 绘制时间段信息（灰色，向右缩进）
@@ -1144,7 +1144,7 @@ function drawTimeDetailPanel(
         
         // 绘制项目符号
         ctx.fillStyle = '#6b7280'
-        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
         ctx.fillText('•', panelX + 25, currentY)
         
         // 绘制时间段信息（灰色，向右缩进）
@@ -1194,7 +1194,7 @@ function drawLegend(
   ctx.strokeRect(legendStartX, legendCenterY - legendItemHeight / 2, legendItemHeight, legendItemHeight)
   
   ctx.fillStyle = '#2d3748'
-  ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
   ctx.textAlign = 'left'
   ctx.fillText('Live演出', legendStartX + legendItemHeight + 8, legendCenterY + 5)
   
@@ -1223,7 +1223,7 @@ function drawLegend(
     
     // 绘制"时间明细"标题
     ctx.fillStyle = '#374151'
-    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
     ctx.textAlign = 'center'
     ctx.fillText('时间明细', ganttWidth + detailPanelWidth / 2, legendCenterY + 6)
   }
@@ -1265,7 +1265,7 @@ async function drawFooter(
   
   // 绘制工具署名文本
   ctx.fillStyle = '#ffffff'
-  ctx.font = 'bold 16px Arial, sans-serif'
+  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
   ctx.textAlign = 'left'
   
   const signature = getToolSignature()
@@ -1278,7 +1278,7 @@ async function drawFooter(
   ctx.fillText(signature, textX, textY)
   
   // 绘制URL（小字体）
-  ctx.font = '14px Arial, sans-serif'
+  ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
   ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
   ctx.fillText(toolUrl, textX, textY + 25)
   
@@ -1342,7 +1342,7 @@ function drawGanttToCanvas(
   // 绘制时间轴
   ctx.strokeStyle = '#dadce0'
   ctx.fillStyle = '#5f6368'
-  ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+  ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
   ctx.textAlign = 'center'
   
   // 根据时间范围决定时间标记的间隔 - 与网页版保持一致
@@ -1416,7 +1416,7 @@ function drawGanttToCanvas(
    
       // 活动标题文字
       ctx.fillStyle = '#1565c0'
-      ctx.font = '600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = '600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
       ctx.textAlign = 'left'
       const activityTitle = activity.location ? 
         `${activity.name} @ ${activity.location}` : 
@@ -1455,7 +1455,7 @@ function drawGanttToCanvas(
      
       // 团体名
       ctx.fillStyle = '#5f6368'
-      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
       ctx.textAlign = 'right'
       ctx.fillText(team.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
       
@@ -1488,7 +1488,7 @@ function drawGanttToCanvas(
         
         if (barWidth >= MIN_WIDTH_FOR_TIME) {
           ctx.fillStyle = '#2d3748'
-          ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+          ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
           ctx.textAlign = 'center'
           const startTime = minutesToTime(bar.startMinutes)
           const endTime = minutesToTime(bar.startMinutes + bar.duration)
@@ -1497,7 +1497,7 @@ function drawGanttToCanvas(
           
           if (bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION) {
             ctx.fillStyle = '#4a5568'
-            ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+            ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
             ctx.fillText(`@${bar.location}`, barX + barWidth / 2, barY + barHeight/2 + 8)
           }
         }
@@ -1525,7 +1525,7 @@ function drawGanttToCanvas(
         
         if (barWidth >= MIN_WIDTH_FOR_TIME) {
           ctx.fillStyle = '#2d3748'
-          ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+          ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
           ctx.textAlign = 'center'
           const startTime = minutesToTime(bar.startMinutes)
           const endTime = minutesToTime(bar.startMinutes + bar.duration)
@@ -1534,7 +1534,7 @@ function drawGanttToCanvas(
           
           if (bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION) {
             ctx.fillStyle = '#4a5568'
-            ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+            ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
             ctx.fillText(`@${bar.location}`, barX + barWidth / 2, barY + barHeight/2 + 8)
           }
         }
@@ -1666,7 +1666,7 @@ export function showAppWarningModal(message: string, title: string = '提示'): 
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     padding: 20px;
     box-sizing: border-box;
   `
@@ -1727,7 +1727,7 @@ function showImageModal(dataURL: string | null, message: string): void {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     padding: 20px;
     box-sizing: border-box;
   `

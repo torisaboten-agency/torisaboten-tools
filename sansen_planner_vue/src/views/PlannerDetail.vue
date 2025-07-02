@@ -1914,7 +1914,7 @@ onUnmounted(() => {
   overflow-x: auto;
   overflow-y: auto; /* 启用垂直滚动 */
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   max-width: 100%; /* 限制最大宽度不超过父容器 */
   /* 添加触摸拖动支持 */
   touch-action: pan-x; /* 允许水平拖动 */

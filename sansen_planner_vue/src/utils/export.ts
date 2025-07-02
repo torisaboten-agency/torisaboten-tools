@@ -20,7 +20,7 @@ export function showWeChatLimitation(fileType: string = '文件'): void {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     padding: 20px;
     box-sizing: border-box;
   `
