@@ -1978,7 +1978,7 @@ onUnmounted(() => {
 .gantt-header {
   position: sticky;
   top: 0;
-  background: #ffffff; /* 改为白色，与下方内容保持一致 */
+  background: #f8f9fa; /* 改回灰色，保持视觉统一 */
   border-bottom: 1px solid #e1e5e9;
   z-index: 10;
   height: 48px;
@@ -2002,10 +2002,6 @@ onUnmounted(() => {
 
 .gantt-row:hover {
   background: #f8f9fa;
-}
-
-.gantt-row:hover .gantt-left-panel {
-  background: #f8f9fa; /* hover时左侧面板也跟随变色 */
 }
 
 .gantt-activity-header {
@@ -2052,7 +2048,7 @@ onUnmounted(() => {
   width: 160px;
   min-width: 160px;
   padding: 0 12px;
-  background: #ffffff; /* 改为白色，与右侧时间轴保持一致 */
+  background: #f8f9fa; /* 改回灰色，与header保持一致 */
   border-right: 1px solid #e1e5e9;
   text-align: right;
   font-size: 14px;
@@ -2061,6 +2057,15 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+/* 只有非header行才使用白色背景 */
+.gantt-row .gantt-left-panel {
+  background: #ffffff;
+}
+
+.gantt-row:hover .gantt-left-panel {
+  background: #f8f9fa; /* hover时变为灰色 */
 }
 
 .gantt-timeline {
@@ -2075,7 +2080,7 @@ onUnmounted(() => {
   display: flex;
   position: relative;
   height: 48px;
-  background: #ffffff; /* 改为白色，与整体保持一致 */
+  background: #f8f9fa; /* 改回灰色，与header保持一致 */
   width: 100%; /* 确保占满宽度 */
 }
 
