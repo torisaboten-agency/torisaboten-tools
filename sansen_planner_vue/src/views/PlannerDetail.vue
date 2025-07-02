@@ -2025,6 +2025,11 @@ onUnmounted(() => {
   min-width: 100% !important;
 }
 
+/* 最高优先级确保活动头部背景不被覆盖 */
+.gantt-row.gantt-activity-header .gantt-timeline {
+  background: #e3f2fd !important;
+}
+
 .activity-location-text {
   position: absolute;
   left: 16px;
@@ -2068,7 +2073,8 @@ onUnmounted(() => {
   width: 100%; /* 确保占满宽度 */
 }
 
-.gantt-timeline {
+/* 限制timeline样式只对非头部元素生效 */
+.gantt-body .gantt-timeline {
   flex: 1;
   position: relative;
   min-height: 56px;
@@ -2079,6 +2085,11 @@ onUnmounted(() => {
 
 /* 确保时间轴头部不受gantt-timeline白色背景影响 */
 .gantt-header .gantt-time-header {
+  background: #f8f9fa !important;
+}
+
+/* 更强的选择器确保时间轴头部背景不被覆盖 */
+.gantt-chart-content .gantt-header .gantt-time-header {
   background: #f8f9fa !important;
 }
 
@@ -2279,14 +2290,20 @@ onUnmounted(() => {
   
   .gantt-time-header {
     min-width: 520px; /* 相应调整时间轴宽度 */
+    background: #f8f9fa !important; /* 确保响应式下的时间轴头部背景 */
   }
   
   .gantt-row {
     min-height: 35px;
   }
   
-  .gantt-timeline {
+  .gantt-body .gantt-timeline {
     min-width: 520px; /* 相应调整时间轴宽度 */
+  }
+  
+  /* 响应式样式中也要确保活动头部背景不被覆盖 */
+  .gantt-row.gantt-activity-header .gantt-timeline {
+    background: #e3f2fd !important;
   }
   
   .gantt-time-bar {
