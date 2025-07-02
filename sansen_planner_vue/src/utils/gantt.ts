@@ -1011,9 +1011,10 @@ async function exportDetailedGanttAsImage(
  */
 function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
   const lineHeight = 14      // 与绘制函数保持一致
-  const teamSpacing = 8      // 统一团体间距
-  const activitySpacing = 8  // 统一活动间距
-  const topPadding = 20      // 顶部间距（currentY = startY + 20）
+  const teamSpacing = 16     // 团体之间的间距
+  const activityHeaderSpacing = 22 // 活动标题与其下方内容的间距
+  const interActivitySpacing = 24  // 不同活动分组之间的间距
+  const topPadding = 20      // 顶部间距
   const bottomPadding = 15   // 底部留白
   
   let contentHeight = 0
@@ -1025,13 +1026,13 @@ function calculateDetailPanelHeight(teamData: GanttTeamData[]): number {
     // 多活动模式：活动标题高度
     if (activityId !== 'single-activity') {
       if (activityIndex > 0) {
-        contentHeight += activitySpacing * 2 // 活动间更大间距
+        contentHeight += interActivitySpacing
       }
-      contentHeight += teamSpacing // 活动标题后使用统一间距
+      contentHeight += activityHeaderSpacing
     }
     
     teams.forEach((team, teamIndex) => {
-      // 团体间紧凑间距 - 统一逻辑：除了活动下的第一个团体，所有团体前都有间距
+      // 团体间距 - 在非首个团体前增加间距
       if (teamIndex > 0) {
         contentHeight += teamSpacing
       }
@@ -1079,8 +1080,9 @@ function drawTimeDetailPanel(
   // 绘制团体时间信息 - 从更高的位置开始，增加顶部间距
   let currentY = startY + 20
   const lineHeight = 14
-  const teamSpacing = 8     // 统一团体间距
-  const activitySpacing = 8 // 统一活动间距
+  const teamSpacing = 16          // 团体之间的间距
+  const activityHeaderSpacing = 22 // 活动标题与其下方内容的间距
+  const interActivitySpacing = 24  // 不同活动分组之间的间距
   
   const groupedData = groupTeamsByActivity(teamData)
   const activityEntries = Object.entries(groupedData)
@@ -1090,7 +1092,7 @@ function drawTimeDetailPanel(
     if (activityId !== 'single-activity') {
       // 活动间间距（除了第一个活动）
       if (activityIndex > 0) {
-        currentY += activitySpacing * 2 // 活动间要更大的间距
+        currentY += interActivitySpacing
       }
       
       const activityName = teams[0]?.activity?.name || `活动 ${activityId}`
@@ -1101,13 +1103,13 @@ function drawTimeDetailPanel(
       ctx.textAlign = 'left'
       ctx.fillText(activityName, panelX + 15, currentY)
       
-      currentY += teamSpacing // 活动标题后使用统一间距
+      currentY += activityHeaderSpacing // 在活动标题后增加一个较大的、合适的间距
     }
     
     teams.forEach((team, teamIndex) => {
       const teamName = team.team.name
       
-      // 团体间紧凑间距 - 统一逻辑：除了活动下的第一个团体，所有团体前都有间距
+      // 团体间距 - 在非首个团体前增加间距
       if (teamIndex > 0) {
         currentY += teamSpacing
       }
