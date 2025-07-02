@@ -311,21 +311,26 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
     const endTime = minutesToTime(bar.startMinutes + bar.duration)
     const timeText = `${startTime}-${endTime}`
     
-    // 新的显示逻辑：特典时间大于60分钟或宽度足够时显示时间
-    if (minWidthPercent > 8 || (bar.type === 'tokuten' && duration > 60)) {
-      // 宽度足够或特典时间大于1小时：显示时间范围
+    // 计算实际像素宽度
+    const timelineContainer = document.querySelector('.gantt-timeline')
+    const timelineWidth = timelineContainer ? timelineContainer.clientWidth : 800
+    const actualWidth = (minWidthPercent / 100) * timelineWidth
+    
+    // 使用绝对宽度阈值：基于文字实际需要的像素空间
+    const MIN_WIDTH_FOR_TIME = 85 // 85px足够显示"HH:MM-HH:MM"格式
+    const MIN_WIDTH_FOR_LOCATION = 110 // 110px才显示地点信息
+    
+    if (actualWidth >= MIN_WIDTH_FOR_TIME) {
+      // 宽度足够：显示完整时间范围
       displayText = timeText
-    } else if (minWidthPercent > 4) {
-      // 中等宽度：只显示开始时间
-      displayText = startTime
     } else {
-      // 宽度太小：留空，通过颜色和tooltip区分
+      // 宽度不够：完全不显示文字，只通过颜色和tooltip区分
       displayText = ''
     }
     
     // 如果有地点且宽度足够，准备双行显示
     let locationHTML = ''
-    if (hasLocation && minWidthPercent > 6) {
+    if (hasLocation && actualWidth >= MIN_WIDTH_FOR_LOCATION) {
       locationHTML = `<div style="font-size: 9px; line-height: 1.1; margin-top: 2px; color: #4a5568;">@${bar.location}</div>`
     }
     
@@ -1051,18 +1056,6 @@ function drawGanttToCanvas(
       ctx.textAlign = 'right'
       ctx.fillText(teamData.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
       
-      // 移除重复绘制垂直线的逻辑，让垂直线自然贯穿
-      // timeMarkPositions.forEach(xPos => {
-      //   if (xPos > leftPanelWidth) { // 只在时间轴区域绘制
-      //     ctx.strokeStyle = '#dadce0'
-      //     ctx.lineWidth = 1
-      //     ctx.beginPath()
-      //     ctx.moveTo(xPos, currentY)
-      //     ctx.lineTo(xPos, currentY + rowHeight)
-      //     ctx.stroke()
-      //   }
-      // })
-      
       // 检查时间重叠
       const allBars = [
         ...teamData.liveBars.map(bar => ({ ...bar, type: 'live' as const })),
@@ -1086,17 +1079,20 @@ function drawGanttToCanvas(
         ctx.lineWidth = 1
         ctx.strokeRect(barX, barY, barWidth, barHeight)
         
-        // 文字
-        if (barWidth > 60) {
+        // 文字显示逻辑：与网页版保持一致，基于绝对像素宽度
+        const MIN_WIDTH_FOR_TIME = 85 // 85px足够显示"HH:MM-HH:MM"格式
+        const MIN_WIDTH_FOR_LOCATION = 110 // 110px才显示地点信息
+        
+        if (barWidth >= MIN_WIDTH_FOR_TIME) {
           ctx.fillStyle = '#2d3748'
           ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
           ctx.textAlign = 'center'
           const startTime = minutesToTime(bar.startMinutes)
           const endTime = minutesToTime(bar.startMinutes + bar.duration)
-          const textY = bar.location && barWidth > 80 ? barY + barHeight/2 - 4 : barY + barHeight/2 + 4
+          const textY = bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION ? barY + barHeight/2 - 4 : barY + barHeight/2 + 4
           ctx.fillText(`${startTime}-${endTime}`, barX + barWidth / 2, textY)
           
-          if (bar.location && barWidth > 80) {
+          if (bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION) {
             ctx.fillStyle = '#4a5568'
             ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
             ctx.fillText(`@${bar.location}`, barX + barWidth / 2, barY + barHeight/2 + 8)
@@ -1120,17 +1116,20 @@ function drawGanttToCanvas(
         ctx.lineWidth = 1
         ctx.strokeRect(barX, barY, barWidth, barHeight)
         
-        // 文字
-        if (barWidth > 60) {
+        // 文字显示逻辑：与网页版保持一致，基于绝对像素宽度
+        const MIN_WIDTH_FOR_TIME = 85 // 85px足够显示"HH:MM-HH:MM"格式
+        const MIN_WIDTH_FOR_LOCATION = 110 // 110px才显示地点信息
+        
+        if (barWidth >= MIN_WIDTH_FOR_TIME) {
           ctx.fillStyle = '#2d3748'
           ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
           ctx.textAlign = 'center'
           const startTime = minutesToTime(bar.startMinutes)
           const endTime = minutesToTime(bar.startMinutes + bar.duration)
-          const textY = bar.location && barWidth > 80 ? barY + barHeight/2 - 4 : barY + barHeight/2 + 4
+          const textY = bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION ? barY + barHeight/2 - 4 : barY + barHeight/2 + 4
           ctx.fillText(`${startTime}-${endTime}`, barX + barWidth / 2, textY)
           
-          if (bar.location && barWidth > 80) {
+          if (bar.location && barWidth >= MIN_WIDTH_FOR_LOCATION) {
             ctx.fillStyle = '#4a5568'
             ctx.font = '500 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
             ctx.fillText(`@${bar.location}`, barX + barWidth / 2, barY + barHeight/2 + 8)
