@@ -1482,7 +1482,8 @@ onUnmounted(() => {
   align-items: center;
   min-height: 56px;
   border-bottom: 1px solid #f1f3f4;
-  background: #ffffff;
+  /* 移除白色背景，让垂直分割线自然贯穿 */
+  /* background: #ffffff; */
 }
 
 .gantt-activity-header {
@@ -1561,7 +1562,8 @@ onUnmounted(() => {
   position: relative;
   min-height: 56px;
   padding: 8px 0;
-  background: #ffffff;
+  /* 移除白色背景，让垂直分割线自然贯穿 */
+  /* background: #ffffff; */
   width: 100%; /* 确保占满宽度 */
   z-index: 10; /* 确保timeline容器覆盖在时间轴线之上 */
 }
