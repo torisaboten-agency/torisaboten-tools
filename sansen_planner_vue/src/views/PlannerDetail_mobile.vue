@@ -1817,6 +1817,7 @@ onUnmounted(() => {
     top: 6px;
     font-size: 9px;
     min-width: 16px;
+    z-index: 5 !important; /* 确保活动时段块覆盖在时间轴竖直线之上 */
   }
   
   .gantt-time-bar.has-overlap {

@@ -249,19 +249,19 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
       `
     }
 
-    // 团体行
-    teams.forEach(teamData => {
-      const timeBars = generateTimeBars(teamData, timeRange)
-      
-      bodyHTML += `
-        <div class="gantt-row">
-          <div class="gantt-left-panel">${teamData.team.name}</div>
-          <div class="gantt-timeline" style="width: 100%; position: relative;">
-            ${timeBars}
+          // 团体行
+      teams.forEach(teamData => {
+        const timeBars = generateTimeBars(teamData, timeRange)
+        
+        bodyHTML += `
+          <div class="gantt-row">
+            <div class="gantt-left-panel">${teamData.team.name}</div>
+            <div class="gantt-timeline" style="width: 100%; position: relative;">
+              ${timeBars}
+            </div>
           </div>
-        </div>
-      `
-    })
+        `
+      })
   })
 
   bodyHTML += '</div>'
@@ -963,19 +963,32 @@ function drawGanttToCanvas(
     timeMarkPositions.push(xPos)
   }
   
-  // 先绘制垂直分割线，再绘制活动时段块，确保活动块覆盖在时间轴线之上
+  // 按活动分组
+  const groupedData = groupTeamsByActivity(teamData)
+  
+  // 计算甘特图的实际高度
+  let finalY = currentY
+  Object.entries(groupedData).forEach(([activityId, teams]) => {
+    const activity = teams[0]?.activity
+    
+    // 活动头部高度
+    if (activityId !== 'single-activity' && activity) {
+      finalY += 48
+    }
+    
+    // 团体行高度
+    finalY += teams.length * rowHeight
+  })
+  
+  // 绘制垂直分割线，从时间标签下方延伸到甘特图底部
   timeMarkPositions.forEach(xPos => {
     ctx.strokeStyle = '#dadce0'
     ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
-    ctx.lineTo(xPos, startY + 24 + 2000) // 预绘制足够长的线，后续被活动块覆盖
+    ctx.lineTo(xPos, finalY) // 延伸到甘特图实际底部
     ctx.stroke()
   })
-
-  
-  // 按活动分组
-  const groupedData = groupTeamsByActivity(teamData)
   
   Object.entries(groupedData).forEach(([activityId, teams]) => {
     const activity = teams[0]?.activity
@@ -1009,9 +1022,9 @@ function drawGanttToCanvas(
     teams.forEach(teamData => {
       // 移除高度限制检查，确保所有团体都能显示在导出图片中
       
-      // 团体行背景
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, currentY, canvasWidth, rowHeight)
+      // 移除团体行白色背景，让垂直分割线自然贯穿
+      // ctx.fillStyle = '#ffffff'
+      // ctx.fillRect(0, currentY, canvasWidth, rowHeight)
       
       // 行分隔线
       ctx.strokeStyle = '#f1f3f4'
@@ -1037,6 +1050,18 @@ function drawGanttToCanvas(
       ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'right'
       ctx.fillText(teamData.team.name, leftPanelWidth - 20, currentY + rowHeight/2 + 5)
+      
+      // 移除重复绘制垂直线的逻辑，让垂直线自然贯穿
+      // timeMarkPositions.forEach(xPos => {
+      //   if (xPos > leftPanelWidth) { // 只在时间轴区域绘制
+      //     ctx.strokeStyle = '#dadce0'
+      //     ctx.lineWidth = 1
+      //     ctx.beginPath()
+      //     ctx.moveTo(xPos, currentY)
+      //     ctx.lineTo(xPos, currentY + rowHeight)
+      //     ctx.stroke()
+      //   }
+      // })
       
       // 检查时间重叠
       const allBars = [
