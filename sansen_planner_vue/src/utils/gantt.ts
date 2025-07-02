@@ -215,7 +215,7 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
 
   return `
     <div class="gantt-header">
-      <div class="gantt-left-panel">团体</div>
+      <div class="gantt-left-panel"></div>
       <div class="gantt-time-header" style="width: 100%; position: relative;">
         ${timeMarks}
         ${dayIndicators}

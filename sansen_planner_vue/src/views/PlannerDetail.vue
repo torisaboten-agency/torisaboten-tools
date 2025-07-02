@@ -2015,7 +2015,7 @@ onUnmounted(() => {
   font-weight: 600;
   font-size: 15px;
   color: #1565c0;
-  border-right: 1px solid #bbdefb;
+  /* 移除右边框，简化视觉效果 */
 }
 
 .gantt-activity-header .gantt-timeline {
@@ -2045,7 +2045,7 @@ onUnmounted(() => {
   min-width: 160px;
   padding: 0 12px;
   background: #f8f9fa; /* 改回灰色，与header保持一致 */
-  border-right: 1px solid #e1e5e9;
+  /* 移除右边框，简化视觉效果 */
   text-align: right;
   font-size: 14px;
   color: #5f6368;
