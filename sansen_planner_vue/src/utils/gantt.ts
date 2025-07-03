@@ -302,7 +302,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
 /**
  * 生成时间网格线
  */
-function generateTimeGridLines(timeRange: GanttTimeRange): string {
+function generateTimeGridLines(_timeRange: GanttTimeRange): string {
   // 移除重复的时间网格线 - 现在由时间头部的全局分隔线统一处理
   // 返回空字符串，所有时间分隔线都由时间头部统一管理
   return ''
