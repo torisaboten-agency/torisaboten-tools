@@ -275,10 +275,6 @@ const isWeChat = computed(() => {
 
 // 方法
 const viewLottery = (lottery: Lottery): void => {
-  // 确保数据已经保存到localStorage
-  lotteryStore.saveLotteries()
-  
-  // 使用nextTick确保DOM更新完成后再跳转
   router.push(`/draw/${lottery.id}`)
 }
 

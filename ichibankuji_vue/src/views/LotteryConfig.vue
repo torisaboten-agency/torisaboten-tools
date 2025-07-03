@@ -106,19 +106,6 @@
                     </label>
                     <small class="form-hint">每箱最后一次抽奖额外获得的特殊奖励</small>
                   </div>
-
-                  <div v-if="config.type === 'ichiban' && config.includeLastPrize" class="form-group">
-                    <label for="lastPrizeName" class="form-label">LAST赏名称</label>
-                    <input
-                      id="lastPrizeName"
-                      v-model="config.lastPrizeName"
-                      type="text"
-                      class="form-input"
-                      placeholder="例如：特别奖、最后一击奖、LAST赏"
-                      maxlength="20"
-                    >
-                    <small class="form-hint">自定义LAST赏的显示名称</small>
-                  </div>
                 </div>
               </div>
             </div>
@@ -290,7 +277,7 @@
                 <div v-if="config.type === 'ichiban'" class="preview-item">
                   <span class="preview-label">LAST赏：</span>
                   <span class="preview-value">
-                    {{ config.includeLastPrize ? `启用 (${config.lastPrizeName})` : '禁用' }}
+                    {{ config.includeLastPrize ? '启用' : '禁用' }}
                   </span>
                 </div>
 
@@ -387,7 +374,6 @@ const config = reactive<LotteryConfig>({
   type: 'ichiban',
   totalBoxes: 0,
   includeLastPrize: true,
-  lastPrizeName: 'LAST赏',
   prizes: []
 })
 
@@ -624,7 +610,6 @@ const handleSubmit = async (): Promise<void> => {
         type: config.type,
         totalBoxes: config.totalBoxes,
         includeLastPrize: config.includeLastPrize,
-        lastPrizeName: config.lastPrizeName,
         prizes: config.prizes.map(prize => ({
           ...prize,
           originalCount: prize.count
@@ -637,9 +622,6 @@ const handleSubmit = async (): Promise<void> => {
       // 创建模式：创建新抽奖
       const lotteryId = lotteryStore.createLottery(config)
       alert('抽奖创建成功！')
-      
-      // 确保数据已保存到localStorage，然后再跳转
-      await new Promise(resolve => setTimeout(resolve, 100))
       router.push(`/draw/${lotteryId}`)
     }
   } catch (error) {
@@ -658,7 +640,6 @@ onMounted(() => {
       config.type = lottery.type
       config.totalBoxes = lottery.totalBoxes
       config.includeLastPrize = lottery.includeLastPrize
-      config.lastPrizeName = lottery.lastPrizeName || 'LAST赏'
       config.prizes = lottery.prizes.filter(p => !p.isLastPrize).map(prize => ({
         id: prize.id,
         level: prize.level,

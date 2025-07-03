@@ -32,7 +32,6 @@ export interface LotteryConfig {
   type: 'ichiban' | 'probability'
   totalBoxes: number      // 总箱数，0表示无限
   includeLastPrize: boolean
-  lastPrizeName: string   // LAST赏名称
   prizes: Prize[]
 }
 
@@ -43,7 +42,6 @@ export interface Lottery {
   type: 'ichiban' | 'probability'
   totalBoxes: number
   includeLastPrize: boolean
-  lastPrizeName: string   // LAST赏名称
   prizes: Prize[]
   history: DrawRecord[]
   

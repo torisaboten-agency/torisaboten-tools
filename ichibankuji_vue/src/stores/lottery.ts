@@ -75,11 +75,10 @@ export const useLotteryStore = defineStore('lottery', () => {
 
     // 如果包含LAST赏，添加LAST赏奖项
     if (config.includeLastPrize && config.type === 'ichiban') {
-      const lastPrizeName = config.lastPrizeName || 'LAST赏'
       processedPrizes.push({
         id: generateUUID(),
-        level: lastPrizeName,
-        description: `${lastPrizeName} - 每箱最后的惊喜大奖！`,
+        level: 'LAST赏',
+        description: 'LAST赏 - 每箱最后的惊喜大奖！',
         isLastPrize: true,
         count: 1,
         originalCount: 1
@@ -92,7 +91,6 @@ export const useLotteryStore = defineStore('lottery', () => {
       type: config.type,
       totalBoxes: config.totalBoxes,
       includeLastPrize: config.includeLastPrize,
-      lastPrizeName: config.lastPrizeName || 'LAST赏',
       prizes: processedPrizes,
       history: [],
       currentBox: 1,
