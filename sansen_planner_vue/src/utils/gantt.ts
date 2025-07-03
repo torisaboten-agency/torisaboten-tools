@@ -785,29 +785,39 @@ export async function exportGanttAsImage(
 ): Promise<void> {
   console.log('🚀 开始导出甘特图为图片...', { plannerName, plannerDate, teamCount: teamData.length })
   
-  // 检查微信环境限制
-  if (isWeChatBrowser()) {
-    console.log('❌ 检测到微信浏览器，终止导出')
-    showAppWarningModal(`由于微信内置浏览器的限制，图片导出功能可能无法正常工作。<br>
-      建议在外部浏览器中打开本页面以获得完整功能。<br><br>
-      如需继续，您可以使用手机截图功能：<br>
-      • iPhone：同时按住电源键+音量上键<br>
-      • Android：同时按住电源键+音量下键`)
-    return
+  // 检查微信环境限制（临时跳过以调试问题）
+  const isWeChat = isWeChatBrowser()
+  if (isWeChat) {
+    console.log('⚠️ 检测到微信浏览器，但继续导出以便调试')
+    // 临时注释掉以便调试
+    // showAppWarningModal(`由于微信内置浏览器的限制，图片导出功能可能无法正常工作。<br>
+    //   建议在外部浏览器中打开本页面以获得完整功能。<br><br>
+    //   如需继续，您可以使用手机截图功能：<br>
+    //   • iPhone：同时按住电源键+音量上键<br>
+    //   • Android：同时按住电源键+音量下键`)
+    // return
+  } else {
+    console.log('✅ 非微信环境，继续导出')
   }
 
   // 显示导出模式选择弹窗
+  console.log('📋 显示导出模式选择弹窗...')
   const exportMode = await showExportModeModal()
+  console.log('📋 用户选择的导出模式:', exportMode)
   if (!exportMode) {
+    console.log('❌ 用户取消导出')
     return // 用户取消
   }
 
   // 根据选择的模式调用对应的导出函数
   if (exportMode === 'detailed') {
+    console.log('🚀 开始详细模式导出...')
     await exportDetailedGanttAsImage(container, teamData, timeRange, plannerName, plannerDate)
   } else {
+    console.log('🚀 开始简洁模式导出...')
     await exportSimpleGanttAsImage(container, teamData, timeRange, plannerName, plannerDate)
   }
+  console.log('🎉 导出流程完成')
 }
 
 /**
@@ -820,6 +830,7 @@ async function exportSimpleGanttAsImage(
   plannerName: string = '参战规划',
   plannerDate: string = ''
 ): Promise<void> {
+  console.log('🎯 [简洁模式] 开始导出...', { plannerName, plannerDate, teamDataLength: teamData.length })
   try {
     // 计算所需的甘特图高度（基于团体数量）
     const rowHeight = 56
@@ -983,18 +994,27 @@ async function exportDetailedGanttAsImage(
 
     // 绘制标题文字（白色）
     ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+    ctx.font = 'bold 20px sans-serif'
     ctx.textAlign = 'center'
-    ctx.fillText(`${plannerName} - ${plannerDate}`, ganttWidth / 2, headerHeight / 2 + 7)
+    const title = `${plannerName} - ${plannerDate}`
+    console.log(`[Draw Header] Drawing title for detailed: "${title}"`)
+    ctx.fillText(title, ganttWidth / 2, headerHeight / 2 + 7)
 
     // 绘制图例（包含明细面板标题）
     drawLegend(ctx, canvas.width, headerHeight, legendHeight, detailPanelWidth)
 
-    // 绘制甘特图主体（只在甘特图区域）
-    drawGanttToCanvas(ctx, teamData, timeRange, ganttWidth, headerHeight + legendHeight + 10)
+    // 保存上下文状态，隔离主体内容绘制
+    ctx.save()
+    try {
+      // 绘制甘特图主体（只在甘特图区域）
+      drawGanttToCanvas(ctx, teamData, timeRange, ganttWidth, headerHeight + legendHeight + 10)
 
-    // 绘制侧边时间明细表（使用计算出的完整高度）
-    drawTimeDetailPanel(ctx, teamData, ganttWidth, headerHeight + legendHeight, detailPanelWidth, contentHeight)
+      // 绘制侧边时间明细表（使用计算出的完整高度）
+      drawTimeDetailPanel(ctx, teamData, ganttWidth, headerHeight + legendHeight, detailPanelWidth, contentHeight)
+    } finally {
+      // 恢复上下文状态
+      ctx.restore()
+    }
 
     // 预加载二维码和logo
     const toolUrl = getToolUrl()
@@ -1313,7 +1333,7 @@ async function drawFooter(
   try {
     // 绘制工具署名文本
     ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+    ctx.font = 'bold 16px sans-serif'
     ctx.textAlign = 'left'
     
     const signature = getToolSignature()
@@ -1326,7 +1346,7 @@ async function drawFooter(
     ctx.fillText(signature, textX, textY)
     
     // 绘制URL（小字体）
-    ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+    ctx.font = '14px sans-serif'
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
     ctx.fillText(toolUrl, textX, textY + 25)
     console.log('✅ 底部文字绘制完成')
@@ -1615,41 +1635,57 @@ function drawGanttToCanvas(
  * 尝试多种下载方法
  */
 async function tryDownloadMethods(canvas: HTMLCanvasElement, filename: string): Promise<void> {
+  console.log('📥 开始尝试下载方法...', { filename, canvasSize: `${canvas.width}x${canvas.height}` })
+  
   // 方法1：尝试现代blob方式
   if (canvas.toBlob) {
+    console.log('📥 方法1: 尝试Blob下载...')
     try {
       await new Promise<void>((resolve, reject) => {
         canvas.toBlob((blob) => {
           if (blob && tryBlobDownload(blob, filename)) {
+            console.log('✅ Blob下载成功')
             resolve()
           } else {
+            console.log('❌ Blob下载失败')
             reject(new Error('Blob下载失败'))
           }
         }, 'image/png')
       })
       return
     } catch (error) {
-      console.warn('Blob方法失败：', error)
+      console.warn('❌ Blob方法失败：', error)
     }
+  } else {
+    console.log('⚠️ 浏览器不支持canvas.toBlob')
   }
   
   // 方法2：尝试传统dataURL方式
   if (canvas.toDataURL) {
+    console.log('📥 方法2: 尝试DataURL下载...')
     try {
       const dataURL = canvas.toDataURL('image/png')
       if (tryDataURLDownload(dataURL, filename)) {
+        console.log('✅ DataURL下载成功')
         return
+      } else {
+        console.log('❌ DataURL下载失败')
       }
     } catch (error) {
-      console.warn('DataURL方法失败：', error)
+      console.warn('❌ DataURL方法失败：', error)
     }
+  } else {
+    console.log('⚠️ 浏览器不支持canvas.toDataURL')
   }
   
   // 方法3：显示图片让用户手动保存
+  console.log('📥 方法3: 显示图片模态框...')
   try {
     const dataURL = canvas.toDataURL('image/png')
+    console.log('📥 显示图片模态框，dataURL长度:', dataURL.length)
     showImageModal(dataURL, '请长按下方图片选择"保存到相册"')
   } catch (error) {
+    console.error('❌ 图片模态框也失败:', error)
     showAppWarningModal('抱歉，您的浏览器不支持图片导出功能。建议使用系统截图。')
   }
 }
@@ -1658,11 +1694,15 @@ async function tryDownloadMethods(canvas: HTMLCanvasElement, filename: string): 
  * 尝试Blob下载
  */
 function tryBlobDownload(blob: Blob, filename: string): boolean {
+  console.log('🔄 尝试Blob下载...', { blobSize: blob.size, filename })
   try {
     const link = document.createElement('a')
     const hasDownloadSupport = 'download' in link
+    const hasCreateObjectURL = typeof URL !== 'undefined' && URL.createObjectURL
     
-    if (hasDownloadSupport && URL.createObjectURL) {
+    console.log('🔍 Blob下载环境检查:', { hasDownloadSupport, hasCreateObjectURL })
+    
+    if (hasDownloadSupport && hasCreateObjectURL) {
       const url = URL.createObjectURL(blob)
       link.href = url
       link.download = filename
@@ -1673,11 +1713,13 @@ function tryBlobDownload(blob: Blob, filename: string): boolean {
       document.body.removeChild(link)
       
       setTimeout(() => URL.revokeObjectURL(url), 1000)
+      console.log('✅ Blob下载链接已触发')
       return true
     }
+    console.log('❌ Blob下载环境不支持')
     return false
   } catch (error) {
-    console.warn('Blob下载异常：', error)
+    console.warn('❌ Blob下载异常：', error)
     return false
   }
 }
@@ -1686,9 +1728,12 @@ function tryBlobDownload(blob: Blob, filename: string): boolean {
  * 尝试DataURL下载
  */
 function tryDataURLDownload(dataURL: string, filename: string): boolean {
+  console.log('🔄 尝试DataURL下载...', { dataURLLength: dataURL.length, filename })
   try {
     const link = document.createElement('a')
     const hasDownloadSupport = 'download' in link
+    
+    console.log('🔍 DataURL下载环境检查:', { hasDownloadSupport })
     
     if (hasDownloadSupport) {
       link.href = dataURL
@@ -1698,11 +1743,13 @@ function tryDataURLDownload(dataURL: string, filename: string): boolean {
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
+      console.log('✅ DataURL下载链接已触发')
       return true
     }
+    console.log('❌ DataURL下载环境不支持')
     return false
   } catch (error) {
-    console.warn('DataURL下载异常：', error)
+    console.warn('❌ DataURL下载异常：', error)
     return false
   }
 }
@@ -1712,7 +1759,13 @@ function tryDataURLDownload(dataURL: string, filename: string): boolean {
  */
 export function isWeChatBrowser(): boolean {
   const ua = navigator.userAgent.toLowerCase()
-  return ua.includes('micromessenger')
+  const isWeChat = ua.includes('micromessenger')
+  console.log('🔍 浏览器检测:', { 
+    userAgent: ua, 
+    isWeChat, 
+    isMobile: /mobile|android|iphone|ipad/i.test(ua)
+  })
+  return isWeChat
 }
 
 /**
@@ -1868,9 +1921,22 @@ function createHighDPICanvas(width: number, height: number): { canvas: HTMLCanva
     throw new Error('无法创建Canvas上下文')
   }
 
-  // 获取设备像素比例，提升高分辨率设备的精细度
+  // 设置一个安全阈值，避免在移动设备上因Canvas过大导致内存溢出
+  // 常见限制是16,777,216像素 (4096x4096)
+  const MAX_CANVAS_PIXELS = 16 * 1024 * 1024; 
+
+  // 初始缩放比例使用设备像素比，最高不超过3倍
   const devicePixelRatio = window.devicePixelRatio || 1
-  const scale = Math.min(devicePixelRatio, 3) // 最大3倍缩放，避免文件过大
+  let scale = Math.min(devicePixelRatio, 3)
+
+  // 动态调整缩放比例：如果预估的像素总数超过上限，则逐步降低缩放比例
+  while (scale > 1 && (width * scale * height * scale) > MAX_CANVAS_PIXELS) {
+    scale -= 0.5;
+  }
+  // 确保缩放比例不低于1
+  scale = Math.max(1, scale); 
+
+  console.log(`[Canvas Create] Target: ${width}x${height}, DPR: ${devicePixelRatio}, Final Scale: ${scale}`);
   
   // 设置Canvas的实际尺寸（高精细度）
   canvas.width = width * scale
