@@ -386,13 +386,9 @@ watch(lastDrawResults, (newResults) => {
 
 // 初始化
 onMounted(() => {
-  // 先确保加载了所有抽奖数据
-  lotteryStore.loadLotteries()
-  
-  // 然后尝试加载特定抽奖
   const success = lotteryStore.loadLottery(props.id)
   if (!success) {
-    alert('抽奖不存在或已被删除，将返回主页')
+    // 如果加载失败，跳转到主页
     router.push('/')
   }
 })
