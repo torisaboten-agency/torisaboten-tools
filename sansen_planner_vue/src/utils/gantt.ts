@@ -199,7 +199,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
-        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; width: 1px; height: 2000px; background: #dadce0; z-index: 1; pointer-events: none;"></div>
+        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 8px; background: #dadce0; z-index: 30;"></div>
       </div>
     `
   }
@@ -213,7 +213,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
       if (minutes % 120 !== 0) {
         const position = ((minutes - timeRange.start) / totalMinutes) * 100
         timeMarks += `
-          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 2000px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6; transform: translateX(-50%); pointer-events: none;"></div>
+          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 4px; border-left: 1px dashed #bdbdbd; z-index: 25; opacity: 0.8; transform: translateX(-50%);"></div>
         `
       }
     }
@@ -290,10 +290,48 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
 /**
  * 生成时间网格线
  */
-function generateTimeGridLines(_timeRange: GanttTimeRange): string {
-  // 移除重复的时间网格线 - 现在由时间轴的全局分隔线统一处理
-  // 所有竖线都从时间轴延伸下来，避免重复显示
-  return ''
+function generateTimeGridLines(timeRange: GanttTimeRange): string {
+  const totalMinutes = timeRange.end - timeRange.start
+
+  // 根据时间范围决定时间标记的间隔（与头部保持一致）
+  let interval = 60 // 默认1小时间隔
+  if (totalMinutes <= 4 * 60) {
+    interval = 30 // 4小时内用30分钟间隔
+  } else if (totalMinutes <= 12 * 60) {
+    interval = 60 // 12小时内用1小时间隔
+  } else {
+    interval = 120 // 12小时以上用2小时间隔
+  }
+
+  let timeGridLines = ''
+  
+  // 生成主要时间刻度的实线
+  for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
+       minutes <= timeRange.end; 
+       minutes += interval) {
+    const position = ((minutes - timeRange.start) / totalMinutes) * 100
+    
+    timeGridLines += `
+      <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 2;"></div>
+    `
+  }
+
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeGridLines += `
+          <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
+        `
+      }
+    }
+  }
+  
+  return timeGridLines
 }
 
 /**

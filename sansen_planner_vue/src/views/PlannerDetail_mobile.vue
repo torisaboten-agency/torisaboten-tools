@@ -1594,7 +1594,7 @@ onUnmounted(() => {
 .gantt-time-header {
   display: flex;
   position: relative;
-  height: 36px;
+  height: 48px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
@@ -1629,7 +1629,7 @@ onUnmounted(() => {
   font-weight: 500;
   position: relative;
   z-index: 25; /* 提高时间标签层级 */
-  margin-top: 2px;
+  margin-top: 4px;
   white-space: nowrap;
 }
 
