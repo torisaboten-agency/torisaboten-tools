@@ -1395,7 +1395,7 @@ onUnmounted(() => {
   width: 100%;
   max-height: calc(100vh - 100px); /* 移动端更宽松的高度限制 */
   overflow-x: auto;
-  overflow-y: visible; /* 改为visible，确保sticky定位正常工作 */
+  overflow-y: auto; /* 启用垂直滚动 */
   -webkit-overflow-scrolling: touch;
   border-radius: 6px;
 }
@@ -1462,16 +1462,13 @@ onUnmounted(() => {
 
 .gantt-chart-content {
   min-width: 100%;
-  max-height: inherit; /* 继承父容器的最大高度 */
-  overflow-y: auto; /* 在内容层启用垂直滚动 */
-  -webkit-overflow-scrolling: touch; /* 优化触摸滚动 */
 }
 
 .gantt-header {
   position: sticky;
   top: 0;
   background: #f8f9fa; /* 改回灰色，保持视觉统一 */
-  z-index: 30; /* 提高甘特图头部层级，确保始终在最上层 */
+  z-index: 20; /* 提高层级，确保始终显示在内容区域之上 */
   height: 48px;
   display: flex;
   align-items: center;
@@ -1501,8 +1498,6 @@ onUnmounted(() => {
   color: #1565c0;
   display: flex;
   align-items: center;
-  position: relative;
-  z-index: 15; /* 确保活动头部在时间分割线之上 */
 }
 
 .gantt-activity-header .activity-name {
@@ -1527,7 +1522,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  z-index: 15; /* 确保活动时间轴区域在时间分割线之上 */
 }
 
 .activity-location-text {
@@ -1583,7 +1577,7 @@ onUnmounted(() => {
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
-  z-index: 20; /* 确保时间轴头部在最上层 */
+  z-index: 21; /* 时间轴头部内容区域层级更高 */
 }
 
 /* 确保时间轴头部不受gantt-timeline白色背景影响 */
@@ -1623,7 +1617,7 @@ onUnmounted(() => {
   color: #5f6368;
   font-weight: 500;
   position: relative;
-  z-index: 25; /* 提高时间标签层级，确保在时间轴头部之上 */
+  z-index: 22; /* 时间标签层级最高，确保始终可见 */
   margin-top: 4px;
   white-space: nowrap;
 }
