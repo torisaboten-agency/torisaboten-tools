@@ -1982,7 +1982,7 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   background: #f8f9fa; /* 改回灰色，保持视觉统一 */
-  z-index: 10;
+  z-index: 20; /* 提高层级，确保始终显示在内容区域之上 */
   height: 48px;
   display: flex;
   align-items: center;
@@ -2081,6 +2081,7 @@ onUnmounted(() => {
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
+  z-index: 21; /* 时间轴头部内容区域层级更高 */
 }
 
 /* 限制timeline样式只对非头部元素生效 */
@@ -2132,7 +2133,7 @@ onUnmounted(() => {
   color: #5f6368;
   font-weight: 500;
   position: relative;
-  z-index: 2;
+  z-index: 22; /* 时间标签层级最高，确保始终可见 */
   margin-top: 4px;
   white-space: nowrap;
 }
