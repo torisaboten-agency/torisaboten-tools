@@ -783,11 +783,8 @@ export async function exportGanttAsImage(
   plannerName: string = '参战规划',
   plannerDate: string = ''
 ): Promise<void> {
-  console.log('🚀 开始导出甘特图为图片...', { plannerName, plannerDate, teamCount: teamData.length })
-  
   // 检查微信环境限制
   if (isWeChatBrowser()) {
-    console.log('❌ 检测到微信浏览器，终止导出')
     showAppWarningModal(`由于微信内置浏览器的限制，图片导出功能可能无法正常工作。<br>
       建议在外部浏览器中打开本页面以获得完整功能。<br><br>
       如需继续，您可以使用手机截图功能：<br>
@@ -877,38 +874,17 @@ async function exportSimpleGanttAsImage(
     const toolUrl = getToolUrl()
     
     try {
-      console.log('🖼️ [简洁模式] 开始加载底部资源...')
       const [qrImage, logoImage] = await Promise.all([
         preloadLocalQRCode(toolUrl, 60),
         loadLogoImage()
       ])
       
-      console.log('🖼️ [简洁模式] 资源加载成功，开始绘制底部栏...')
       // 绘制底部脚注条
       await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage, logoImage)
-      console.log('✅ [简洁模式] 底部栏绘制完成')
     } catch (error) {
-      console.warn('⚠️ [简洁模式] 图片资源加载失败，使用基础底部栏:', error)
+      console.warn('图片资源加载失败，继续导出:', error)
       // 即使资源加载失败，也绘制脚注（不含图片）
-      try {
-        await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
-        console.log('✅ [简洁模式] 基础底部栏绘制完成')
-      } catch (footerError) {
-        console.error('❌ [简洁模式] 底部栏绘制失败:', footerError)
-        // 手动绘制最基础的底部信息
-        try {
-          const footerY = canvas.height - footerHeight
-          ctx.fillStyle = '#667eea'
-          ctx.fillRect(0, footerY, canvas.width, footerHeight)
-          ctx.fillStyle = '#ffffff'
-          ctx.font = '16px sans-serif'
-          ctx.textAlign = 'left'
-          ctx.fillText('参战计划作成工具', 20, footerY + 30)
-          console.log('✅ [简洁模式] 紧急底部栏绘制完成')
-        } catch (emergencyError) {
-          console.error('💥 [简洁模式] 紧急底部栏也失败:', emergencyError)
-        }
-      }
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
     }
 
     // 尝试多种下载方法
@@ -1000,38 +976,17 @@ async function exportDetailedGanttAsImage(
     const toolUrl = getToolUrl()
     
     try {
-      console.log('🖼️ [详细模式] 开始加载底部资源...')
       const [qrImage, logoImage] = await Promise.all([
         preloadLocalQRCode(toolUrl, 60),
         loadLogoImage()
       ])
       
-      console.log('🖼️ [详细模式] 资源加载成功，开始绘制底部栏...')
       // 绘制底部脚注条（整个宽度）
       await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage, logoImage)
-      console.log('✅ [详细模式] 底部栏绘制完成')
     } catch (error) {
-      console.warn('⚠️ [详细模式] 图片资源加载失败，使用基础底部栏:', error)
+      console.warn('图片资源加载失败，继续导出:', error)
       // 即使资源加载失败，也绘制脚注（不含图片）
-      try {
-        await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
-        console.log('✅ [详细模式] 基础底部栏绘制完成')
-      } catch (footerError) {
-        console.error('❌ [详细模式] 底部栏绘制失败:', footerError)
-        // 手动绘制最基础的底部信息
-        try {
-          const footerY = canvas.height - footerHeight
-          ctx.fillStyle = '#667eea'
-          ctx.fillRect(0, footerY, canvas.width, footerHeight)
-          ctx.fillStyle = '#ffffff'
-          ctx.font = '16px sans-serif'
-          ctx.textAlign = 'left'
-          ctx.fillText('参战计划作成工具', 20, footerY + 30)
-          console.log('✅ [详细模式] 紧急底部栏绘制完成')
-        } catch (emergencyError) {
-          console.error('💥 [详细模式] 紧急底部栏也失败:', emergencyError)
-        }
-      }
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
     }
 
     // 尝试多种下载方法
@@ -1292,48 +1247,34 @@ async function drawFooter(
   qrImage?: HTMLImageElement,
   logoImage?: HTMLImageElement
 ): Promise<void> {
-  console.log('🎨 开始绘制底部栏:', { canvasWidth, canvasHeight, footerHeight, hasQR: !!qrImage, hasLogo: !!logoImage })
-  
   const footerY = canvasHeight - footerHeight
   
-  try {
-    // 绘制紫色渐变背景
-    const gradient = ctx.createLinearGradient(0, footerY, canvasWidth, footerY)
-    gradient.addColorStop(0, '#667eea')
-    gradient.addColorStop(1, '#764ba2')
-    
-    ctx.fillStyle = gradient
-    ctx.fillRect(0, footerY, canvasWidth, footerHeight)
-    console.log('✅ 底部背景绘制完成')
-  } catch (error) {
-    console.error('❌ 底部背景绘制失败:', error)
-    throw error
-  }
+  // 绘制紫色渐变背景
+  const gradient = ctx.createLinearGradient(0, footerY, canvasWidth, footerY)
+  gradient.addColorStop(0, '#667eea')
+  gradient.addColorStop(1, '#764ba2')
   
-  try {
-    // 绘制工具署名文本
-    ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
-    ctx.textAlign = 'left'
-    
-    const signature = getToolSignature()
-    const toolUrl = getToolUrl()
-    
-    const textX = 20
-    const textY = footerY + 25
-    
-    // 绘制署名
-    ctx.fillText(signature, textX, textY)
-    
-    // 绘制URL（小字体）
-    ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
-    ctx.fillText(toolUrl, textX, textY + 25)
-    console.log('✅ 底部文字绘制完成')
-  } catch (error) {
-    console.error('❌ 底部文字绘制失败:', error)
-    throw error
-  }
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, footerY, canvasWidth, footerHeight)
+  
+  // 绘制工具署名文本
+  ctx.fillStyle = '#ffffff'
+  ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+  ctx.textAlign = 'left'
+  
+  const signature = getToolSignature()
+  const toolUrl = getToolUrl()
+  
+  const textX = 20
+  const textY = footerY + 25
+  
+  // 绘制署名
+  ctx.fillText(signature, textX, textY)
+  
+  // 绘制URL（小字体）
+  ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+  ctx.fillText(toolUrl, textX, textY + 25)
   
   // 计算右侧元素的位置
   const qrSize = 60
@@ -1343,42 +1284,29 @@ async function drawFooter(
   
   let currentX = canvasWidth - rightMargin
   
-  try {
-    // 绘制二维码（如果存在）
-    if (qrImage) {
-      const qrX = currentX - qrSize
-      const qrY = footerY + 10
-      
-      // 绘制二维码白色背景
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(qrX - 2, qrY - 2, qrSize + 4, qrSize + 4)
-      
-      // 绘制二维码
-      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize)
-      
-      currentX = qrX - spacing
-      console.log('✅ 二维码绘制完成')
-    } else {
-      console.log('ℹ️ 无二维码图片，跳过')
-    }
+  // 绘制二维码（如果存在）
+  if (qrImage) {
+    const qrX = currentX - qrSize
+    const qrY = footerY + 10
     
-    // 绘制Logo（如果存在）
-    if (logoImage) {
-      const logoX = currentX - logoSize
-      const logoY = footerY + (footerHeight - logoSize) / 2
-      
-      // 直接绘制Logo（透明背景）
-      ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize)
-      console.log('✅ Logo绘制完成')
-    } else {
-      console.log('ℹ️ 无Logo图片，跳过')
-    }
-  } catch (error) {
-    console.error('❌ 底部图片绘制失败:', error)
-    throw error
+    // 绘制二维码白色背景
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(qrX - 2, qrY - 2, qrSize + 4, qrSize + 4)
+    
+    // 绘制二维码
+    ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize)
+    
+    currentX = qrX - spacing
   }
   
-  console.log('🎉 底部栏绘制全部完成')
+  // 绘制Logo（如果存在）
+  if (logoImage) {
+    const logoX = currentX - logoSize
+    const logoY = footerY + (footerHeight - logoSize) / 2
+    
+    // 直接绘制Logo（透明背景）
+    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize)
+  }
 }
 
 /**
