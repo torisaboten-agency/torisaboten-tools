@@ -2017,7 +2017,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   position: relative;
-  z-index: 15; /* 确保活动头部在时间分割线之上 */
+  z-index: 20; /* 提高活动头部层级，确保在时间分割线之上 */
 }
 
 .gantt-activity-header .activity-name {
@@ -2032,6 +2032,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  position: relative;
+  z-index: 20; /* 确保活动名称在时间线之上 */
 }
 
 .activity-header-timeline {
@@ -2042,7 +2044,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  z-index: 15; /* 确保活动时间轴区域在时间分割线之上 */
+  z-index: 20; /* 提高活动时间轴区域层级，确保在时间分割线之上 */
 }
 
 .activity-location-text {
@@ -2058,6 +2060,7 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 20; /* 确保活动地点文字在时间线之上 */
 }
 
 .gantt-left-panel {
@@ -2121,6 +2124,7 @@ onUnmounted(() => {
   align-items: center;
   transform: translateX(-50%); /* 居中对齐到精确时间点 */
   pointer-events: none;
+  z-index: 2; /* 设置时间标记容器的层级 */
 }
 
 .time-separator-line {
