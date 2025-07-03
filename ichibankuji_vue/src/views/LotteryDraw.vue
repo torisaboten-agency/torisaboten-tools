@@ -260,10 +260,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLotteryStore } from '@/stores/lottery'
 import DrawResultModal from '@/components/DrawResultModal.vue'
+import type { PrizeResult } from '@/types/lottery'
 
 const router = useRouter()
 const lotteryStore = useLotteryStore()
@@ -378,7 +379,7 @@ const formatDateTime = (dateString: string): string => {
 }
 
 // 监听抽奖结果变化
-watch(lastDrawResults, (newResults) => {
+watch(lastDrawResults, (newResults: PrizeResult[]) => {
   if (newResults.length > 0) {
     // 可以在这里添加音效或动画
   }
@@ -422,7 +423,7 @@ onMounted(async () => {
 })
 
 // 监听路由参数变化
-watch(() => props.id, async (newId) => {
+watch(() => props.id, async (newId: string) => {
   if (newId) {
     console.log('🔄 检测到路由参数变化，重新加载抽奖:', newId)
     
