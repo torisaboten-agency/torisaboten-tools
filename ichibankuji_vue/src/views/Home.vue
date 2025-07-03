@@ -84,6 +84,7 @@
           v-for="lottery in filteredLotteries"
           :key="lottery.id"
           :lottery="lottery"
+          @view="viewLottery"
           @edit="editLottery"
           @delete="deleteLottery"
         />
@@ -273,6 +274,10 @@ const isWeChat = computed(() => {
 })
 
 // 方法
+const viewLottery = (lottery: Lottery): void => {
+  router.push(`/draw/${lottery.id}`)
+}
+
 const editLottery = (lottery: Lottery): void => {
   router.push(`/config/${lottery.id}`)
 }
