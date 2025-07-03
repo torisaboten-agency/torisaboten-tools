@@ -199,12 +199,36 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
-        <div class="time-separator-indicator" style="position: absolute; left: 0; top: 100%; width: 1px; height: 8px; background: #dadce0; z-index: 10;"></div>
       </div>
     `
   }
 
-  // 移除时间头部的虚线 - 虚线应该只在甘特图主体区域显示，不应覆盖时间轴
+  // 生成时间分隔线（从时间头部延伸到甘特图主体）
+  let timeSeparators = ''
+  for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
+       minutes <= timeRange.end; 
+       minutes += interval) {
+    const position = ((minutes - timeRange.start) / totalMinutes) * 100
+    
+    timeSeparators += `
+      <div class="gantt-time-separator" style="left: ${position}%; position: absolute; top: 100%; width: 1px; height: 2000px; background: #dadce0; z-index: 1; pointer-events: none;"></div>
+    `
+  }
+
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeSeparators += `
+          <div class="gantt-time-reference-global" style="left: ${position}%; position: absolute; top: 100%; width: 1px; height: 2000px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6; pointer-events: none;"></div>
+        `
+      }
+    }
+  }
 
   // 注释掉次日指示器 - 用户反馈不需要
   // if (nextDayStart !== -1) {
@@ -225,6 +249,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
       <div class="gantt-left-panel" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;"></div>
       <div class="gantt-time-header" style="width: 100%; position: relative;">
         ${timeMarks}
+        ${timeSeparators}
         ${dayIndicators}
       </div>
     </div>
@@ -290,33 +315,8 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
     interval = 120 // 12小时以上用2小时间隔
   }
 
+  // 移除重复的时间网格线 - 现在由时间头部的全局分隔线统一处理
   let timeGridLines = ''
-  
-  // 首先生成主要时间刻度的实线
-  for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
-       minutes <= timeRange.end; 
-       minutes += interval) {
-    const position = ((minutes - timeRange.start) / totalMinutes) * 100
-    
-    timeGridLines += `
-      <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 2;"></div>
-    `
-  }
-
-  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
-  if (interval === 120) {
-    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
-         minutes <= timeRange.end; 
-         minutes += 60) {
-      // 只为不是2小时整点的1小时整点添加虚线
-      if (minutes % 120 !== 0) {
-        const position = ((minutes - timeRange.start) / totalMinutes) * 100
-        timeGridLines += `
-          <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
-        `
-      }
-    }
-  }
   
   return timeGridLines
 }
