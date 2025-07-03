@@ -1509,8 +1509,8 @@ onUnmounted(() => {
   font-weight: 600;
   font-size: 15px;
   color: #1565c0;
-  width: 160px;
-  min-width: 160px;
+  width: var(--dynamic-left-panel-width, 160px);
+  min-width: var(--dynamic-left-panel-width, 160px);
   padding: 0 12px;
   text-align: right;
   display: flex;
@@ -1518,6 +1518,9 @@ onUnmounted(() => {
   justify-content: flex-end;
   z-index: 20; /* 确保活动名称在时间竖线之上 */
   position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .activity-header-timeline {
@@ -1548,8 +1551,8 @@ onUnmounted(() => {
 }
 
 .gantt-left-panel {
-  width: 160px;
-  min-width: 160px;
+  width: var(--dynamic-left-panel-width, 160px);
+  min-width: var(--dynamic-left-panel-width, 160px);
   padding: 0 12px;
   background: #f8f9fa; /* 改回灰色，与header保持一致 */
   text-align: right;
@@ -1559,6 +1562,9 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* 只有非活动头部的行才使用白色背景 */

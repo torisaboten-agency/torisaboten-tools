@@ -97,6 +97,9 @@ export function drawGanttChart(
 function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRange): string {
   const totalMinutes = timeRange.end - timeRange.start
   
+  // 计算动态左侧面板宽度
+  const dynamicLeftPanelWidth = calculateDynamicLeftPanelWidth(teamData)
+  
   // 改进的像素比例计算，特别优化iPad体验
   const screenWidth = window.innerWidth || 800
   const deviceType = getDeviceType()
@@ -126,13 +129,14 @@ function renderHtmlGanttChart(teamData: GanttTeamData[], timeRange: GanttTimeRan
     minWidthBase,
     pixelsPerMinute,
     totalMinutes,
-    calculatedWidth: totalMinutes * pixelsPerMinute
+    calculatedWidth: totalMinutes * pixelsPerMinute,
+    dynamicLeftPanelWidth
   })
 
   let html = `
-    <div class="gantt-chart-content">
-      ${renderGanttHeader(timeRange)}
-      ${renderGanttBody(teamData, timeRange)}
+    <div class="gantt-chart-content" style="--dynamic-left-panel-width: ${dynamicLeftPanelWidth}px;">
+      ${renderGanttHeader(timeRange, dynamicLeftPanelWidth)}
+      ${renderGanttBody(teamData, timeRange, dynamicLeftPanelWidth)}
     </div>
     <div id="gantt-tooltip" class="gantt-tooltip"></div>
   `
@@ -160,7 +164,7 @@ function minutesToTime(minutes: number): string {
 /**
  * 渲染甘特图头部（时间轴）
  */
-function renderGanttHeader(timeRange: GanttTimeRange): string {
+function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 160): string {
   const totalMinutes = timeRange.end - timeRange.start
 
   let timeMarks = ''
@@ -216,7 +220,7 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
 
   return `
     <div class="gantt-header">
-      <div class="gantt-left-panel"></div>
+      <div class="gantt-left-panel" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;"></div>
       <div class="gantt-time-header" style="width: 100%; position: relative;">
         ${timeMarks}
         ${dayIndicators}
@@ -228,7 +232,7 @@ function renderGanttHeader(timeRange: GanttTimeRange): string {
 /**
  * 渲染甘特图主体
  */
-function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): string {
+function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, leftPanelWidth: number = 160): string {
   // 按活动分组
   const groupedData = groupTeamsByActivity(teamData)
   
@@ -241,7 +245,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
     if (activityId !== 'single-activity' && activity) {
       bodyHTML += `
         <div class="gantt-row gantt-activity-header">
-          <div class="gantt-left-panel activity-name">${activity.name}</div>
+          <div class="gantt-left-panel activity-name" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;">${activity.name}</div>
           <div class="activity-header-timeline">
             <div class="activity-location-text">${activity.location || ''}</div>
           </div>
@@ -255,7 +259,7 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange): 
       
       bodyHTML += `
         <div class="gantt-row">
-          <div class="gantt-left-panel">${teamData.team.name}</div>
+          <div class="gantt-left-panel" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;">${teamData.team.name}</div>
           <div class="gantt-timeline" style="width: 100%; position: relative;">
             ${timeBars}
           </div>
@@ -414,6 +418,53 @@ function checkTimeOverlap(bars: TimeBar[]): { hasOverlap: boolean; adjustedBars:
   }
 
   return { hasOverlap, adjustedBars: bars }
+}
+
+/**
+ * 计算左侧面板的动态宽度
+ */
+function calculateDynamicLeftPanelWidth(teamData: GanttTeamData[]): number {
+  if (teamData.length === 0) return 160 // 默认宽度
+  
+  // 创建临时canvas用于测量文本宽度
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return 160
+  
+  // 设置与实际显示相同的字体
+  ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
+  
+  let maxWidth = 0
+  
+  // 检查所有团体名的宽度
+  teamData.forEach(data => {
+    const textWidth = ctx.measureText(data.team.name).width
+    maxWidth = Math.max(maxWidth, textWidth)
+  })
+  
+  // 检查活动名的宽度（如果有多活动）
+  const groupedData = groupTeamsByActivity(teamData)
+  Object.entries(groupedData).forEach(([activityId, teams]) => {
+    if (activityId !== 'single-activity' && teams[0]?.activity) {
+      // 活动名字体稍大一些
+      ctx.font = '600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
+      const activityWidth = ctx.measureText(teams[0].activity.name).width
+      maxWidth = Math.max(maxWidth, activityWidth)
+      // 恢复团体名字体
+      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'
+    }
+  })
+  
+  // 添加左右padding和一些余量，确保文字不会紧贴边缘
+  const finalWidth = Math.max(160, Math.ceil(maxWidth + 48)) // 最小160px，左右各24px padding
+  
+  console.log('📏 动态宽度计算:', {
+    maxTextWidth: maxWidth,
+    finalPanelWidth: finalWidth,
+    teamCount: teamData.length
+  })
+  
+  return finalWidth
 }
 
 /**
@@ -847,7 +898,8 @@ async function exportSimpleGanttAsImage(
     const headerHeight = 60 // 顶部标题栏高度
     const legendHeight = 40 // 图例区域高度
     const footerHeight = 80 // 脚注区域高度
-    canvas.width = Math.max(1200, ganttRect.width)
+    const dynamicLeftPanelWidth = calculateDynamicLeftPanelWidth(teamData)
+    canvas.width = Math.max(1200, ganttRect.width, dynamicLeftPanelWidth + 800)
     canvas.height = headerHeight + legendHeight + estimatedGanttHeight + footerHeight
 
     // 填充白色背景
@@ -949,7 +1001,8 @@ async function exportDetailedGanttAsImage(
     const headerHeight = 60 // 顶部标题栏高度
     const legendHeight = 40 // 图例区域高度
     const footerHeight = 80 // 脚注区域高度
-    const ganttWidth = Math.max(1200, ganttRect.width)
+    const dynamicLeftPanelWidth = calculateDynamicLeftPanelWidth(teamData)
+    const ganttWidth = Math.max(1200, ganttRect.width, dynamicLeftPanelWidth + 800)
     canvas.width = ganttWidth + detailPanelWidth
     canvas.height = headerHeight + legendHeight + contentHeight + footerHeight
 
@@ -1335,7 +1388,7 @@ function drawGanttToCanvas(
   const endMinutes = timeRange.end
   const totalMinutes = endMinutes - startMinutes
   
-  const leftPanelWidth = 160
+  const leftPanelWidth = calculateDynamicLeftPanelWidth(teamData)
   const chartWidth = canvasWidth - leftPanelWidth - 40
   const rowHeight = 56
   
