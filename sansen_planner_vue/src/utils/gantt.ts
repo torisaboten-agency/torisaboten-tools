@@ -242,12 +242,10 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
     
     // 活动头部（仅多活动模式）
     if (activityId !== 'single-activity' && activity) {
-      const activityTimeGridLines = generateTimeGridLines(timeRange)
       bodyHTML += `
         <div class="gantt-row gantt-activity-header">
           <div class="gantt-left-panel activity-name" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;">${activity.name}</div>
           <div class="activity-header-timeline">
-            ${activityTimeGridLines}
             <div class="activity-location-text">${activity.location || ''}</div>
           </div>
         </div>
