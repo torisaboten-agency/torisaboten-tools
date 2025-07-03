@@ -199,11 +199,25 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
+        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 8px; background: #dadce0; z-index: 30;"></div>
       </div>
     `
   }
 
-  // 移除全局分隔线 - 回到正确的实现方式
+  // 为2小时间隔模式添加虚线刻度
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线刻度
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeMarks += `
+          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 4px; border-left: 1px dashed #bdbdbd; z-index: 25; opacity: 0.8; transform: translateX(-50%);"></div>
+        `
+      }
+    }
+  }
 
   // 注释掉次日指示器 - 用户反馈不需要
   // if (nextDayStart !== -1) {
