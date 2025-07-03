@@ -303,22 +303,9 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
  * 生成时间网格线
  */
 function generateTimeGridLines(timeRange: GanttTimeRange): string {
-  const totalMinutes = timeRange.end - timeRange.start
-
-  // 根据时间范围决定时间标记的间隔（与头部保持一致）
-  let interval = 60 // 默认1小时间隔
-  if (totalMinutes <= 4 * 60) {
-    interval = 30 // 4小时内用30分钟间隔
-  } else if (totalMinutes <= 12 * 60) {
-    interval = 60 // 12小时内用1小时间隔
-  } else {
-    interval = 120 // 12小时以上用2小时间隔
-  }
-
   // 移除重复的时间网格线 - 现在由时间头部的全局分隔线统一处理
-  let timeGridLines = ''
-  
-  return timeGridLines
+  // 返回空字符串，所有时间分隔线都由时间头部统一管理
+  return ''
 }
 
 /**
