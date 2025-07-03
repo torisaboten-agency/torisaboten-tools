@@ -786,14 +786,7 @@ function addTouchDragSupport(container: HTMLElement): void {
  */
 function showExportModeModal(): Promise<'simple' | 'detailed' | null> {
   return new Promise((resolve) => {
-    // 检查是否已经有模态框存在，避免重复创建
-    const existingModal = document.querySelector('[data-export-modal]')
-    if (existingModal) {
-      return // 如果已经有模态框，直接返回
-    }
-
     const modal = document.createElement('div')
-    modal.setAttribute('data-export-modal', 'true') // 添加标识属性
     modal.style.cssText = `
       position: fixed;
       top: 0;
@@ -867,9 +860,7 @@ function showExportModeModal(): Promise<'simple' | 'detailed' | null> {
     const confirmBtn = content.querySelector('#confirmExport') as HTMLButtonElement
 
     const cleanup = () => {
-      if (modal.parentNode) {
-        document.body.removeChild(modal)
-      }
+      document.body.removeChild(modal)
     }
 
     cancelBtn.addEventListener('click', () => {

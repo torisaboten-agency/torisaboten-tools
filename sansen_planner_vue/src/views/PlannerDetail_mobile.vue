@@ -667,15 +667,7 @@ const handleResize = () => {
   redrawGantt()
 }
 
-// 导出图片的防抖状态
-let isExporting = ref(false)
-
 const exportImage = async () => {
-  // 防止重复点击
-  if (isExporting.value) {
-    return
-  }
-
   if (!planner.value || !hasData.value) {
     alert('没有可导出的甘特图数据')
     return
@@ -689,7 +681,6 @@ const exportImage = async () => {
   }
   
   try {
-    isExporting.value = true
     // 使用完整的导出图片功能
     const plannerName = planner.value.type === 'single' 
       ? (planner.value.activityName || '参战规划')
@@ -707,8 +698,6 @@ const exportImage = async () => {
   } catch (error) {
     console.error('导出图片失败:', error)
     alert('导出图片失败，请重试')
-  } finally {
-    isExporting.value = false
   }
 }
 
