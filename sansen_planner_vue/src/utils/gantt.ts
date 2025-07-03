@@ -199,7 +199,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
-        <div class="time-tick" style="position: absolute; bottom: 0; left: 0; width: 1px; height: 8px; background: #dadce0; z-index: 30;"></div>
+        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; width: 1px; height: 8px; background: #dadce0; z-index: 30;"></div>
       </div>
     `
   }
@@ -213,7 +213,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
       if (minutes % 120 !== 0) {
         const position = ((minutes - timeRange.start) / totalMinutes) * 100
         timeMarks += `
-          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 4px; border-left: 1px dashed #bdbdbd; z-index: 25; opacity: 0.8;"></div>
+          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 4px; border-left: 1px dashed #bdbdbd; z-index: 25; opacity: 0.8; transform: translateX(-50%);"></div>
         `
       }
     }
