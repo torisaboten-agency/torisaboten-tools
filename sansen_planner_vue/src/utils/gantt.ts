@@ -203,6 +203,21 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     `
   }
 
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeMarks += `
+          <div class="gantt-time-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 5; opacity: 0.6;"></div>
+        `
+      }
+    }
+  }
+
   // 注释掉次日指示器 - 用户反馈不需要
   // if (nextDayStart !== -1) {
   //   const nextDayPosition = ((nextDayStart - timeRange.start) / totalMinutes) * 100
@@ -296,6 +311,21 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
     timeGridLines += `
       <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 1;"></div>
     `
+  }
+
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeGridLines += `
+          <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
+        `
+      }
+    }
   }
   
   return timeGridLines
@@ -1482,6 +1512,28 @@ function drawGanttToCanvas(
     ctx.lineTo(xPos, finalY) // 延伸到甘特图实际底部
     ctx.stroke()
   })
+
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    ctx.strokeStyle = '#bdbdbd'
+    ctx.lineWidth = 1
+    ctx.setLineDash([5, 5]) // 设置虚线样式
+    
+    for (let minutes = Math.ceil(startMinutes / 60) * 60; 
+         minutes <= endMinutes; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const xPos = leftPanelWidth + 20 + (minutes - startMinutes) / totalMinutes * chartWidth
+        ctx.beginPath()
+        ctx.moveTo(xPos, startY + 24) // 从时间标签下面开始
+        ctx.lineTo(xPos, finalY) // 延伸到甘特图实际底部
+        ctx.stroke()
+      }
+    }
+    
+    ctx.setLineDash([]) // 重置为实线
+  }
   
   Object.entries(groupedData).forEach(([activityId, teams]) => {
     const activity = teams[0]?.activity
