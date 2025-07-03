@@ -1500,20 +1500,7 @@ onUnmounted(() => {
   color: #1565c0;
   display: flex;
   align-items: center;
-  z-index: 15; /* 确保活动头部在时间线之上 */
   position: relative;
-  isolation: isolate; /* 创建独立的层叠上下文 */
-}
-
-.gantt-activity-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #e3f2fd;
-  z-index: -1; /* 在活动头部内容之下，但能阻挡时间竖线 */
 }
 
 .gantt-activity-header .activity-name {
@@ -1528,8 +1515,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  z-index: 20; /* 确保活动名称在时间竖线之上 */
-  position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1543,19 +1528,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  z-index: 15; /* 确保活动头部时间线在时间竖线之上 */
-  isolation: isolate; /* 创建独立的层叠上下文 */
-}
-
-.activity-header-timeline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #e3f2fd;
-  z-index: -1; /* 在时间线内容之下，但能阻挡时间竖线 */
 }
 
 .activity-location-text {
@@ -1571,7 +1543,7 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  z-index: 20; /* 确保地点文字在时间竖线之上 */
+  z-index: 2; /* 确保地点文字在时间竖线之上 */
 }
 
 .gantt-left-panel {
@@ -1637,18 +1609,7 @@ onUnmounted(() => {
   align-items: center;
   transform: translateX(-50%); /* 居中对齐到精确时间点 */
   pointer-events: none;
-  z-index: 2; /* 确保时间竖线在底层 */
-}
-
-.time-separator-line {
-  width: 1px;
-  background: #dadce0;
-  position: absolute;
-  top: 24px; /* 从时间标签下面开始 */
-  bottom: -2000px; /* 延伸到整个甘特图高度 */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
+  z-index: 2;
 }
 
 .time-label {

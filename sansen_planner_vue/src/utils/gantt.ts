@@ -189,7 +189,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
   //   nextDayStart = midnightMinutes
   // }
 
-  // 生成时间标记
+  // 生成时间标记（仅时间标签，不包含竖线）
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
        minutes <= timeRange.end; 
        minutes += interval) {
@@ -198,7 +198,6 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
-        <div class="time-separator-line"></div>
         <div class="time-label">${timeLabel}</div>
       </div>
     `
@@ -243,10 +242,12 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
     
     // 活动头部（仅多活动模式）
     if (activityId !== 'single-activity' && activity) {
+      const activityTimeGridLines = generateTimeGridLines(timeRange)
       bodyHTML += `
         <div class="gantt-row gantt-activity-header">
           <div class="gantt-left-panel activity-name" style="width: ${leftPanelWidth}px; min-width: ${leftPanelWidth}px;">${activity.name}</div>
           <div class="activity-header-timeline">
+            ${activityTimeGridLines}
             <div class="activity-location-text">${activity.location || ''}</div>
           </div>
         </div>
@@ -273,6 +274,36 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
 }
 
 /**
+ * 生成时间网格线
+ */
+function generateTimeGridLines(timeRange: GanttTimeRange): string {
+  const totalMinutes = timeRange.end - timeRange.start
+
+  // 根据时间范围决定时间标记的间隔（与头部保持一致）
+  let interval = 60 // 默认1小时间隔
+  if (totalMinutes <= 4 * 60) {
+    interval = 30 // 4小时内用30分钟间隔
+  } else if (totalMinutes <= 12 * 60) {
+    interval = 60 // 12小时内用1小时间隔
+  } else {
+    interval = 120 // 12小时以上用2小时间隔
+  }
+
+  let timeGridLines = ''
+  for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
+       minutes <= timeRange.end; 
+       minutes += interval) {
+    const position = ((minutes - timeRange.start) / totalMinutes) * 100
+    
+    timeGridLines += `
+      <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 1;"></div>
+    `
+  }
+  
+  return timeGridLines
+}
+
+/**
  * 生成时间条HTML
  */
 function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): string {
@@ -287,7 +318,8 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
   // 使用实际的时间范围，而不是固定的1440分钟
   const totalMinutes = timeRange.end - timeRange.start
 
-  let barsHTML = ''
+  // 生成时间竖线（只在当前行内）
+  let barsHTML = generateTimeGridLines(timeRange)
   adjustedBars.forEach(bar => {
     // 使用百分比定位，与时间轴标记保持一致
     const leftPercent = ((bar.startMinutes - timeRange.start) / totalMinutes) * 100
