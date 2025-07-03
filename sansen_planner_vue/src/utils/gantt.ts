@@ -189,7 +189,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
   //   nextDayStart = midnightMinutes
   // }
 
-  // 生成时间标记（包含时间标签和分隔线指示器）
+  // 生成时间标记（仅时间标签，不包含竖线）
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
        minutes <= timeRange.end; 
        minutes += interval) {
@@ -199,25 +199,11 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
-        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 8px; background: #dadce0; z-index: 30;"></div>
       </div>
     `
   }
 
-  // 为2小时间隔模式添加虚线刻度
-  if (interval === 120) {
-    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
-         minutes <= timeRange.end; 
-         minutes += 60) {
-      // 只为不是2小时整点的1小时整点添加虚线刻度
-      if (minutes % 120 !== 0) {
-        const position = ((minutes - timeRange.start) / totalMinutes) * 100
-        timeMarks += `
-          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 4px; border-left: 1px dashed #bdbdbd; z-index: 25; opacity: 0.8; transform: translateX(-50%);"></div>
-        `
-      }
-    }
-  }
+  // 网页版不显示中间刻度线
 
   // 注释掉次日指示器 - 用户反馈不需要
   // if (nextDayStart !== -1) {
@@ -304,32 +290,17 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
   }
 
   let timeGridLines = ''
-  
-  // 生成主要时间刻度的实线
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
        minutes <= timeRange.end; 
        minutes += interval) {
     const position = ((minutes - timeRange.start) / totalMinutes) * 100
     
     timeGridLines += `
-      <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 2;"></div>
+      <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 1;"></div>
     `
   }
 
-  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
-  if (interval === 120) {
-    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
-         minutes <= timeRange.end; 
-         minutes += 60) {
-      // 只为不是2小时整点的1小时整点添加虚线
-      if (minutes % 120 !== 0) {
-        const position = ((minutes - timeRange.start) / totalMinutes) * 100
-        timeGridLines += `
-          <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
-        `
-      }
-    }
-  }
+  // 网页版不显示中间刻度线
   
   return timeGridLines
 }
