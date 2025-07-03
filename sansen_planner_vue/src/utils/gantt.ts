@@ -773,27 +773,6 @@ function showExportModeModal(): Promise<'simple' | 'detailed' | null> {
   })
 }
 
-async function loadFooterResources(): Promise<{ qrImage: HTMLImageElement | null; logoImage: HTMLImageElement | null }> {
-  try {
-    const toolUrl = getToolUrl()
-    const qrPromise = preloadLocalQRCode(toolUrl, 60).catch((e) => {
-      console.error('QR Code failed to load', e)
-      return null
-    })
-    const logoPromise = loadLogoImage().catch((e) => {
-      console.error('Logo failed to load', e)
-      return null
-    })
-
-    const [qrImage, logoImage] = await Promise.all([qrPromise, logoPromise])
-    
-    return { qrImage, logoImage }
-  } catch (error) {
-    console.error('Failed to load footer resources:', error)
-    return { qrImage: null, logoImage: null }
-  }
-}
-
 /**
  * 导出甘特图为图片（含降级逻辑）
  */
@@ -902,22 +881,46 @@ async function exportSimpleGanttAsImage(
     // 绘制图例
     drawLegend(ctx, canvas.width, headerHeight, legendHeight)
 
-    // 保存绘图上下文状态，隔离甘特图绘制，防止状态污染
-    ctx.save()
+    // 重新绘制甘特图到canvas（移除高度限制，确保所有团体都能显示）
+    drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10)
+
+    // 预加载二维码和logo
+    const toolUrl = getToolUrl()
+    
     try {
-      // 重新绘制甘特图到canvas（移除高度限制，确保所有团体都能显示）
-      drawGanttToCanvas(ctx, teamData, timeRange, canvas.width, headerHeight + legendHeight + 10)
-    } finally {
-      // 恢复绘图上下文状态，确保后续绘制（如底部栏）不受影响
-      ctx.restore()
+      console.log('🖼️ [简洁模式] 开始加载底部资源...')
+      const [qrImage, logoImage] = await Promise.all([
+        preloadLocalQRCode(toolUrl, 60),
+        loadLogoImage()
+      ])
+      
+      console.log('🖼️ [简洁模式] 资源加载成功，开始绘制底部栏...')
+      // 绘制底部脚注条
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage, logoImage)
+      console.log('✅ [简洁模式] 底部栏绘制完成')
+    } catch (error) {
+      console.warn('⚠️ [简洁模式] 图片资源加载失败，使用基础底部栏:', error)
+      // 即使资源加载失败，也绘制脚注（不含图片）
+      try {
+        await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
+        console.log('✅ [简洁模式] 基础底部栏绘制完成')
+      } catch (footerError) {
+        console.error('❌ [简洁模式] 底部栏绘制失败:', footerError)
+        // 手动绘制最基础的底部信息
+        try {
+          const footerY = canvas.height - footerHeight
+          ctx.fillStyle = '#667eea'
+          ctx.fillRect(0, footerY, canvas.width, footerHeight)
+          ctx.fillStyle = '#ffffff'
+          ctx.font = '16px sans-serif'
+          ctx.textAlign = 'left'
+          ctx.fillText('参战计划作成工具', 20, footerY + 30)
+          console.log('✅ [简洁模式] 紧急底部栏绘制完成')
+        } catch (emergencyError) {
+          console.error('💥 [简洁模式] 紧急底部栏也失败:', emergencyError)
+        }
+      }
     }
-
-    // 预加载资源，然后绘制底部栏
-    const { qrImage, logoImage } = await loadFooterResources()
-    await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage ?? undefined, logoImage ?? undefined)
-
-    // 强制等待100ms，确保移动端浏览器完成渲染
-    await new Promise(resolve => setTimeout(resolve, 100));
 
     // 尝试多种下载方法
     await tryDownloadMethods(canvas, `${plannerName}_${plannerDate}.png`)
@@ -1013,13 +1016,44 @@ async function exportDetailedGanttAsImage(
       ctx.restore()
     }
 
-    // 预加载资源，然后绘制底部栏
-    const { qrImage, logoImage } = await loadFooterResources()
-    await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage ?? undefined, logoImage ?? undefined)
-
-    // 强制等待100ms，确保移动端浏览器完成渲染
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // 预加载二维码和logo
+    const toolUrl = getToolUrl()
     
+    try {
+      console.log('🖼️ [详细模式] 开始加载底部资源...')
+      const [qrImage, logoImage] = await Promise.all([
+        preloadLocalQRCode(toolUrl, 60),
+        loadLogoImage()
+      ])
+      
+      console.log('🖼️ [详细模式] 资源加载成功，开始绘制底部栏...')
+      // 绘制底部脚注条（整个宽度）
+      await drawFooter(ctx, canvas.width, canvas.height, footerHeight, qrImage, logoImage)
+      console.log('✅ [详细模式] 底部栏绘制完成')
+    } catch (error) {
+      console.warn('⚠️ [详细模式] 图片资源加载失败，使用基础底部栏:', error)
+      // 即使资源加载失败，也绘制脚注（不含图片）
+      try {
+        await drawFooter(ctx, canvas.width, canvas.height, footerHeight)
+        console.log('✅ [详细模式] 基础底部栏绘制完成')
+      } catch (footerError) {
+        console.error('❌ [详细模式] 底部栏绘制失败:', footerError)
+        // 手动绘制最基础的底部信息
+        try {
+          const footerY = canvas.height - footerHeight
+          ctx.fillStyle = '#667eea'
+          ctx.fillRect(0, footerY, canvas.width, footerHeight)
+          ctx.fillStyle = '#ffffff'
+          ctx.font = '16px sans-serif'
+          ctx.textAlign = 'left'
+          ctx.fillText('参战计划作成工具', 20, footerY + 30)
+          console.log('✅ [详细模式] 紧急底部栏绘制完成')
+        } catch (emergencyError) {
+          console.error('💥 [详细模式] 紧急底部栏也失败:', emergencyError)
+        }
+      }
+    }
+
     // 尝试多种下载方法
     await tryDownloadMethods(canvas, `${plannerName}_${plannerDate}_详细.png`)
 
@@ -1299,7 +1333,7 @@ async function drawFooter(
   try {
     // 绘制工具署名文本
     ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif'
+    ctx.font = 'bold 16px sans-serif'
     ctx.textAlign = 'left'
     
     const signature = getToolSignature()
