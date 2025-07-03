@@ -15,7 +15,17 @@
 # SPA路由重定向（其他所有路径）
 /sansen_planner_vue/* /sansen_planner_vue/dist/index.html  200
 
-# 注意：vuetify应用目录不存在，已移除相关配置
+# SPA路由 - ichibankuji_vue
+# 静态资源直接映射到dist目录
+/ichibankuji_vue/assets/*  /ichibankuji_vue/dist/assets/:splat  200
+/ichibankuji_vue/dist/*    /ichibankuji_vue/dist/:splat         200
+
+# 强制重定向主页面到构建版本
+/ichibankuji_vue   /ichibankuji_vue/dist/index.html  200!
+/ichibankuji_vue/  /ichibankuji_vue/dist/index.html  200!
+
+# SPA路由重定向（其他所有路径）
+/ichibankuji_vue/* /ichibankuji_vue/dist/index.html  200
 
 # 根目录默认页面
 /  /index.html  200 
