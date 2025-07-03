@@ -1914,7 +1914,7 @@ onUnmounted(() => {
   border-radius: 6px;
   background: #ffffff;
   overflow-x: auto;
-  overflow-y: auto; /* 启用垂直滚动 */
+  overflow-y: visible; /* 改为visible，让sticky定位生效 */
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   max-width: 100%; /* 限制最大宽度不超过父容器 */
@@ -1976,13 +1976,15 @@ onUnmounted(() => {
 
 .gantt-chart-content {
   min-width: 100%;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto; /* 将垂直滚动移到内容层 */
 }
 
 .gantt-header {
   position: sticky;
   top: 0;
   background: #f8f9fa; /* 改回灰色，保持视觉统一 */
-  z-index: 10;
+  z-index: 30; /* 提高z-index确保置顶 */
   height: 48px;
   display: flex;
   align-items: center;
@@ -2013,6 +2015,8 @@ onUnmounted(() => {
   color: #1565c0;
   display: flex;
   align-items: center;
+  z-index: 15; /* 确保活动头部在时间线之上 */
+  position: relative;
 }
 
 .gantt-activity-header .activity-name {
@@ -2027,6 +2031,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  z-index: 20; /* 确保活动名称在时间竖线之上 */
+  position: relative;
 }
 
 .activity-header-timeline {
@@ -2037,6 +2043,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
+  z-index: 15; /* 确保活动头部时间线在时间竖线之上 */
 }
 
 .activity-location-text {
@@ -2052,6 +2059,7 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 20; /* 确保地点文字在时间竖线之上 */
 }
 
 .gantt-left-panel {
@@ -2081,6 +2089,7 @@ onUnmounted(() => {
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
+  z-index: 20; /* 确保时间头部在时间线之上 */
 }
 
 /* 限制timeline样式只对非头部元素生效 */
@@ -2114,6 +2123,7 @@ onUnmounted(() => {
   align-items: center;
   transform: translateX(-50%); /* 居中对齐到精确时间点 */
   pointer-events: none;
+  z-index: 2; /* 确保时间竖线在底层 */
 }
 
 .time-separator-line {
@@ -2132,7 +2142,7 @@ onUnmounted(() => {
   color: #5f6368;
   font-weight: 500;
   position: relative;
-  z-index: 2;
+  z-index: 25; /* 提高时间标签层级 */
   margin-top: 4px;
   white-space: nowrap;
 }
