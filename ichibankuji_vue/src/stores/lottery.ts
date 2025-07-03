@@ -47,10 +47,7 @@ export const useLotteryStore = defineStore('lottery', () => {
   // 操作方法
   const loadLotteries = (): void => {
     try {
-      console.log('🔄 开始加载抽奖数据...')
       lotteries.value = StorageManager.loadLotteries()
-      console.log('📊 抽奖数据加载完成，总数:', lotteries.value.length)
-      console.log('📋 抽奖列表:', lotteries.value.map(l => ({ id: l.id, name: l.name })))
     } catch (error) {
       console.error('加载抽奖列表失败:', error)
       lotteries.value = []
@@ -106,24 +103,15 @@ export const useLotteryStore = defineStore('lottery', () => {
 
     lotteries.value.push(lottery)
     saveLotteries()
-    
-    console.log('🎯 抽奖创建成功:', { id: lotteryId, name: config.name })
-    console.log('📦 抽奖已保存到数组，总数:', lotteries.value.length)
-    
     return lotteryId
   }
 
   const loadLottery = (id: string): boolean => {
-    console.log('🔍 正在加载抽奖:', id)
-    console.log('📋 当前抽奖列表:', lotteries.value.map(l => ({ id: l.id, name: l.name })))
-    
     const lottery = lotteries.value.find((l: Lottery) => l.id === id)
     if (lottery) {
-      console.log('✅ 抽奖加载成功:', lottery.name)
       currentLottery.value = { ...lottery }
       return true
     }
-    console.log('❌ 抽奖不存在，ID:', id)
     return false
   }
 

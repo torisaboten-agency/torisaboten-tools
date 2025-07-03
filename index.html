@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torisaboten 工具集 - 偶活相关工具集合</title>
-    <link rel="icon" type="image/png" href="shared/assets/logo.png">
     <link rel="stylesheet" href="shared/styles.css" id="main-css">
     <script src="shared/path-resolver.js"></script>
     <style>
@@ -225,20 +224,35 @@
             
             <!-- 工具网格 -->
             <div class="tools-grid">
-                <!-- 线下抽奖小助手 -->
-                <a href="ichibankuji/index.html" class="tool-card">
-                    <span class="tool-card-icon">🎲</span>
-                    <div class="tool-card-title">线下抽奖小助手</div>
+                <!-- 一番赏抽奖工具 (Vue版本) -->
+                <a href="ichibankuji_vue/" class="tool-card">
+                    <span class="tool-card-icon">🎯</span>
+                    <div class="tool-card-title">一番赏抽奖工具</div>
                     <div class="tool-card-description">
-                        专为线下抽奖活动设计的多功能助手，支持一番赏和概率抽奖。提供抽奖概率计算、历史记录管理和实时统计功能。
+                        现代化的线下抽奖助手，基于Vue3+TypeScript重构。支持一番赏和概率抽奖，提供更优雅的用户体验和强大的数据管理功能。
                     </div>
                     <ul class="tool-card-features">
                         <li>一番赏与概率抽奖双模式</li>
-                        <li>抽奖概率精确计算</li>
-                        <li>历史记录追踪管理</li>
-                        <li>实时统计与分析</li>
-                        <li>操作简单，界面直观</li>
-                        <li>本地存储，数据安全</li>
+                        <li>智能撤销与LAST赏机制</li>
+                        <li>可视化配置与实时预览</li>
+                        <li>完整的数据导入导出</li>
+                        <li>响应式设计，移动端完美适配</li>
+                        <li>本地存储，数据安全可靠</li>
+                    </ul>
+                </a>
+                
+                <!-- 传统版本备用链接 -->
+                <a href="ichibankuji/index.html" class="tool-card" style="opacity: 0.7; border: 2px dashed #cbd5e0;">
+                    <span class="tool-card-icon">🎲</span>
+                    <div class="tool-card-title">线下抽奖小助手 (传统版)</div>
+                    <div class="tool-card-description">
+                        原始的HTML+JS版本，功能稳定。推荐使用上方的Vue版本以获得更好的体验。
+                    </div>
+                    <ul class="tool-card-features">
+                        <li>基础抽奖功能</li>
+                        <li>简单的概率计算</li>
+                        <li>基本的历史记录</li>
+                        <li>轻量级实现</li>
                     </ul>
                 </a>
                 

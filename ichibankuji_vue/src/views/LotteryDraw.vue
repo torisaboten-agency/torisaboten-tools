@@ -260,7 +260,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLotteryStore } from '@/stores/lottery'
 import DrawResultModal from '@/components/DrawResultModal.vue'
@@ -385,56 +385,15 @@ watch(lastDrawResults, (newResults) => {
 })
 
 // 初始化
-onMounted(async () => {
-  try {
-    console.log('🚀 LotteryDraw页面开始初始化，目标ID:', props.id)
-    
-    // 先确保加载了所有抽奖数据
-    lotteryStore.loadLotteries()
-    
-    // 增加短暂延迟，确保数据完全加载
-    await new Promise(resolve => setTimeout(resolve, 50))
-    
-    // 然后尝试加载特定抽奖
-    const success = lotteryStore.loadLottery(props.id)
-    if (!success) {
-      console.log('❌ 抽奖加载失败，尝试重新加载数据...')
-      
-      // 再次尝试重新加载数据
-      lotteryStore.loadLotteries()
-      await new Promise(resolve => setTimeout(resolve, 100))
-      
-      const retrySuccess = lotteryStore.loadLottery(props.id)
-      if (!retrySuccess) {
-        alert('抽奖不存在或已被删除，将返回主页')
-        router.push('/')
-      } else {
-        console.log('✅ 重试成功，抽奖已加载')
-      }
-    } else {
-      console.log('✅ 抽奖加载成功')
-    }
-  } catch (error) {
-    console.error('初始化失败:', error)
-    alert('页面初始化失败，将返回主页')
+onMounted(() => {
+  // 先确保加载了所有抽奖数据
+  lotteryStore.loadLotteries()
+  
+  // 然后尝试加载特定抽奖
+  const success = lotteryStore.loadLottery(props.id)
+  if (!success) {
+    alert('抽奖不存在或已被删除，将返回主页')
     router.push('/')
-  }
-})
-
-// 监听路由参数变化
-watch(() => props.id, async (newId) => {
-  if (newId) {
-    console.log('🔄 检测到路由参数变化，重新加载抽奖:', newId)
-    
-    // 重新加载数据
-    lotteryStore.loadLotteries()
-    await new Promise(resolve => setTimeout(resolve, 50))
-    
-    const success = lotteryStore.loadLottery(newId)
-    if (!success) {
-      alert('抽奖不存在或已被删除，将返回主页')
-      router.push('/')
-    }
   }
 })
 </script>
