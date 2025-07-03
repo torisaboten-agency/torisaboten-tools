@@ -818,14 +818,6 @@ async function exportSimpleGanttAsImage(
   plannerDate: string = ''
 ): Promise<void> {
   try {
-    // 创建canvas
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    
-    if (!ctx) {
-      throw new Error('无法创建Canvas上下文')
-    }
-
     // 计算所需的甘特图高度（基于团体数量）
     const rowHeight = 56
     let totalRows = 0
@@ -847,8 +839,12 @@ async function exportSimpleGanttAsImage(
     const headerHeight = 60 // 顶部标题栏高度
     const legendHeight = 40 // 图例区域高度
     const footerHeight = 80 // 脚注区域高度
-    canvas.width = Math.max(1200, ganttRect.width)
-    canvas.height = headerHeight + legendHeight + estimatedGanttHeight + footerHeight
+    
+    // 创建高精细度Canvas
+    const { canvas, ctx } = createHighDPICanvas(
+      Math.max(1200, ganttRect.width),
+      headerHeight + legendHeight + estimatedGanttHeight + footerHeight
+    )
 
     // 填充白色背景
     ctx.fillStyle = '#ffffff'
@@ -911,14 +907,6 @@ async function exportDetailedGanttAsImage(
   plannerDate: string = ''
 ): Promise<void> {
   try {
-    // 创建canvas
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    
-    if (!ctx) {
-      throw new Error('无法创建Canvas上下文')
-    }
-
     // 计算时间明细表的宽度
     const detailPanelWidth = 240
     
@@ -950,8 +938,12 @@ async function exportDetailedGanttAsImage(
     const legendHeight = 40 // 图例区域高度
     const footerHeight = 80 // 脚注区域高度
     const ganttWidth = Math.max(1200, ganttRect.width)
-    canvas.width = ganttWidth + detailPanelWidth
-    canvas.height = headerHeight + legendHeight + contentHeight + footerHeight
+    
+    // 创建高精细度Canvas
+    const { canvas, ctx } = createHighDPICanvas(
+      ganttWidth + detailPanelWidth,
+      headerHeight + legendHeight + contentHeight + footerHeight
+    )
 
     // 填充白色背景
     ctx.fillStyle = '#ffffff'
@@ -1791,4 +1783,37 @@ function showImageModal(dataURL: string | null, message: string): void {
       document.body.removeChild(modal)
     }
   })
+}
+
+/**
+ * 创建高精细度Canvas
+ */
+function createHighDPICanvas(width: number, height: number): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D; scale: number } {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  
+  if (!ctx) {
+    throw new Error('无法创建Canvas上下文')
+  }
+
+  // 获取设备像素比例，提升高分辨率设备的精细度
+  const devicePixelRatio = window.devicePixelRatio || 1
+  const scale = Math.min(devicePixelRatio, 3) // 最大3倍缩放，避免文件过大
+  
+  // 设置Canvas的实际尺寸（高精细度）
+  canvas.width = width * scale
+  canvas.height = height * scale
+  
+  // 设置Canvas的显示尺寸
+  canvas.style.width = width + 'px'
+  canvas.style.height = height + 'px'
+  
+  // 缩放绘图上下文以匹配设备像素比例
+  ctx.scale(scale, scale)
+  
+  // 启用抗锯齿和高质量文本渲染
+  ctx.imageSmoothingEnabled = true
+  ctx.imageSmoothingQuality = 'high'
+  
+  return { canvas, ctx, scale }
 } 
