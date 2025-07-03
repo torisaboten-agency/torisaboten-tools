@@ -199,7 +199,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     timeMarks += `
       <div class="gantt-time-mark" style="left: ${position}%;">
         <div class="time-label">${timeLabel}</div>
-        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; width: 1px; height: 2000px; background: #dadce0; z-index: 1;"></div>
+        <div class="time-tick" style="position: absolute; bottom: 0; left: 50%; width: 1px; height: 2000px; background: #dadce0; z-index: 1; pointer-events: none;"></div>
       </div>
     `
   }
@@ -213,7 +213,7 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
       if (minutes % 120 !== 0) {
         const position = ((minutes - timeRange.start) / totalMinutes) * 100
         timeMarks += `
-          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 2000px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6; transform: translateX(-50%);"></div>
+          <div class="gantt-time-tick-dashed" style="left: ${position}%; position: absolute; bottom: 0; width: 1px; height: 2000px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6; transform: translateX(-50%); pointer-events: none;"></div>
         `
       }
     }
@@ -291,7 +291,8 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
  * 生成时间网格线
  */
 function generateTimeGridLines(_timeRange: GanttTimeRange): string {
-  // 所有时间分隔线现在由时间头部统一处理，避免重复
+  // 移除重复的时间网格线 - 现在由时间轴的全局分隔线统一处理
+  // 所有竖线都从时间轴延伸下来，避免重复显示
   return ''
 }
 
