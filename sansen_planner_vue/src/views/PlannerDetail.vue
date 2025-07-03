@@ -2149,6 +2149,27 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
+/* 时间参考线样式（用于2小时间隔时的虚线） */
+.gantt-time-reference {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  border-left: 1px dashed #bdbdbd;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.gantt-timeline-reference {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  border-left: 1px dashed #bdbdbd;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .gantt-time-bar {
   position: absolute;
   height: 36px;

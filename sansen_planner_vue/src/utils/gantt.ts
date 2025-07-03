@@ -203,7 +203,20 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
     `
   }
 
-  // 网页版不显示中间刻度线
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeMarks += `
+          <div class="gantt-time-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 5; opacity: 0.6;"></div>
+        `
+      }
+    }
+  }
 
   // 注释掉次日指示器 - 用户反馈不需要
   // if (nextDayStart !== -1) {
@@ -300,7 +313,20 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
     `
   }
 
-  // 网页版不显示中间刻度线
+  // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
+  if (interval === 120) {
+    for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
+         minutes <= timeRange.end; 
+         minutes += 60) {
+      // 只为不是2小时整点的1小时整点添加虚线
+      if (minutes % 120 !== 0) {
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
+        timeGridLines += `
+          <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
+        `
+      }
+    }
+  }
   
   return timeGridLines
 }
