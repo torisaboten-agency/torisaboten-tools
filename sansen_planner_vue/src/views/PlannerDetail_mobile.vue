@@ -1503,20 +1503,6 @@ onUnmounted(() => {
   align-items: center;
   position: relative;
   z-index: 20; /* 提高活动头部层级，确保在时间分割线之上 */
-  isolation: isolate; /* 创建新的层叠上下文，确保完全覆盖时间线 */
-}
-
-/* 为活动头部添加遮盖层，完全阻挡时间竖线 */
-.gantt-activity-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #e3f2fd;
-  z-index: -1;
-  pointer-events: none;
 }
 
 .gantt-activity-header .activity-name {
@@ -1544,20 +1530,6 @@ onUnmounted(() => {
   align-items: center;
   width: 100%;
   z-index: 20; /* 提高活动时间轴区域层级，确保在时间分割线之上 */
-  isolation: isolate; /* 创建新的层叠上下文 */
-}
-
-/* 为活动时间轴区域添加遮盖层 */
-.activity-header-timeline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #e3f2fd;
-  z-index: -1;
-  pointer-events: none;
 }
 
 .activity-location-text {
