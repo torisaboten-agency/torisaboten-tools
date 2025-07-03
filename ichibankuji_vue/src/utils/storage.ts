@@ -12,22 +12,43 @@ export class StorageManager {
    */
   static loadLotteries(): Lottery[] {
     try {
+      console.log('💾 开始从localStorage加载数据...')
       const data = localStorage.getItem(this.STORAGE_KEY)
       if (!data) {
+        console.log('📭 localStorage中没有数据')
         return []
       }
 
+      console.log('📄 原始localStorage数据长度:', data.length)
       const parsed = JSON.parse(data)
+      console.log('🔍 解析后的数据类型:', Array.isArray(parsed) ? 'Array' : typeof parsed)
       
       // 版本兼容性处理
       if (Array.isArray(parsed)) {
         // 旧版本格式直接返回
-        return parsed
+        console.log('📦 使用旧版本格式，抽奖数量:', parsed.length)
+        
+        // 确保所有抽奖都有lastPrizeName字段
+        const compatibleData = parsed.map((lottery: any) => ({
+          ...lottery,
+          lastPrizeName: lottery.lastPrizeName || 'LAST赏'
+        }))
+        
+        return compatibleData
       } else if (parsed.version && parsed.lotteries) {
         // 新版本格式
-        return parsed.lotteries
+        console.log('🆕 使用新版本格式，版本:', parsed.version, '抽奖数量:', parsed.lotteries.length)
+        
+        // 确保所有抽奖都有lastPrizeName字段
+        const compatibleData = parsed.lotteries.map((lottery: any) => ({
+          ...lottery,
+          lastPrizeName: lottery.lastPrizeName || 'LAST赏'
+        }))
+        
+        return compatibleData
       }
 
+      console.log('❓ 无法识别的数据格式:', parsed)
       return []
     } catch (error) {
       console.error('加载抽奖数据失败:', error)
@@ -40,13 +61,20 @@ export class StorageManager {
    */
   static saveLotteries(lotteries: Lottery[]): void {
     try {
+      console.log('💾 开始保存抽奖数据，数量:', lotteries.length)
+      console.log('📋 保存的抽奖列表:', lotteries.map(l => ({ id: l.id, name: l.name })))
+      
       const snapshot: LotterySnapshot = {
         version: this.VERSION,
         exportedAt: new Date().toISOString(),
         lotteries
       }
       
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(snapshot))
+      const jsonData = JSON.stringify(snapshot)
+      console.log('📄 保存的JSON数据长度:', jsonData.length)
+      
+      localStorage.setItem(this.STORAGE_KEY, jsonData)
+      console.log('✅ 数据保存到localStorage成功')
     } catch (error) {
       console.error('保存抽奖数据失败:', error)
       throw new Error('保存失败，请检查浏览器存储限制')

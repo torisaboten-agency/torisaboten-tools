@@ -636,11 +636,14 @@ const handleSubmit = async (): Promise<void> => {
     } else {
       // 创建模式：创建新抽奖
       const lotteryId = lotteryStore.createLottery(config)
+      
+      // 强制保存数据到localStorage
+      lotteryStore.saveLotteries()
+      
       alert('抽奖创建成功！')
       
-      // 确保数据已保存到localStorage，然后再跳转
-      await new Promise(resolve => setTimeout(resolve, 100))
-      router.push(`/draw/${lotteryId}`)
+      // 使用replace而不是push，避免路由历史问题
+      router.replace(`/draw/${lotteryId}`)
     }
   } catch (error) {
     alert(`操作失败：${error instanceof Error ? error.message : '未知错误'}`)
