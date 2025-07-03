@@ -1,6 +1,6 @@
 [build]
-  # 让Netlify在线构建Vue应用
-  command = "cd sansen_planner_vue && npm ci && npm run build"
+  # 让Netlify在线构建所有Vue应用
+  command = "cd sansen_planner_vue && npm ci && npm run build && cd ../ichibankuji_vue && npm ci && npm run build"
   # 发布整个项目根目录
   publish = "."
 
@@ -40,7 +40,37 @@
   status = 200
   force = false
 
-# 注意：sansen_planner_vuetify 目录不存在，已移除相关配置
+# SPA路由重定向配置 - ichibankuji_vue  
+# 强制重定向到构建后的dist目录，避免加载源文件
+[[redirects]]
+  from = "/ichibankuji_vue"
+  to = "/ichibankuji_vue/dist/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ichibankuji_vue/"
+  to = "/ichibankuji_vue/dist/index.html"
+  status = 200
+  force = true
+
+# 排除静态资源的重定向 - 让这些文件正常提供服务
+[[redirects]]
+  from = "/ichibankuji_vue/assets/*"
+  to = "/ichibankuji_vue/dist/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/ichibankuji_vue/dist/*"
+  to = "/ichibankuji_vue/dist/:splat"
+  status = 200
+
+# SPA路由重定向（除了上述静态资源）
+[[redirects]]
+  from = "/ichibankuji_vue/*"
+  to = "/ichibankuji_vue/dist/index.html"
+  status = 200
+  force = false
 
 # 静态资源缓存配置
 [[headers]]
