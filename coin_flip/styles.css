@@ -575,6 +575,34 @@
     color: white;
 }
 
+/* 页脚链接样式 */
+.app-footer .footer-main-link {
+    color: white !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 1 !important;
+}
+
+.app-footer .footer-main-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: underline;
+}
+
+.app-footer .footer-sub-link {
+    color: white !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.85rem;
+    opacity: 1 !important;
+}
+
+.app-footer .footer-sub-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: underline;
+}
+
 /* 移动端页脚优化 */
 @media (max-width: 768px) {
     .footer-content {
@@ -587,5 +615,16 @@
         width: 100%;
         max-width: 280px;
         justify-content: center;
+    }
+    
+    /* 移动端页脚链接样式 */
+    .app-footer .footer-sub-link {
+        white-space: normal !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .app-footer .footer-main-link {
+        white-space: normal !important;
+        font-size: 0.8rem !important;
     }
 } 

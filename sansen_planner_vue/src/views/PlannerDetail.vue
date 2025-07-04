@@ -2539,27 +2539,29 @@ onUnmounted(() => {
   font-size: 0.9rem;
 }
 
-.footer-main-link {
+.app-footer .footer-main-link {
   color: white !important;
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 0.9rem;
   font-weight: 500;
+  opacity: 1 !important;
 }
 
-.footer-main-link:hover {
+.app-footer .footer-main-link:hover {
   color: rgba(255, 255, 255, 0.8) !important;
   text-decoration: underline;
 }
 
-.footer-sub-link {
+.app-footer .footer-sub-link {
   color: white !important;
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 0.85rem;
+  opacity: 1 !important;
 }
 
-.footer-sub-link:hover {
+.app-footer .footer-sub-link:hover {
   color: rgba(255, 255, 255, 0.8) !important;
   text-decoration: underline;
 }

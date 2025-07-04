@@ -726,27 +726,29 @@ import logoSrc from '@/assets/logo.png'
   line-height: 1.4;
 }
 
-.footer-main-link {
+.doc-footer .footer-main-link {
   color: white !important;
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 0.9rem;
   font-weight: 500;
+  opacity: 1 !important;
 }
 
-.footer-main-link:hover {
+.doc-footer .footer-main-link:hover {
   color: rgba(255, 255, 255, 0.8) !important;
   text-decoration: underline;
 }
 
-.footer-sub-link {
+.doc-footer .footer-sub-link {
   color: white !important;
   text-decoration: none;
   transition: color 0.2s ease;
   font-size: 0.85rem;
+  opacity: 1 !important;
 }
 
-.footer-sub-link:hover {
+.doc-footer .footer-sub-link:hover {
   color: rgba(255, 255, 255, 0.8) !important;
   text-decoration: underline;
 }
