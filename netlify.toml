@@ -42,6 +42,12 @@
 
 # 注意：sansen_planner_vuetify 目录不存在，已移除相关配置
 
+# 抛硬币工具 - 静态HTML，无需特殊配置，但确保正确访问
+[[redirects]]
+  from = "/coin_flip"
+  to = "/coin_flip/"
+  status = 301
+
 # 静态资源缓存配置
 [[headers]]
   for = "*.js"

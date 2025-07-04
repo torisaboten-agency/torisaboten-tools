@@ -17,6 +17,11 @@ workspace/
 │   ├── docs.html            # 用户文档
 │   ├── demo-snapshot.json   # 演示快照
 │   └── README.md            # 工具说明
+├── coin_flip/               # 抛硬币工具
+│   ├── index.html           # 主页面
+│   ├── script.js            # 主要脚本
+│   ├── styles.css           # 工具样式
+│   └── README.md            # 工具说明
 ├── sansen_planner/          # 偶活参战规划小助手 (原版)
 │   ├── index.html           # 主页面
 │   ├── planner.html         # 规划器页面
@@ -52,7 +57,29 @@ workspace/
 # 在ichibankuji目录下打开index.html即可使用
 ```
 
-### 2. 偶活参战规划小助手 (`sansen_planner/`, `sansen_planner_vue/`, `sansen_planner_vuetify/`)
+### 2. 抛硬币工具 (`coin_flip/`)
+精美的在线抛硬币工具，支持自定义选项和历史记录。
+
+**功能特点：**
+- 🪙 真实3D硬币翻转动画，视觉效果震撼
+- ⚙️ 自定义正反面结果，适应各种决策场景
+- 📊 完整历史记录和统计分析
+- ⌨️ 键盘快捷键支持（空格键抛硬币）
+- 💾 本地数据存储，设置和历史永久保存
+- 📱 响应式设计，完美适配各种设备
+
+**使用方法：**
+```bash
+# 在coin_flip目录下打开index.html即可使用
+```
+
+**典型使用场景：**
+- 日常决策：选择困难时的快速裁决工具
+- 娱乐游戏：聚会互动和运气测试
+- 教育教学：概率演示和决策训练
+- 团队协作：公平决策和打破僵局
+
+### 3. 偶活参战规划小助手 (`sansen_planner/`, `sansen_planner_vue/`, `sansen_planner_vuetify/`)
 专为偶像活动粉丝设计的参战规划工具，生成可视化甘特图。提供三个版本：
 
 #### 原版 (`sansen_planner/`)
@@ -115,6 +142,7 @@ workspace/
 每个工具都有独立的README和用户文档，详见各工具目录：
 
 - [一番赏工具文档](ichibankuji/README.md)
+- [抛硬币工具文档](coin_flip/README.md)
 - [偶活参战规划小助手文档](sansen_planner/README.md)
 
 ## 🌟 特色
@@ -143,6 +171,7 @@ workspace/
 
 ### 已完成 ✅
 - 一番赏工具完整功能
+- 抛硬币工具（3D动画版）
 - 偶活参战规划小助手基础版本
 - 统一的项目结构和设计语言
 - 响应式布局和移动端适配

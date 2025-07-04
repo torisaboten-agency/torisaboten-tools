@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抛硬币工具 - Torisaboten</title>
+    <link rel="stylesheet" href="../shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="icon" href="../shared/assets/logo.png" type="image/png">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部标题栏 -->
+        <div class="app-header">
+            <div class="app-header-content">
+                <div class="app-logo">
+                    <img src="../shared/assets/logo.png" alt="App Logo" style="width: 32px; height: 32px;">
+                </div>
+                <div class="app-title-wrapper">
+                    <div class="app-title">
+                        <h1>抛硬币工具</h1>
+                        <p class="app-author">By Torisaboten</p>
+                    </div>
+                </div>
+                <div style="width: 48px;"></div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <div class="container">
+                <!-- 自定义选项区域 -->
+                <div class="coin-settings">
+                    <h2>自定义硬币选项</h2>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label for="heads-text">正面结果：</label>
+                            <input 
+                                v-model="headsText" 
+                                id="heads-text" 
+                                type="text" 
+                                placeholder="例如：正面、是、同意" 
+                                maxlength="20"
+                            >
+                        </div>
+                        <div class="setting-item">
+                            <label for="tails-text">反面结果：</label>
+                            <input 
+                                v-model="tailsText" 
+                                id="tails-text" 
+                                type="text" 
+                                placeholder="例如：反面、否、拒绝" 
+                                maxlength="20"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 硬币区域 -->
+                <div class="coin-area">
+                    <div class="coin-container">
+                        <div 
+                            class="coin" 
+                            :class="coinClass"
+                            @animationend="onAnimationEnd"
+                        >
+                            <div class="coin-face coin-heads">
+                                <div class="coin-text">{{ headsText }}</div>
+                            </div>
+                            <div class="coin-face coin-tails">
+                                <div class="coin-text">{{ tailsText }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 结果显示 -->
+                    <div class="result-display" v-if="lastResult">
+                        <div class="result-icon">{{ lastResult.result === 'heads' ? '🎉' : '✨' }}</div>
+                        <div class="result-text">
+                            <span class="result-label">结果是：</span>
+                            <span class="result-value" :class="lastResult.result">{{ lastResult.text }}</span>
+                        </div>
+                        <div class="result-time">{{ formatTime(lastResult.timestamp) }}</div>
+                    </div>
+                </div>
+
+                <!-- 抛硬币按钮 -->
+                <div class="action-area">
+                    <button 
+                        class="flip-button" 
+                        @click="flipCoin" 
+                        :disabled="isFlipping"
+                    >
+                        {{ isFlipping ? '抛硬币中...' : '🪙 抛硬币' }}
+                    </button>
+                    <button 
+                        class="clear-button" 
+                        @click="clearHistory"
+                        v-if="history.length > 0"
+                    >
+                        🗑️ 清空历史
+                    </button>
+                </div>
+
+                <!-- 历史记录 -->
+                <div class="history-section" v-if="history.length > 0">
+                    <h3>抛硬币历史记录</h3>
+                    <div class="history-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">总次数：</span>
+                            <span class="stat-value">{{ history.length }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">{{ headsText }}：</span>
+                            <span class="stat-value heads">{{ headsCount }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">{{ tailsText }}：</span>
+                            <span class="stat-value tails">{{ tailsCount }}</span>
+                        </div>
+                    </div>
+                    <div class="history-list">
+                        <div 
+                            v-for="(record, index) in history.slice().reverse()" 
+                            :key="index"
+                            class="history-item"
+                            :class="record.result"
+                        >
+                            <div class="history-result">
+                                <span class="history-icon">{{ record.result === 'heads' ? '🎯' : '⚡' }}</span>
+                                <span class="history-text">{{ record.text }}</span>
+                            </div>
+                            <div class="history-time">{{ formatTime(record.timestamp) }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 空状态 -->
+                <div class="empty-state" v-if="history.length === 0">
+                    <div class="empty-icon">🪙</div>
+                    <h3>还没有抛硬币记录</h3>
+                    <p>点击上方按钮开始你的第一次抛硬币吧！</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="app-footer">
+            <div class="container">
+                <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
