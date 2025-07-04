@@ -5,15 +5,12 @@ createApp({
         return {
             headsText: '正面',
             tailsText: '反面',
-            canStand: false,
-            standingText: '立起',
-            standingProbability: 1.0,
             isFlipping: false,
             lastResult: null,
             history: [],
-            // 'heads', 'tails', 'standing'
+            // 'heads', 'tails'
             currentState: 'heads', 
-            // 'flip-heads', 'flip-tails', 'flip-standing'
+            // 'flip-heads', 'flip-tails'
             animationClass: ''
         }
     },
@@ -23,9 +20,6 @@ createApp({
         },
         tailsCount() {
             return this.history.filter(record => record.result === 'tails').length;
-        },
-        standingCount() {
-            return this.history.filter(record => record.result === 'standing').length;
         }
     },
     methods: {
@@ -34,23 +28,10 @@ createApp({
             
             this.isFlipping = true;
             
-            // 计算概率
-            let result, resultText;
-            const random = Math.random() * 100;
-            
-            if (this.canStand && random < this.standingProbability) {
-                result = 'standing';
-                resultText = this.standingText;
-            } else {
-                const adjustedThreshold = this.canStand ? 50 - (this.standingProbability / 2) : 50;
-                if (random < adjustedThreshold || (!this.canStand && random < 50)) {
-                    result = 'heads';
-                    resultText = this.headsText;
-                } else {
-                    result = 'tails';
-                    resultText = this.tailsText;
-                }
-            }
+            // 简单的50/50概率
+            const isHeads = Math.random() < 0.5;
+            const result = isHeads ? 'heads' : 'tails';
+            const resultText = isHeads ? this.headsText : this.tailsText;
             
             this.animationClass = 'flip-' + result;
             
@@ -60,10 +41,7 @@ createApp({
                 text: resultText,
                 timestamp: new Date().toISOString(),
                 headsText: this.headsText,
-                tailsText: this.tailsText,
-                standingText: this.standingText,
-                canStand: this.canStand,
-                standingProbability: this.standingProbability
+                tailsText: this.tailsText
             };
             
             // 动画结束后更新状态
@@ -73,16 +51,7 @@ createApp({
                 this.currentState = result;
                 this.lastResult = record;
                 this.history.unshift(record);
-            }, 1200); // 必须和CSS动画时间一致
-        },
-        
-        onStandingChange() {
-            // 当取消立起选项时，确保概率正常
-            if (!this.canStand) {
-                this.standingProbability = 0;
-            } else if (this.standingProbability === 0) {
-                this.standingProbability = 1.0;
-            }
+            }, 1200);
         },
         
         clearHistory() {

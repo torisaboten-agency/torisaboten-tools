@@ -60,32 +60,7 @@
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* 复选框样式 */
-.checkbox-item {
-    margin: 1.5rem 0;
-}
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-weight: 500;
-    color: #4a5568;
-}
-
-.checkbox-label input[type="checkbox"] {
-    width: auto;
-    margin-right: 0.75rem;
-    transform: scale(1.2);
-}
-
-.standing-config {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-}
 
 /* 硬币区域 */
 .coin-area {
@@ -111,79 +86,88 @@
     width: 200px;
     height: 200px;
     transform-style: preserve-3d;
+    margin: 0 auto;
 }
 
-/* 最终静止状态，动画结束后应用 */
-.coin.state-heads { transform: rotateY(0deg); }
-.coin.state-tails { transform: rotateY(180deg); }
-.coin.state-standing { transform: rotateY(90deg); }
+/* 最终静止状态 */
+.coin.state-heads { 
+    transform: rotateY(0deg); 
+}
+.coin.state-tails { 
+    transform: rotateY(180deg); 
+}
 
+/* 硬币正面和反面 */
 .coin-face {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     backface-visibility: hidden;
-    border: 3px solid #b0b0b0;
     font-weight: 600;
     font-size: 1.1rem;
-    color: #333;
-    background: linear-gradient(145deg, #e0e0e0 0%, #c0c0c0 100%);
+    color: #2d3748;
+    
+    /* 银币基础样式 */
+    background: 
+        radial-gradient(circle at 30% 30%, #f7fafc, #e2e8f0),
+        linear-gradient(45deg, #f7fafc 0%, #cbd5e0 50%, #f7fafc 100%);
+    border: 3px solid #a0aec0;
+    
+    /* 立体效果 */
     box-shadow: 
-        /* 使用层叠阴影创造厚度感 */
-        0 0 0 1px #999, 0 0 0 2px #aaa, 0 0 0 3px #bbb,
-        0 0 0 4px #ccc, 0 0 0 5px #bbb, 0 0 0 6px #aaa,
-        0 0 0 7px #999,
-        /* 表面光泽和整体阴影 */
-        inset 0 3px 3px rgba(255, 255, 255, 0.6),
-        inset 0 -3px 3px rgba(0, 0, 0, 0.1),
-        5px 10px 25px rgba(0, 0, 0, 0.2);
+        inset 0 3px 8px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.1),
+        0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* 正面 */
 .coin-heads {
     transform: rotateY(0deg);
 }
+
+/* 反面 */
 .coin-tails {
     transform: rotateY(180deg);
 }
+
+
 
 .coin-text {
     text-align: center;
     word-wrap: break-word;
     max-width: 80%;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+    font-size: 1.2rem;
 }
 
-/* 翻转动画 - 统一为Y轴旋转，仅结束角度不同 */
+/* 翻转动画 */
 @keyframes flip-heads {
     from { transform: rotateY(0deg); }
-    to { transform: rotateY(1800deg); } /* 5圈 -> 0deg */
+    to { transform: rotateY(1800deg); }
 }
+
 @keyframes flip-tails {
     from { transform: rotateY(0deg); }
-    to { transform: rotateY(1980deg); } /* 5.5圈 -> 180deg */
-}
-@keyframes flip-standing {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(1890deg); } /* 5.25圈 -> 90deg */
+    to { transform: rotateY(1980deg); }
 }
 
-/* 统一的动画属性 */
+/* 动画类 */
 .coin.flip-heads,
-.coin.flip-tails,
-.coin.flip-standing {
+.coin.flip-tails {
     animation-duration: 1.2s;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-    animation-fill-mode: forwards; /* 动画结束时停留在最后一帧 */
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation-fill-mode: forwards;
 }
 
-/* 分别应用动画 */
 .coin.flip-heads { animation-name: flip-heads; }
 .coin.flip-tails { animation-name: flip-tails; }
-.coin.flip-standing { animation-name: flip-standing; }
 
 /* 结果显示 */
 .result-display {
@@ -192,6 +176,18 @@
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 12px;
     border: 2px solid #e2e8f0;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .result-icon {
@@ -204,26 +200,29 @@
 }
 
 .result-label {
-    color: #718096;
+    color: #4a5568;
     font-weight: 500;
-    margin-right: 0.5rem;
+}
+
+.result-type {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.result-type.heads {
+    color: #e53e3e;
+}
+
+.result-type.tails {
+    color: #3182ce;
 }
 
 .result-value {
     font-weight: 700;
     font-size: 1.3rem;
-}
-
-.result-value.heads {
-    color: #38a169;
-}
-
-.result-value.tails {
-    color: #3182ce;
-}
-
-.result-value.standing {
-    color: #9f7aea;
+    color: #2d3748;
+    margin-top: 0.25rem;
+    display: block;
 }
 
 .result-time {
@@ -326,15 +325,11 @@
 }
 
 .stat-value.heads {
-    color: #38a169;
+    color: #718096;
 }
 
 .stat-value.tails {
-    color: #3182ce;
-}
-
-.stat-value.standing {
-    color: #9f7aea;
+    color: #718096;
 }
 
 .history-list {
@@ -362,15 +357,11 @@
 }
 
 .history-item.heads {
-    border-left: 4px solid #38a169;
+    border-left: 4px solid #718096;
 }
 
 .history-item.tails {
-    border-left: 4px solid #3182ce;
-}
-
-.history-item.standing {
-    border-left: 4px solid #9f7aea;
+    border-left: 4px solid #718096;
 }
 
 .history-result {
@@ -543,4 +534,34 @@
 .clear-button:focus-visible {
     outline: 2px solid #e53e3e;
     outline-offset: 2px;
+}
+
+/* 页脚样式 */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.back-home-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    text-decoration: none;
+    color: white;
 } 

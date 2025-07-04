@@ -56,46 +56,7 @@
                         </div>
                     </div>
                     
-                    <!-- 硬币立起选项 -->
-                    <div class="setting-item checkbox-item">
-                        <label class="checkbox-label">
-                            <input 
-                                v-model="canStand" 
-                                type="checkbox" 
-                                @change="onStandingChange"
-                            >
-                            <span class="checkmark"></span>
-                            硬币可以立起
-                        </label>
-                    </div>
-                    
-                    <!-- 立起配置选项 -->
-                    <div v-if="canStand" class="standing-config">
-                        <div class="settings-grid">
-                            <div class="setting-item">
-                                <label for="standing-text">立起结果：</label>
-                                <input 
-                                    v-model="standingText" 
-                                    id="standing-text" 
-                                    type="text" 
-                                    placeholder="例如：重新抛、平局" 
-                                    maxlength="20"
-                                >
-                            </div>
-                            <div class="setting-item">
-                                <label for="standing-probability">立起概率 (%)：</label>
-                                <input 
-                                    v-model.number="standingProbability" 
-                                    id="standing-probability" 
-                                    type="number" 
-                                    min="0" 
-                                    max="50" 
-                                    step="0.1"
-                                    placeholder="1.0"
-                                >
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
                 <!-- 硬币区域 -->
@@ -105,9 +66,11 @@
                             class="coin" 
                             :class="[animationClass, !isFlipping ? 'state-' + currentState : '']"
                         >
+                            <!-- 硬币正面 -->
                             <div class="coin-face coin-heads">
                                 <div class="coin-text">{{ headsText }}</div>
                             </div>
+                            <!-- 硬币反面 -->
                             <div class="coin-face coin-tails">
                                 <div class="coin-text">{{ tailsText }}</div>
                             </div>
@@ -117,14 +80,15 @@
                     <!-- 结果显示 -->
                     <div class="result-display" v-if="lastResult">
                         <div class="result-icon">{{ 
-                            lastResult.result === 'heads' ? '🎉' : 
-                            lastResult.result === 'tails' ? '✨' : '⚡' 
+                            lastResult.result === 'heads' ? '🎉' : '✨' 
                         }}</div>
                         <div class="result-text">
-                            <span v-if="lastResult.result === 'heads'" class="result-label">结果是 正面——</span>
-                            <span v-if="lastResult.result === 'tails'" class="result-label">结果是 反面——</span>
-                            <span v-if="lastResult.result === 'standing'" class="result-label">硬币立起来了！——</span>
-                            <span class="result-value" :class="lastResult.result">"{{ lastResult.text }}"</span>
+                            <span class="result-label">你抛出了：</span>
+                            <span v-if="lastResult.result === 'heads'" class="result-type heads">正面</span>
+                            <span v-if="lastResult.result === 'tails'" class="result-type tails">反面</span>
+                            <span class="result-label">！</span>
+                            <br>
+                            <span class="result-value" :class="lastResult.result">{{ lastResult.text }}</span>
                         </div>
                         <div class="result-time">{{ formatTime(lastResult.timestamp) }}</div>
                     </div>
@@ -164,10 +128,6 @@
                             <span class="stat-label">{{ tailsText }}：</span>
                             <span class="stat-value tails">{{ tailsCount }}</span>
                         </div>
-                        <div v-if="standingCount > 0" class="stat-item">
-                            <span class="stat-label">{{ standingText }}：</span>
-                            <span class="stat-value standing">{{ standingCount }}</span>
-                        </div>
                     </div>
                     <div class="history-list">
                         <div 
@@ -178,8 +138,7 @@
                         >
                             <div class="history-result">
                                 <span class="history-icon">{{ 
-                                    record.result === 'heads' ? '🎯' : 
-                                    record.result === 'tails' ? '⚡' : '🏛️'
+                                    record.result === 'heads' ? '🎯' : '⚡'
                                 }}</span>
                                 <span class="history-text">{{ record.text }}</span>
                             </div>
@@ -200,7 +159,10 @@
         <!-- 页脚 -->
         <footer class="app-footer">
             <div class="container">
-                <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+                <div class="footer-content">
+                    <a href="../index.html" class="back-home-btn">🏠 返回工具集首页</a>
+                    <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+                </div>
             </div>
         </footer>
     </div>
