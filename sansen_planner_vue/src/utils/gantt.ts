@@ -338,7 +338,6 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
   const { hasOverlap, adjustedBars } = checkTimeOverlap(allBars)
   
   // 使用扩展的时间范围，与时间轴头部保持一致
-  const totalMinutes = timeRange.end - timeRange.start
   const extendedEndTime = timeRange.end + 60
   const extendedTotalMinutes = extendedEndTime - timeRange.start
 
