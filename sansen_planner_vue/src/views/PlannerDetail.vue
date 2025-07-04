@@ -2039,7 +2039,8 @@ onUnmounted(() => {
   overflow: visible !important; /* 确保内部元素不会产生滚动条 */
   /* 用背景图像绘制完整的分割线 */
   background-image: linear-gradient(to bottom, #f1f3f4 1px, transparent 1px);
-  background-size: 100% 56px; /* 56px 是每个 gantt-row 的高度 */
+  background-size: 100% 36px; /* 36px 是每个 gantt-row 的紧凑高度 */
+  min-width: 920px; /* 增加最小宽度，确保扩展1小时后的时间轴完整显示 */
   border-top: 1px solid #f1f3f4; /* 保留顶部的第一条线 */
   border-bottom: 1px solid #f1f3f4; /* 添加一条永远完整的底线 */
 }
@@ -2047,7 +2048,7 @@ onUnmounted(() => {
 .gantt-row {
   display: flex;
   align-items: center;
-  min-height: 56px;
+  min-height: 36px;
   /* 移除 border-bottom，改用背景线绘制分割线 */
   /* border-bottom: 1px solid #f1f3f4; */
   /* 移除白色背景，让垂直分割线自然贯穿 */
@@ -2059,9 +2060,10 @@ onUnmounted(() => {
   background: #e3f2fd;
   font-weight: 600;
   padding: 0;
-  border-bottom: 1px solid #bbdefb;
-  border-top: 1px solid #bbdefb;
-  min-height: 56px;
+  /* 移除重复的边框，使用背景分割线统一处理 */
+  /* border-bottom: 1px solid #bbdefb; */
+  /* border-top: 1px solid #bbdefb; */
+  min-height: 36px;
   color: #1565c0;
   display: flex;
   align-items: center;
@@ -2090,7 +2092,7 @@ onUnmounted(() => {
   flex: 1;
   background: #e3f2fd;
   position: relative;
-  min-height: 56px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -2147,6 +2149,7 @@ onUnmounted(() => {
   height: 24px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
+  min-width: 920px; /* 确保时间轴头部有足够宽度显示扩展的时间 */
   overflow: visible; /* 允许分割线延伸到容器外 */
   z-index: 20; /* 确保时间头部在时间线之上 */
 }
@@ -2155,8 +2158,9 @@ onUnmounted(() => {
 .gantt-body .gantt-timeline {
   flex: 1;
   position: relative;
-  min-height: 56px;
-  padding: 8px 0;
+  min-height: 36px;
+  min-width: 920px; /* 确保timeline区域有足够宽度显示扩展的时间 */
+  padding: 4px 0; /* 减少内边距适应紧凑布局 */
   /* 移除白色背景，让垂直分割线自然贯穿 */
   /* background: #ffffff; */
   width: 100%; /* 确保占满宽度 */
@@ -2218,7 +2222,7 @@ onUnmounted(() => {
 
 .gantt-time-bar {
   position: absolute;
-  height: 36px;
+  height: 28px; /* 缩小时间条高度 */
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -2227,7 +2231,7 @@ onUnmounted(() => {
   color: #2d3748;
   cursor: pointer;
   font-weight: 500;
-  top: 8px;
+  top: 4px; /* 调整位置适应新的padding */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;
   overflow: hidden;
