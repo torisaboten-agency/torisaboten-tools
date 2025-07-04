@@ -68,7 +68,7 @@
             <h2>✨ 主要功能</h2>
             <ul class="feature-list">
               <li><strong>双模式支持：</strong>单一活动模式适合简单场景，多活动模式支持复杂规划</li>
-              <li><strong>Live演出管理：</strong>添加演出时间、地点等详细信息</li>
+              <li><strong>Live管理：</strong>添加演出时间、地点等详细信息</li>
               <li><strong>特典会管理：</strong>独立管理特典时间，支持与演出时间重叠显示</li>
               <li><strong>智能交互：</strong>优化的tooltip系统，支持智能定位和触摸友好操作</li>
               <li><strong>时区支持：</strong>支持多个时区设置，适应不同地区的活动</li>
@@ -119,9 +119,7 @@
             
             <h4>适用场景：</h4>
             <ul>
-              <li>单日演唱会</li>
-              <li>握手会</li>
-              <li>发布会等单一活动</li>
+              <li>同一场演出活动内的时间安排</li>
             </ul>
 
             <h4>操作步骤：</h4>
@@ -139,9 +137,7 @@
             
             <h4>适用场景：</h4>
             <ul>
-              <li>多日巡回演出</li>
-              <li>节庆期间的多场活动</li>
-              <li>不同地点的系列活动</li>
+              <li>单日赶场多个活动的时间安排</li>
             </ul>
 
             <h4>操作步骤：</h4>
@@ -159,7 +155,7 @@
             
             <h4>甘特图特性：</h4>
             <ul>
-              <li><span class="color-demo live"></span> <strong>绿色条块：</strong>Live演出时间</li>
+              <li><span class="color-demo live"></span> <strong>绿色条块：</strong>Live时间</li>
               <li><span class="color-demo tokuten"></span> <strong>粉色条块：</strong>特典会时间</li>
               <li><strong>时间冲突检测：</strong>重叠时间会自动调整显示位置</li>
               <li><strong>智能时间显示：</strong>根据时间段宽度自动决定是否显示时间文字</li>

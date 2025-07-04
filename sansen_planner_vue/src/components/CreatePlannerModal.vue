@@ -19,7 +19,7 @@
               <div class="type-icon">🎯</div>
               <div class="type-info">
                 <div class="type-title">单一活动</div>
-                <div class="type-desc">针对一个活动的参战规划<br>适用于单场演唱会、握手会等</div>
+                <div class="type-desc">针对一个活动的参战规划<br>适用于参加单场偶像Live</div>
               </div>
             </div>
             <div 
@@ -30,7 +30,7 @@
               <div class="type-icon">🗓️</div>
               <div class="type-info">
                 <div class="type-title">多个活动</div>
-                <div class="type-desc">包含多个活动的复合规划<br>适用于偶像节、巡回演出等</div>
+                <div class="type-desc">包含多个活动的复合规划<br>适用于一天内赶场多场活动</div>
               </div>
             </div>
           </div>

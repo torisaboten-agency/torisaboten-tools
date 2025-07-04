@@ -15,7 +15,7 @@
           >
         </div>
 
-        <h4>Live演出时间段</h4>
+        <h4>Live时间段</h4>
         <div class="time-slots">
           <div 
             v-for="(slot, index) in liveSlots" 
