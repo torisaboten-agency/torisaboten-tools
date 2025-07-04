@@ -78,7 +78,12 @@
           <a href="/" class="footer-link">🏠 返回工具集首页</a>
           <router-link to="/docs" class="footer-link">📖 使用文档</router-link>
         </div>
-        <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+        <p class="footer-text">@ToriSaboten 2025</p>
+      <p class="footer-links">
+        <a href="https://weibo.com/u/7987651990" target="_blank" class="footer-link">💼ToriSaboten_Official</a> | 
+        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-link">🌸花与心事Affloret</a> | 
+        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-link">🦋她蝶效应Psychelles</a>
+      </p>
       </div>
     </footer>
   </div>
@@ -423,12 +428,35 @@ const clearAllPlanners = () => {
 
 @media (max-width: 480px) {
   .footer-links {
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+    margin: 0.5rem 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .footer-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  
+  .footer-links a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
   }
   
   .footer-link {
     display: inline-block;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
 }
 </style> 

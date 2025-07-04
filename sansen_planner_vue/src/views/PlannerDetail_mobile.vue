@@ -344,7 +344,12 @@
     <!-- 页脚 -->
     <footer class="app-footer">
       <div class="container">
-        <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
+        <p class="footer-text">@ToriSaboten 2025</p>
+      <p class="footer-links">
+        <a href="https://weibo.com/u/7987651990" target="_blank" class="footer-link">💼ToriSaboten_Official</a> | 
+        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-link">🌸花与心事Affloret</a> | 
+        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-link">🦋她蝶效应Psychelles</a>
+      </p>
       </div>
     </footer>
     
