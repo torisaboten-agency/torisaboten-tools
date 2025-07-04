@@ -73,16 +73,12 @@
     
     <!-- 页脚 -->
     <footer class="app-footer">
-      <div class="container">
+      <div class="footer-container">
         <div class="footer-links">
           <a href="/" class="footer-link">🏠 返回工具集首页</a>
           <router-link to="/docs" class="footer-link">📖 使用文档</router-link>
         </div>
-        <p class="footer-text"><a href="https://weibo.com/u/7987651990" target="_blank" class="footer-main-link">@ToriSaboten🕊️🌵</a></p>
-      <p class="footer-links">
-        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-sub-link">花与心事Affloret🌸</a> | 
-        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-sub-link">她蝶效应Psychelles🦋</a>
-      </p>
+        <p class="footer-text">© Torisaboten 2025</p>
       </div>
     </footer>
   </div>
@@ -397,23 +393,43 @@ const clearAllPlanners = () => {
   text-align: center;
 }
 
-.footer-text {
-  margin: 0;
-  opacity: 0.8;
+.footer-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-link {
+  color: #e2e8f0;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
   font-size: 0.9rem;
 }
 
-/* 按钮样式从shared/styles.css继承，这里不再需要重复定义 */
-.footer-link {
-  /* 确保继承共享样式 */
+.footer-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
-/* 链接样式从shared/styles.css继承，这里不再需要重复定义 */
-.footer-links {
-   /* 确保继承共享样式 */
+.footer-text {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
 }
 
-@media (max-width: 768px) {
-  /* 移动端特定样式调整，大部分继承自shared/styles.css */
+@media (max-width: 480px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .footer-link {
+    display: inline-block;
+  }
 }
 </style> 

@@ -90,7 +90,6 @@ body {
     color: white;
     font-size: 0.9rem;
     opacity: 0.9;
-    margin: 0.5rem 0;
 }
 
 .app-footer .container {
@@ -98,7 +97,13 @@ body {
     margin: 0 auto;
 }
 
-/* 修复：恢复按钮样式 */
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
 .footer-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
@@ -108,8 +113,6 @@ body {
     transition: all 0.2s ease;
     font-size: 0.9rem;
     font-weight: 500;
-    display: inline-flex; /* 确保是按钮布局 */
-    align-items: center;
 }
 
 .footer-link:hover {
@@ -118,48 +121,11 @@ body {
     text-decoration: none;
 }
 
-/* 修复：简化链接容器，解决换行问题 */
-.footer-links {
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    /* 移除所有flex相关属性 */
-}
-
 .footer-text {
     margin: 0;
     color: white;
     font-size: 0.9rem;
     opacity: 0.9;
-}
-
-/* 修复：为微博链接设置高优先级白色文本样式 */
-.app-footer .footer-main-link,
-.app-footer .footer-main-link:visited,
-.app-footer .footer-sub-link,
-.app-footer .footer-sub-link:visited {
-    color: white !important;
-    text-decoration: none;
-    transition: color 0.2s ease;
-    opacity: 1 !important;
-    background: none;
-    padding: 0;
-    font-weight: normal;
-}
-
-.app-footer .footer-main-link:hover,
-.app-footer .footer-sub-link:hover {
-    color: rgba(255, 255, 255, 0.8) !important;
-    text-decoration: underline;
-}
-
-.app-footer .footer-main-link {
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.app-footer .footer-sub-link {
-    font-size: 0.85rem;
 }
 
 /* 页面切换 */
@@ -1033,43 +999,12 @@ body {
     }
     
     .footer-links {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.3rem;
-        margin: 0.5rem 0;
-        font-size: 0.8rem;
-        line-height: 1.4;
-    }
-    
-    .footer-links a {
-        color: rgba(255, 255, 255, 0.9);
-        text-decoration: none;
-        font-size: 0.75rem;
-        transition: color 0.2s ease;
-    }
-    
-    .footer-links a:hover {
-        color: white;
-        text-decoration: underline;
-    }
-    
-    .app-footer .footer-sub-link {
-        font-size: 0.75rem !important;
-        white-space: nowrap;
-    }
-    
-    .app-footer .footer-main-link {
-        font-size: 0.8rem !important;
-        white-space: nowrap;
+        flex-direction: column;
+        gap: 0.75rem;
     }
     
     .footer-link {
         display: inline-block;
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 6px;
     }
     
     .charity-callout {
@@ -1172,28 +1107,6 @@ body {
         #export-csv-btn {
             max-width: 100%;
             text-overflow: ellipsis;
-        }
-        
-        /* 小屏幕页脚优化 */
-        .footer-links {
-            gap: 0.2rem;
-        }
-        
-        .footer-links .footer-sub-link {
-            font-size: 0.7rem;
-        }
-        
-        .footer-links .footer-main-link {
-            font-size: 0.75rem;
-        }
-        
-        /* 移动端移除强制不换行，让内容自然换行 */
-        .app-footer .footer-sub-link {
-            white-space: normal !important;
-        }
-        
-        .app-footer .footer-main-link {
-            white-space: normal !important;
         }
     }
     
