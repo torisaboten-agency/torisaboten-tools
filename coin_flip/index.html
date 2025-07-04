@@ -55,6 +55,47 @@
                             >
                         </div>
                     </div>
+                    
+                    <!-- 硬币立起选项 -->
+                    <div class="setting-item checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                v-model="canStand" 
+                                type="checkbox" 
+                                @change="onStandingChange"
+                            >
+                            <span class="checkmark"></span>
+                            硬币可以立起
+                        </label>
+                    </div>
+                    
+                    <!-- 立起配置选项 -->
+                    <div v-if="canStand" class="standing-config">
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="standing-text">立起结果：</label>
+                                <input 
+                                    v-model="standingText" 
+                                    id="standing-text" 
+                                    type="text" 
+                                    placeholder="例如：重新抛、平局" 
+                                    maxlength="20"
+                                >
+                            </div>
+                            <div class="setting-item">
+                                <label for="standing-probability">立起概率 (%)：</label>
+                                <input 
+                                    v-model.number="standingProbability" 
+                                    id="standing-probability" 
+                                    type="number" 
+                                    min="0" 
+                                    max="50" 
+                                    step="0.1"
+                                    placeholder="1.0"
+                                >
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 硬币区域 -->
@@ -76,10 +117,15 @@
                     
                     <!-- 结果显示 -->
                     <div class="result-display" v-if="lastResult">
-                        <div class="result-icon">{{ lastResult.result === 'heads' ? '🎉' : '✨' }}</div>
+                        <div class="result-icon">{{ 
+                            lastResult.result === 'heads' ? '🎉' : 
+                            lastResult.result === 'tails' ? '✨' : '⚡' 
+                        }}</div>
                         <div class="result-text">
-                            <span class="result-label">结果是：</span>
-                            <span class="result-value" :class="lastResult.result">{{ lastResult.text }}</span>
+                            <span v-if="lastResult.result === 'heads'" class="result-label">结果是 正面——</span>
+                            <span v-if="lastResult.result === 'tails'" class="result-label">结果是 反面——</span>
+                            <span v-if="lastResult.result === 'standing'" class="result-label">硬币立起来了！——</span>
+                            <span class="result-value" :class="lastResult.result">"{{ lastResult.text }}"</span>
                         </div>
                         <div class="result-time">{{ formatTime(lastResult.timestamp) }}</div>
                     </div>
@@ -119,6 +165,10 @@
                             <span class="stat-label">{{ tailsText }}：</span>
                             <span class="stat-value tails">{{ tailsCount }}</span>
                         </div>
+                        <div v-if="standingCount > 0" class="stat-item">
+                            <span class="stat-label">{{ standingText }}：</span>
+                            <span class="stat-value standing">{{ standingCount }}</span>
+                        </div>
                     </div>
                     <div class="history-list">
                         <div 
@@ -128,7 +178,10 @@
                             :class="record.result"
                         >
                             <div class="history-result">
-                                <span class="history-icon">{{ record.result === 'heads' ? '🎯' : '⚡' }}</span>
+                                <span class="history-icon">{{ 
+                                    record.result === 'heads' ? '🎯' : 
+                                    record.result === 'tails' ? '⚡' : '🏛️'
+                                }}</span>
                                 <span class="history-text">{{ record.text }}</span>
                             </div>
                             <div class="history-time">{{ formatTime(record.timestamp) }}</div>

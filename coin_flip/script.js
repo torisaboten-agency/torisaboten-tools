@@ -5,6 +5,9 @@ createApp({
         return {
             headsText: '正面',
             tailsText: '反面',
+            canStand: false,
+            standingText: '立起',
+            standingProbability: 1.0,
             isFlipping: false,
             lastResult: null,
             history: [],
@@ -18,6 +21,9 @@ createApp({
         },
         tailsCount() {
             return this.history.filter(record => record.result === 'tails').length;
+        },
+        standingCount() {
+            return this.history.filter(record => record.result === 'standing').length;
         }
     },
     methods: {
@@ -26,12 +32,30 @@ createApp({
             
             this.isFlipping = true;
             
-            // 生成随机结果
-            const result = Math.random() < 0.5 ? 'heads' : 'tails';
-            const resultText = result === 'heads' ? this.headsText : this.tailsText;
+            // 计算概率
+            let result, resultText;
+            const random = Math.random() * 100;
             
-            // 设置动画类
-            this.coinClass = `flip-${result}`;
+            if (this.canStand && random < this.standingProbability) {
+                // 硬币立起
+                result = 'standing';
+                resultText = this.standingText;
+                this.coinClass = 'flip-standing';
+            } else {
+                // 正常抛硬币，调整概率
+                const adjustedThreshold = this.canStand ? 
+                    50 - (this.standingProbability / 2) : 50;
+                
+                if (random < adjustedThreshold || (!this.canStand && random < 50)) {
+                    result = 'heads';
+                    resultText = this.headsText;
+                    this.coinClass = 'flip-heads';
+                } else {
+                    result = 'tails';
+                    resultText = this.tailsText;
+                    this.coinClass = 'flip-tails';
+                }
+            }
             
             // 创建结果记录
             const record = {
@@ -39,7 +63,10 @@ createApp({
                 text: resultText,
                 timestamp: new Date().toISOString(),
                 headsText: this.headsText,
-                tailsText: this.tailsText
+                tailsText: this.tailsText,
+                standingText: this.standingText,
+                canStand: this.canStand,
+                standingProbability: this.standingProbability
             };
             
             // 延迟设置结果，让动画有时间完成
@@ -53,6 +80,16 @@ createApp({
         onAnimationEnd() {
             this.isFlipping = false;
             this.coinClass = '';
+        },
+        
+        onStandingChange() {
+            // 当取消立起选项时，确保概率正常
+            if (!this.canStand) {
+                this.standingProbability = 0;
+            } else if (this.standingProbability === 0) {
+                this.standingProbability = 1.0;
+            }
+            this.saveToStorage();
         },
         
         clearHistory() {
@@ -90,6 +127,9 @@ createApp({
             const data = {
                 headsText: this.headsText,
                 tailsText: this.tailsText,
+                canStand: this.canStand,
+                standingText: this.standingText,
+                standingProbability: this.standingProbability,
                 history: this.history,
                 lastResult: this.lastResult
             };
@@ -103,6 +143,9 @@ createApp({
                     const parsed = JSON.parse(data);
                     this.headsText = parsed.headsText || '正面';
                     this.tailsText = parsed.tailsText || '反面';
+                    this.canStand = parsed.canStand || false;
+                    this.standingText = parsed.standingText || '立起';
+                    this.standingProbability = parsed.standingProbability || 1.0;
                     this.history = parsed.history || [];
                     this.lastResult = parsed.lastResult || null;
                 }
@@ -111,6 +154,9 @@ createApp({
                 // 如果加载失败，使用默认值
                 this.headsText = '正面';
                 this.tailsText = '反面';
+                this.canStand = false;
+                this.standingText = '立起';
+                this.standingProbability = 1.0;
                 this.history = [];
                 this.lastResult = null;
             }
@@ -122,6 +168,12 @@ createApp({
             this.saveToStorage();
         },
         tailsText() {
+            this.saveToStorage();
+        },
+        standingText() {
+            this.saveToStorage();
+        },
+        standingProbability() {
             this.saveToStorage();
         }
     },

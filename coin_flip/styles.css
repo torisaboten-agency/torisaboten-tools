@@ -60,6 +60,33 @@
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* 复选框样式 */
+.checkbox-item {
+    margin: 1.5rem 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.75rem;
+    transform: scale(1.2);
+}
+
+.standing-config {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
 /* 硬币区域 */
 .coin-area {
     background: #ffffff;
@@ -87,6 +114,10 @@
     transition: transform 0.1s ease;
 }
 
+.coin.standing {
+    transform: rotateX(90deg);
+}
+
 .coin-face {
     position: absolute;
     width: 100%;
@@ -96,30 +127,27 @@
     align-items: center;
     justify-content: center;
     backface-visibility: hidden;
-    border: 2px solid #ddd;
+    border: 3px solid #999;
     font-weight: 600;
     font-size: 1.1rem;
     color: #333;
+    background: linear-gradient(145deg, #f0f0f0 0%, #d0d0d0 100%);
+    box-shadow: 
+        0 6px 15px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+        /* 厚度效果 */
+        0 0 0 4px #bbb,
+        0 0 0 6px #aaa,
+        0 0 0 8px #999;
 }
 
 .coin-heads {
     transform: rotateY(0deg);
-    background: linear-gradient(145deg, #4285f4 0%, #1a73e8 100%);
-    color: white;
-    border-color: #1a73e8;
-    box-shadow: 
-        0 4px 12px rgba(26, 115, 232, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .coin-tails {
     transform: rotateY(180deg);
-    background: linear-gradient(145deg, #f8f9fa 0%, #e8eaed 100%);
-    color: #333;
-    border-color: #dadce0;
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .coin-text {
@@ -140,6 +168,12 @@
     100% { transform: rotateY(1980deg); }
 }
 
+@keyframes flip-standing {
+    0% { transform: rotateY(0deg) rotateX(0deg); }
+    50% { transform: rotateY(900deg) rotateX(45deg); }
+    100% { transform: rotateY(1800deg) rotateX(90deg); }
+}
+
 .coin.flip-heads {
     animation: flip-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-origin: center center;
@@ -147,6 +181,11 @@
 
 .coin.flip-tails {
     animation: flip-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-standing {
+    animation: flip-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-origin: center center;
 }
 
@@ -185,6 +224,10 @@
 
 .result-value.tails {
     color: #3182ce;
+}
+
+.result-value.standing {
+    color: #9f7aea;
 }
 
 .result-time {
@@ -294,6 +337,10 @@
     color: #3182ce;
 }
 
+.stat-value.standing {
+    color: #9f7aea;
+}
+
 .history-list {
     max-height: 300px;
     overflow-y: auto;
@@ -324,6 +371,10 @@
 
 .history-item.tails {
     border-left: 4px solid #3182ce;
+}
+
+.history-item.standing {
+    border-left: 4px solid #9f7aea;
 }
 
 .history-result {
@@ -387,6 +438,13 @@
     .coin-face {
         font-size: 1rem;
         border-width: 2px;
+        box-shadow: 
+            0 4px 10px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+            /* 移动端厚度效果 */
+            0 0 0 3px #bbb,
+            0 0 0 5px #aaa;
     }
     
     .action-area {
@@ -420,6 +478,13 @@
     .coin-face {
         font-size: 0.9rem;
         border-width: 2px;
+        box-shadow: 
+            0 3px 8px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+            /* 小屏幕厚度效果 */
+            0 0 0 2px #bbb,
+            0 0 0 4px #aaa;
     }
     
     .coin-settings,
