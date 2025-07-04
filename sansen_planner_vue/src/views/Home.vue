@@ -73,12 +73,12 @@
     
     <!-- 页脚 -->
     <footer class="app-footer">
-      <div class="footer-container">
+      <div class="container">
         <div class="footer-links">
           <a href="/" class="footer-link">🏠 返回工具集首页</a>
           <router-link to="/docs" class="footer-link">📖 使用文档</router-link>
         </div>
-        <p class="footer-text">© Torisaboten 2025</p>
+        <p class="footer-text">@ToriSaboten 2025</p>
       </div>
     </footer>
   </div>
@@ -393,7 +393,7 @@ const clearAllPlanners = () => {
   text-align: center;
 }
 
-.footer-container {
+.footer-links {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -411,19 +411,18 @@ const clearAllPlanners = () => {
 }
 
 .footer-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background-color: #3b82f6;
 }
 
 .footer-text {
-  margin: 8px 0 0;
+  margin-top: 16px;
   font-size: 14px;
   color: #ffffff;
   text-align: center;
 }
 
 @media (max-width: 480px) {
-  .footer-container {
+  .footer-links {
     flex-direction: column;
     gap: 0.75rem;
   }

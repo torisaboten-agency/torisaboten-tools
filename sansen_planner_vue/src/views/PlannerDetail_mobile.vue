@@ -343,8 +343,8 @@
 
     <!-- 页脚 -->
     <footer class="app-footer">
-      <div class="footer-container">
-        <p class="footer-text">© Torisaboten 2025</p>
+      <div class="container">
+        <p class="footer-text">@ToriSaboten 2025</p>
       </div>
     </footer>
     
@@ -1992,16 +1992,15 @@ onUnmounted(() => {
 
 /* 页脚样式 */
 .app-footer {
-  background-color: #424242; /* 深灰色背景 */
-  padding: 16px;
   text-align: center;
-  border-top: 1px solid #616161;
-  width: 100%; /* 确保页脚占满宽度 */
+  padding: 20px 0;
+  background: #2c3e50; /* 深色背景 */
+  width: 100%;
 }
 
 .footer-text {
   margin: 0;
+  color: #ffffff; /* 白色文本 */
   font-size: 14px;
-  color: #ffffff;
 }
 </style> 
