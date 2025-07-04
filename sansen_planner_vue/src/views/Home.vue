@@ -78,11 +78,10 @@
           <a href="/" class="footer-link">🏠 返回工具集首页</a>
           <router-link to="/docs" class="footer-link">📖 使用文档</router-link>
         </div>
-        <p class="footer-text">@ToriSaboten 2025</p>
+        <p class="footer-text"><a href="https://weibo.com/u/7987651990" target="_blank" class="footer-main-link">@ToriSaboten🕊️🌵</a></p>
       <p class="footer-links">
-        <a href="https://weibo.com/u/7987651990" target="_blank" class="footer-link">💼ToriSaboten_Official</a> | 
-        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-link">🌸花与心事Affloret</a> | 
-        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-link">🦋她蝶效应Psychelles</a>
+        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-sub-link">花与心事Affloret🌸</a> | 
+        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-sub-link">她蝶效应Psychelles🦋</a>
       </p>
       </div>
     </footer>
@@ -408,19 +407,47 @@ const clearAllPlanners = () => {
 .footer-link {
   color: #e2e8f0;
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
   font-size: 0.9rem;
 }
 
 .footer-link:hover {
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  text-decoration: underline;
 }
 
 .footer-text {
   margin: 0;
   opacity: 0.8;
   font-size: 0.9rem;
+}
+
+.footer-main-link {
+  color: white !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.footer-main-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: underline;
+}
+
+.footer-sub-link {
+  color: white !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.footer-sub-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: underline;
 }
 
 @media (max-width: 480px) {
@@ -447,9 +474,20 @@ const clearAllPlanners = () => {
     text-decoration: underline;
   }
   
+  .footer-sub-link {
+    font-size: 0.75rem !important;
+  }
+  
+  .footer-main-link {
+    font-size: 0.8rem !important;
+  }
+  
   .footer-link {
     display: inline-block;
     font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
   }
 }
 </style> 

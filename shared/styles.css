@@ -107,14 +107,18 @@ body {
 .footer-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    transition: color 0.2s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
 .footer-link:hover {
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .footer-text {
@@ -122,6 +126,31 @@ body {
     color: white;
     font-size: 0.9rem;
     opacity: 0.9;
+}
+
+.footer-main-link {
+    color: white !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.footer-main-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: underline;
+}
+
+.footer-sub-link {
+    color: white !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.85rem;
+}
+
+.footer-sub-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: underline;
 }
 
 /* 页面切换 */
@@ -1017,10 +1046,20 @@ body {
         text-decoration: underline;
     }
     
+    .footer-sub-link {
+        font-size: 0.75rem !important;
+    }
+    
+    .footer-main-link {
+        font-size: 0.8rem !important;
+    }
+    
     .footer-link {
         display: inline-block;
         font-size: 0.8rem;
         padding: 0.4rem 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
     }
     
     .charity-callout {
@@ -1130,8 +1169,12 @@ body {
             gap: 0.2rem;
         }
         
-        .footer-links a {
+        .footer-links .footer-sub-link {
             font-size: 0.7rem;
+        }
+        
+        .footer-links .footer-main-link {
+            font-size: 0.75rem;
         }
     }
     

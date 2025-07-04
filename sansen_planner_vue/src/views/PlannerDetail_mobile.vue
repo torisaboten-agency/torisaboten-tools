@@ -344,11 +344,10 @@
     <!-- 页脚 -->
     <footer class="app-footer">
       <div class="container">
-        <p class="footer-text">@ToriSaboten 2025</p>
+        <p class="footer-text"><a href="https://weibo.com/u/7987651990" target="_blank" class="footer-main-link">@ToriSaboten🕊️🌵</a></p>
       <p class="footer-links">
-        <a href="https://weibo.com/u/7987651990" target="_blank" class="footer-link">💼ToriSaboten_Official</a> | 
-        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-link">🌸花与心事Affloret</a> | 
-        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-link">🦋她蝶效应Psychelles</a>
+        <a href="https://weibo.com/u/7919013782" target="_blank" class="footer-sub-link">花与心事Affloret🌸</a> | 
+        <a href="https://weibo.com/u/7998857709" target="_blank" class="footer-sub-link">她蝶效应Psychelles🦋</a>
       </p>
       </div>
     </footer>
@@ -2008,5 +2007,40 @@ onUnmounted(() => {
   margin: 0;
   opacity: 0.8;
   font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.footer-main-link {
+  color: white !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.footer-main-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: underline;
+}
+
+.footer-sub-link {
+  color: white !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.footer-sub-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: underline;
 }
 </style> 
