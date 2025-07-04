@@ -111,12 +111,25 @@
     width: 200px;
     height: 200px;
     transform-style: preserve-3d;
-    transition: transform 0.1s ease;
 }
 
-/* 硬币立起时竖着站立 */
-.coin.standing {
-    transform: rotateZ(90deg);
+/* 最终静止状态 */
+.coin.state-heads {
+    transform: rotateY(0deg);
+}
+.coin.state-tails {
+    transform: rotateY(180deg);
+}
+.coin.state-standing {
+    transform: rotateY(1800deg) rotateX(90deg);
+}
+
+/* 立起时，显示侧面，隐藏正面和反面 */
+.coin.state-standing .coin-edge {
+    display: block;
+}
+.coin.state-standing .coin-face {
+    display: none;
 }
 
 .coin-face {
@@ -144,25 +157,17 @@
         0 0 0 12px #888;
 }
 
-/* 硬币侧面 - 用于立起状态 */
+/* 硬币侧面 - 用于立起状态，竖着的薄条 */
 .coin-edge {
     position: absolute;
-    width: 24px;
-    height: 100%;
-    background: linear-gradient(180deg, #aaa 0%, #ccc 50%, #aaa 100%);
+    width: 100%;
+    height: 24px;
+    background: linear-gradient(90deg, #aaa 0%, #ccc 50%, #aaa 100%);
     border: 2px solid #888;
     border-radius: 12px;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-}
-
-.coin.standing .coin-edge {
-    display: block;
-}
-
-.coin.standing .coin-face {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     display: none;
 }
 
@@ -181,97 +186,42 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* 翻转动画 - 统一Y轴旋转 */
+/* 翻转动画 */
 @keyframes flip-heads {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(1800deg); }
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(1800deg); } /* 5圈 */
 }
 
 @keyframes flip-tails {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(1980deg); }
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(1980deg); } /* 5.5圈 */
 }
 
+/* 立起动画：前面80%和普通翻转一样，最后20%倾倒 */
 @keyframes flip-standing {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(1800deg) rotateZ(90deg); }
+    from {
+        transform: rotateY(0deg) rotateX(0deg);
+    }
+    80% {
+        transform: rotateY(1800deg) rotateX(0deg); /* 保证过程统一 */
+    }
+    to {
+        transform: rotateY(1800deg) rotateX(90deg); /* 结尾立起 */
+    }
 }
 
-/* 从不同状态开始的动画 */
-@keyframes flip-heads-from-tails {
-    0% { transform: rotateY(180deg); }
-    100% { transform: rotateY(1980deg); }
-}
-
-@keyframes flip-tails-from-heads {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(1980deg); }
-}
-
-@keyframes flip-heads-from-standing {
-    0% { transform: rotateZ(90deg); }
-    100% { transform: rotateY(1800deg); }
-}
-
-@keyframes flip-tails-from-standing {
-    0% { transform: rotateZ(90deg); }
-    100% { transform: rotateY(1980deg); }
-}
-
-@keyframes flip-standing-from-heads {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(1800deg) rotateZ(90deg); }
-}
-
-@keyframes flip-standing-from-tails {
-    0% { transform: rotateY(180deg); }
-    100% { transform: rotateY(1980deg) rotateZ(90deg); }
-}
-
-.coin.flip-heads {
-    animation: flip-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-tails {
-    animation: flip-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
+.coin.flip-heads,
+.coin.flip-tails,
 .coin.flip-standing {
-    animation: flip-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+    /* 动画结束后停留在最后一帧，确保和最终状态无缝衔接 */
+    animation-fill-mode: forwards; 
 }
 
-.coin.flip-heads-from-tails {
-    animation: flip-heads-from-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-tails-from-heads {
-    animation: flip-tails-from-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-heads-from-standing {
-    animation: flip-heads-from-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-tails-from-standing {
-    animation: flip-tails-from-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-standing-from-heads {
-    animation: flip-standing-from-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
-
-.coin.flip-standing-from-tails {
-    animation: flip-standing-from-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-    transform-origin: center center;
-}
+.coin.flip-heads { animation-name: flip-heads; }
+.coin.flip-tails { animation-name: flip-tails; }
+.coin.flip-standing { animation-name: flip-standing; }
 
 /* 结果显示 */
 .result-display {

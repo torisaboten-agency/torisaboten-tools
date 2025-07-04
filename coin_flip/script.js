@@ -11,8 +11,10 @@ createApp({
             isFlipping: false,
             lastResult: null,
             history: [],
-            coinClass: '',
-            currentState: 'heads' // 当前硬币状态: heads, tails, standing
+            // 'heads', 'tails', 'standing'
+            currentState: 'heads', 
+            // 'flip-heads', 'flip-tails', 'flip-standing'
+            animationClass: ''
         }
     },
     computed: {
@@ -37,25 +39,20 @@ createApp({
             const random = Math.random() * 100;
             
             if (this.canStand && random < this.standingProbability) {
-                // 硬币立起
                 result = 'standing';
                 resultText = this.standingText;
-                this.coinClass = this.getAnimationClass(result);
             } else {
-                // 正常抛硬币，调整概率
-                const adjustedThreshold = this.canStand ? 
-                    50 - (this.standingProbability / 2) : 50;
-                
+                const adjustedThreshold = this.canStand ? 50 - (this.standingProbability / 2) : 50;
                 if (random < adjustedThreshold || (!this.canStand && random < 50)) {
                     result = 'heads';
                     resultText = this.headsText;
-                    this.coinClass = this.getAnimationClass(result);
                 } else {
                     result = 'tails';
                     resultText = this.tailsText;
-                    this.coinClass = this.getAnimationClass(result);
                 }
             }
+            
+            this.animationClass = 'flip-' + result;
             
             // 创建结果记录
             const record = {
@@ -69,38 +66,14 @@ createApp({
                 standingProbability: this.standingProbability
             };
             
-            // 延迟设置结果，让动画有时间完成
+            // 动画结束后更新状态
             setTimeout(() => {
-                this.lastResult = record;
-                this.history.push(record);
-                this.currentState = result; // 更新硬币状态
                 this.isFlipping = false;
-                this.coinClass = ''; // 清除动画类
-            }, 1200); // 动画时间1.2秒
-        },
-        
-        // 根据当前状态和目标结果选择动画类
-        getAnimationClass(targetResult) {
-            if (this.currentState === 'heads') {
-                if (targetResult === 'heads') return 'flip-heads';
-                if (targetResult === 'tails') return 'flip-tails-from-heads';
-                if (targetResult === 'standing') return 'flip-standing-from-heads';
-            } else if (this.currentState === 'tails') {
-                if (targetResult === 'heads') return 'flip-heads-from-tails';
-                if (targetResult === 'tails') return 'flip-tails';
-                if (targetResult === 'standing') return 'flip-standing-from-tails';
-            } else if (this.currentState === 'standing') {
-                if (targetResult === 'heads') return 'flip-heads-from-standing';
-                if (targetResult === 'tails') return 'flip-tails-from-standing';
-                if (targetResult === 'standing') return 'flip-standing';
-            }
-            
-            // 默认动画（首次抛硬币）
-            if (targetResult === 'heads') return 'flip-heads';
-            if (targetResult === 'tails') return 'flip-tails';
-            if (targetResult === 'standing') return 'flip-standing';
-            
-            return 'flip-heads';
+                this.animationClass = '';
+                this.currentState = result;
+                this.lastResult = record;
+                this.history.unshift(record);
+            }, 1200); // 必须和CSS动画时间一致
         },
         
         onStandingChange() {
