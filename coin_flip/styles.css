@@ -423,15 +423,14 @@
     }
     
     .coin-face {
+        width: 150px;
+        height: 150px;
         font-size: 1rem;
         border-width: 2px;
         box-shadow: 
-            0 4px 10px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-            /* 移动端厚度效果 */
-            0 0 0 3px #bbb,
-            0 0 0 5px #aaa;
+            inset 0 3px 8px rgba(255, 255, 255, 0.6),
+            inset 0 -3px 8px rgba(0, 0, 0, 0.1),
+            0 6px 20px rgba(0, 0, 0, 0.2);
     }
     
     .action-area {
@@ -463,25 +462,35 @@
     }
     
     .coin-face {
+        width: 120px;
+        height: 120px;
         font-size: 0.9rem;
         border-width: 2px;
         box-shadow: 
-            0 3px 8px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-            /* 小屏幕厚度效果 */
-            0 0 0 2px #bbb,
-            0 0 0 4px #aaa;
+            inset 0 2px 6px rgba(255, 255, 255, 0.6),
+            inset 0 -2px 6px rgba(0, 0, 0, 0.1),
+            0 4px 15px rgba(0, 0, 0, 0.2);
     }
     
     .coin-settings,
     .coin-area,
     .history-section {
         padding: 1rem;
+        margin-bottom: 1.5rem;
     }
     
     .result-display {
         padding: 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    .coin-text {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .main-content {
+        padding: 1rem 0;
     }
 }
 
@@ -564,4 +573,19 @@
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     text-decoration: none;
     color: white;
+}
+
+/* 移动端页脚优化 */
+@media (max-width: 768px) {
+    .footer-content {
+        padding: 1rem;
+    }
+    
+    .back-home-btn {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
 } 
