@@ -1510,7 +1510,7 @@ onUnmounted(() => {
   top: 0;
   background: #f8f9fa; /* 改回灰色，保持视觉统一 */
   z-index: 30; /* 提高z-index确保置顶 */
-  height: 48px;
+  height: 24px; /* 紧凑的时间轴高度 */
   display: flex;
   align-items: center;
 }
@@ -1615,6 +1615,11 @@ onUnmounted(() => {
   background: #ffffff;
 }
 
+/* 确保头部左侧面板有正确的背景色 */
+.gantt-header .gantt-left-panel {
+  background: #f8f9fa !important;
+}
+
 /* 限制timeline样式只对非头部元素生效 */
 .gantt-body .gantt-timeline {
   flex: 1;
@@ -1630,7 +1635,7 @@ onUnmounted(() => {
 .gantt-time-header {
   display: flex;
   position: relative;
-  height: 56px;
+  height: 24px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
@@ -1665,7 +1670,7 @@ onUnmounted(() => {
   font-weight: 500;
   position: relative;
   z-index: 25; /* 提高时间标签层级 */
-  margin-top: 4px;
+  margin-top: 1px; /* 减少上边距，适应紧凑布局 */
   white-space: nowrap;
 }
 
