@@ -363,6 +363,14 @@
                   </div>
                 </div>
                 
+                <!-- 移动端使用提示 -->
+                <div v-if="isMobile" class="mobile-usage-callout">
+                  <div class="callout-icon">📱</div>
+                  <div class="callout-content">
+                    <p>您可以左右滑动来查看完整时间轴。为了获得最佳浏览体验，建议您将规划导出为图片或导入系统日历。</p>
+                  </div>
+                </div>
+                
                 <!-- 甘特图容器 -->
                 <GanttErrorBoundary
                   ref="ganttErrorBoundaryRef"
@@ -1675,6 +1683,37 @@ onUnmounted(() => {
 
 .wechat-guide strong {
   color: #d68910;
+}
+
+/* 移动端使用提示样式 */
+.mobile-usage-callout {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 1px solid #2196f3;
+  border-left: 4px solid #1976d2;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.mobile-usage-callout .callout-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mobile-usage-callout .callout-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-usage-callout .callout-content p {
+  margin: 0;
+  color: #0d47a1;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 /* 移动端活动布局样式 */
