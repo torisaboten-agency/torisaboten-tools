@@ -47,7 +47,7 @@ createApp({
                 this.lastResult = record;
                 this.history.push(record);
                 this.saveToStorage();
-            }, 1500); // 动画时间1.5秒
+            }, 1200); // 动画时间1.2秒
         },
         
         onAnimationEnd() {
