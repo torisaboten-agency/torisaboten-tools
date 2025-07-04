@@ -107,18 +107,14 @@ body {
 .footer-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
+    transition: color 0.2s ease;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
 .footer-link:hover {
-    background: rgba(255, 255, 255, 0.2);
     color: white;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .footer-text {
@@ -1011,17 +1007,14 @@ body {
     .footer-links a {
         color: rgba(255, 255, 255, 0.9);
         text-decoration: none;
-        padding: 0.2rem 0.4rem;
-        border-radius: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        transition: all 0.2s ease;
         font-size: 0.75rem;
         white-space: nowrap;
+        transition: color 0.2s ease;
     }
     
     .footer-links a:hover {
-        background: rgba(255, 255, 255, 0.2);
         color: white;
+        text-decoration: underline;
     }
     
     .footer-link {
@@ -1139,7 +1132,6 @@ body {
         
         .footer-links a {
             font-size: 0.7rem;
-            padding: 0.15rem 0.3rem;
         }
     }
     

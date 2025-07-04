@@ -408,16 +408,13 @@ const clearAllPlanners = () => {
 .footer-link {
   color: #e2e8f0;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
   font-size: 0.9rem;
 }
 
 .footer-link:hover {
-  background: rgba(255, 255, 255, 0.2);
   color: white;
+  text-decoration: underline;
 }
 
 .footer-text {
@@ -440,23 +437,19 @@ const clearAllPlanners = () => {
   .footer-links a {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
     font-size: 0.75rem;
     white-space: nowrap;
+    transition: color 0.2s ease;
   }
   
   .footer-links a:hover {
-    background: rgba(255, 255, 255, 0.2);
     color: white;
+    text-decoration: underline;
   }
   
   .footer-link {
     display: inline-block;
     font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
   }
 }
 </style> 
