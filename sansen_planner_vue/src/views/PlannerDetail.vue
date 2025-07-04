@@ -2368,11 +2368,6 @@ onUnmounted(() => {
     min-height: 35px;
   }
   
-  /* 手机端背景线调整 */
-  .gantt-body {
-    background-size: 100% 35px; /* 手机端行高调整为35px */
-  }
-  
   .gantt-body .gantt-timeline {
     min-width: 520px; /* 相应调整时间轴宽度 */
   }
