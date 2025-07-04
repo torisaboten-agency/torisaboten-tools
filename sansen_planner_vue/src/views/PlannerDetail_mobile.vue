@@ -1546,6 +1546,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   position: relative;
+  z-index: 15; /* 高于普通行但低于时间轴，避免滚动时覆盖固定头部 */
 }
 
 .gantt-activity-header .activity-name {
@@ -1573,6 +1574,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
+  z-index: 15; /* 与活动头部保持相同层级 */
 }
 
 .activity-location-text {

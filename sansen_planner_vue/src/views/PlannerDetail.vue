@@ -2026,7 +2026,7 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 30; /* 提高层级，确保固定头部始终在最上方 */
   background: #ffffff; /* 确保有背景色，防止滚动时下方内容透出 */
   height: 48px;
   display: flex;
@@ -2066,6 +2066,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   position: relative;
+  z-index: 15; /* 高于普通行但低于时间轴，避免滚动时覆盖固定头部 */
 }
 
 .gantt-activity-header .activity-name {
@@ -2093,6 +2094,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
+  z-index: 15; /* 与活动头部保持相同层级 */
 }
 
 .activity-location-text {
