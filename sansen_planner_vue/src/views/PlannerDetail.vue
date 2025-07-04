@@ -2058,10 +2058,10 @@ onUnmounted(() => {
 .gantt-activity-header {
   background: #e3f2fd;
   font-weight: 600;
-  padding: 12px 0;
+  padding: 0;
   border-bottom: 1px solid #bbdefb;
   border-top: 1px solid #bbdefb;
-  min-height: 48px;
+  min-height: 56px;
   color: #1565c0;
   display: flex;
   align-items: center;
@@ -2089,7 +2089,7 @@ onUnmounted(() => {
   flex: 1;
   background: #e3f2fd;
   position: relative;
-  min-height: 48px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -2137,7 +2137,7 @@ onUnmounted(() => {
 .gantt-time-header {
   display: flex;
   position: relative;
-  height: 48px;
+  height: 56px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
   overflow: visible; /* 允许分割线延伸到容器外 */
