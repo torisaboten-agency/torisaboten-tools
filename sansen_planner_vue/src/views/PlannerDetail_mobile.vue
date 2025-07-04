@@ -1539,8 +1539,9 @@ onUnmounted(() => {
   background: #e3f2fd;
   font-weight: 600;
   padding: 0;
-  border-bottom: 1px solid #bbdefb;
-  border-top: 1px solid #bbdefb;
+  /* 移除多余边框，使用背景分割线统一处理 */
+  /* border-bottom: 1px solid #bbdefb; */
+  /* border-top: 1px solid #bbdefb; */
   min-height: 36px;
   color: #1565c0;
   display: flex;
@@ -1697,7 +1698,7 @@ onUnmounted(() => {
 
 .gantt-time-bar {
   position: absolute;
-  height: 28px; /* 缩小时间条高度 */
+  height: 24px; /* 进一步缩小高度，留出更多空间 */
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -1706,7 +1707,7 @@ onUnmounted(() => {
   color: #2d3748;
   cursor: pointer;
   font-weight: 500;
-  top: 4px; /* 调整位置适应新的padding */
+  top: 6px; /* 增加顶部边距，避免贴着分割线 */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;
   overflow: hidden;
