@@ -103,8 +103,10 @@
                     <div class="coin-container">
                         <div 
                             class="coin" 
-                            :class="coinClass"
-                            @animationend="onAnimationEnd"
+                            :class="[coinClass, { standing: currentState === 'standing' }]"
+                            :style="{ transform: currentState === 'standing' ? 'rotateZ(90deg)' : 
+                                      currentState === 'tails' ? 'rotateY(180deg)' : 
+                                      'rotateY(0deg)' }"
                         >
                             <div class="coin-face coin-heads">
                                 <div class="coin-text">{{ headsText }}</div>
@@ -112,6 +114,7 @@
                             <div class="coin-face coin-tails">
                                 <div class="coin-text">{{ tailsText }}</div>
                             </div>
+                            <div class="coin-edge"></div>
                         </div>
                     </div>
                     

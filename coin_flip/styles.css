@@ -112,26 +112,11 @@
     height: 200px;
     transform-style: preserve-3d;
     transition: transform 0.1s ease;
-    /* 默认显示正面 */
-    transform: rotateY(0deg) rotateX(0deg);
 }
 
-/* 硬币状态 - 无动画时的静态状态 */
-.coin.result-heads {
-    transform: rotateY(0deg) rotateX(0deg);
-}
-
-.coin.result-tails {
-    transform: rotateY(180deg) rotateX(0deg);
-}
-
-.coin.result-standing {
-    transform: rotateY(0deg) rotateX(90deg);
-}
-
-/* 保持原有的standing类兼容性 */
+/* 硬币立起时竖着站立 */
 .coin.standing {
-    transform: rotateX(90deg);
+    transform: rotateZ(90deg);
 }
 
 .coin-face {
@@ -143,19 +128,42 @@
     align-items: center;
     justify-content: center;
     backface-visibility: hidden;
-    border: 3px solid #999;
+    border: 4px solid #888;
     font-weight: 600;
     font-size: 1.1rem;
     color: #333;
     background: linear-gradient(145deg, #f0f0f0 0%, #d0d0d0 100%);
     box-shadow: 
-        0 6px 15px rgba(0, 0, 0, 0.2),
-        inset 0 2px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -2px 0 rgba(0, 0, 0, 0.1),
-        /* 厚度效果 */
-        0 0 0 4px #bbb,
-        0 0 0 6px #aaa,
-        0 0 0 8px #999;
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.15),
+        /* 厚度效果 - 更明显 */
+        0 0 0 6px #bbb,
+        0 0 0 8px #aaa,
+        0 0 0 10px #999,
+        0 0 0 12px #888;
+}
+
+/* 硬币侧面 - 用于立起状态 */
+.coin-edge {
+    position: absolute;
+    width: 24px;
+    height: 100%;
+    background: linear-gradient(180deg, #aaa 0%, #ccc 50%, #aaa 100%);
+    border: 2px solid #888;
+    border-radius: 12px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+}
+
+.coin.standing .coin-edge {
+    display: block;
+}
+
+.coin.standing .coin-face {
+    display: none;
 }
 
 .coin-heads {
@@ -173,47 +181,96 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* 翻转动画 - 复杂3D效果，所有结果使用相同动画过程 */
-@keyframes coin-flip {
-    0% { 
-        transform: rotateY(0deg) rotateX(0deg); 
-    }
-    25% { 
-        transform: rotateY(450deg) rotateX(180deg) translateY(-50px); 
-    }
-    50% { 
-        transform: rotateY(900deg) rotateX(360deg) translateY(-30px); 
-    }
-    75% { 
-        transform: rotateY(1350deg) rotateX(540deg) translateY(-20px); 
-    }
-    100% { 
-        transform: rotateY(1800deg) rotateX(720deg) translateY(0px); 
-    }
+/* 翻转动画 - 统一Y轴旋转 */
+@keyframes flip-heads {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1800deg); }
+}
+
+@keyframes flip-tails {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1980deg); }
+}
+
+@keyframes flip-standing {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1800deg) rotateZ(90deg); }
+}
+
+/* 从不同状态开始的动画 */
+@keyframes flip-heads-from-tails {
+    0% { transform: rotateY(180deg); }
+    100% { transform: rotateY(1980deg); }
+}
+
+@keyframes flip-tails-from-heads {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1980deg); }
+}
+
+@keyframes flip-heads-from-standing {
+    0% { transform: rotateZ(90deg); }
+    100% { transform: rotateY(1800deg); }
+}
+
+@keyframes flip-tails-from-standing {
+    0% { transform: rotateZ(90deg); }
+    100% { transform: rotateY(1980deg); }
+}
+
+@keyframes flip-standing-from-heads {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(1800deg) rotateZ(90deg); }
+}
+
+@keyframes flip-standing-from-tails {
+    0% { transform: rotateY(180deg); }
+    100% { transform: rotateY(1980deg) rotateZ(90deg); }
 }
 
 .coin.flip-heads {
-    animation: coin-flip 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: flip-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-origin: center center;
-    /* 动画结束后停留在正面 */
-    animation-fill-mode: forwards;
-    transform: rotateY(0deg) rotateX(0deg);
 }
 
 .coin.flip-tails {
-    animation: coin-flip 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: flip-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-origin: center center;
-    /* 动画结束后停留在反面 */
-    animation-fill-mode: forwards;
-    transform: rotateY(180deg) rotateX(0deg);
 }
 
 .coin.flip-standing {
-    animation: coin-flip 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: flip-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     transform-origin: center center;
-    /* 动画结束后停留在立起状态 */
-    animation-fill-mode: forwards;
-    transform: rotateY(0deg) rotateX(90deg);
+}
+
+.coin.flip-heads-from-tails {
+    animation: flip-heads-from-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-tails-from-heads {
+    animation: flip-tails-from-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-heads-from-standing {
+    animation: flip-heads-from-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-tails-from-standing {
+    animation: flip-tails-from-standing 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-standing-from-heads {
+    animation: flip-standing-from-heads 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
+}
+
+.coin.flip-standing-from-tails {
+    animation: flip-standing-from-tails 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: center center;
 }
 
 /* 结果显示 */
