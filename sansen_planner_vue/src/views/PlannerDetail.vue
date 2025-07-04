@@ -1998,13 +1998,19 @@ onUnmounted(() => {
   min-width: 100%;
   background: #ffffff;
   overflow: visible !important; /* 确保内部元素不会产生滚动条 */
+  /* 用背景图像绘制完整的分割线 */
+  background-image: linear-gradient(to bottom, #f1f3f4 1px, transparent 1px);
+  background-size: 100% 56px; /* 56px 是每个 gantt-row 的高度 */
+  border-top: 1px solid #f1f3f4; /* 保留顶部的第一条线 */
+  border-bottom: 1px solid #f1f3f4; /* 添加一条永远完整的底线 */
 }
 
 .gantt-row {
   display: flex;
   align-items: center;
   min-height: 56px;
-  border-bottom: 1px solid #f1f3f4;
+  /* 移除 border-bottom，改用背景线绘制分割线 */
+  /* border-bottom: 1px solid #f1f3f4; */
   /* 移除白色背景，让垂直分割线自然贯穿 */
   /* background: #ffffff; */
   /* 移除hover效果，保持视觉稳定 */
@@ -2360,6 +2366,11 @@ onUnmounted(() => {
   
   .gantt-row {
     min-height: 35px;
+  }
+  
+  /* 手机端背景线调整 */
+  .gantt-body {
+    background-size: 100% 35px; /* 手机端行高调整为35px */
   }
   
   .gantt-body .gantt-timeline {
