@@ -368,8 +368,8 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
     const actualWidth = (minWidthPercent / 100) * timelineWidth
     
     // 使用绝对宽度阈值：基于文字实际需要的像素空间
-    const MIN_WIDTH_FOR_TIME = 85 // 85px足够显示"HH:MM-HH:MM"格式
-    const MIN_WIDTH_FOR_LOCATION = 110 // 110px才显示地点信息
+    const MIN_WIDTH_FOR_TIME = 120 // 120px确保完整显示"HH:MM-HH:MM"格式
+    const MIN_WIDTH_FOR_LOCATION = 150 // 150px才显示地点信息
     
     if (actualWidth >= MIN_WIDTH_FOR_TIME) {
       // 宽度足够：显示完整时间范围

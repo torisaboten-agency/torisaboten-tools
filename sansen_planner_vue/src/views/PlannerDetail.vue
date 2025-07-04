@@ -1920,6 +1920,10 @@ onUnmounted(() => {
   max-width: 100%; /* 限制最大宽度不超过父容器 */
   touch-action: pan-x pan-y; /* 优化触摸，允许双向原生滚动 */
   cursor: grab; /* 桌面端显示可拖动光标 */
+  user-select: none; /* 禁止文本选择 */
+  -webkit-user-select: none; /* Safari */
+  -webkit-touch-callout: none; /* 禁用iOS长按菜单 */
+  -webkit-tap-highlight-color: transparent; /* 禁用点击高亮 */
 }
 
 .gantt-chart-container:active {
@@ -2327,6 +2331,10 @@ onUnmounted(() => {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pan-y;
     border-radius: 6px;
+    user-select: none; /* 禁止文本选择 */
+    -webkit-user-select: none; /* Safari */
+    -webkit-touch-callout: none; /* 禁用iOS长按菜单 */
+    -webkit-tap-highlight-color: transparent; /* 禁用点击高亮 */
   }
   
   .gantt-chart-content {
