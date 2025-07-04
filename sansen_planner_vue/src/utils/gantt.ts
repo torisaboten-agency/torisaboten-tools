@@ -1,7 +1,7 @@
 import type { GanttTeamData, GanttTimeRange } from '@/types/planner'
 import { getToolUrl, getToolSignature } from './url'
 import { preloadLocalQRCode } from './qrcode'
-import { isIPad, getDeviceType } from './device'
+import { isIPad, getDeviceType, isMobileUserAgent } from './device'
 import logoSrc from '@/assets/logo.png'
 
 export interface GanttOptions {
@@ -715,6 +715,12 @@ function bindTooltipEvents(container: HTMLElement): void {
  * 添加移动端触摸拖动支持
  */
 function addTouchDragSupport(container: HTMLElement): void {
+  // 在移动设备上，我们完全依赖原生滚动，不添加任何JS事件监听器
+  if (isMobileUserAgent()) {
+    return
+  }
+
+  // --- 以下是原有的桌面端鼠标拖动逻辑，保持不变 ---
   const ganttContent = container.querySelector('.gantt-chart-content') as HTMLElement
   if (!ganttContent) return
   
@@ -748,24 +754,6 @@ function addTouchDragSupport(container: HTMLElement): void {
     const walk = (x - startX) * 2 // 增加拖动灵敏度
     ganttContent.scrollLeft = scrollLeft - walk
   })
-  
-  // 触摸事件（移动端拖动支持）
-  ganttContent.addEventListener('touchstart', (e) => {
-    isDragging = true
-    startX = e.touches[0].pageX - ganttContent.offsetLeft
-    scrollLeft = ganttContent.scrollLeft
-  }, { passive: true })
-  
-  ganttContent.addEventListener('touchend', () => {
-    isDragging = false
-  }, { passive: true })
-  
-  ganttContent.addEventListener('touchmove', (e) => {
-    if (!isDragging) return
-    const x = e.touches[0].pageX - ganttContent.offsetLeft
-    const walk = (x - startX) * 1.5 // 移动端拖动灵敏度
-    ganttContent.scrollLeft = scrollLeft - walk
-  }, { passive: true })
 }
 
 /**
