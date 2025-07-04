@@ -113,26 +113,10 @@
     transform-style: preserve-3d;
 }
 
-/* 最终静止状态 */
-.coin.state-heads {
-    transform: rotateY(0deg);
-}
-.coin.state-tails {
-    transform: rotateY(180deg);
-}
-.coin.state-standing {
-    transform: rotateY(1800deg) rotateX(90deg);
-}
-
-/* 立起时，显示侧面，隐藏正面和反面 */
-.coin.state-standing .coin-edge {
-    opacity: 1;
-    pointer-events: auto;
-}
-.coin.state-standing .coin-face {
-    opacity: 0;
-    pointer-events: none;
-}
+/* 最终静止状态，动画结束后应用 */
+.coin.state-heads { transform: rotateY(0deg); }
+.coin.state-tails { transform: rotateY(180deg); }
+.coin.state-standing { transform: rotateY(90deg); }
 
 .coin-face {
     position: absolute;
@@ -143,43 +127,25 @@
     align-items: center;
     justify-content: center;
     backface-visibility: hidden;
-    border: 4px solid #888;
+    border: 3px solid #b0b0b0;
     font-weight: 600;
     font-size: 1.1rem;
     color: #333;
-    background: linear-gradient(145deg, #f0f0f0 0%, #d0d0d0 100%);
+    background: linear-gradient(145deg, #e0e0e0 0%, #c0c0c0 100%);
     box-shadow: 
-        0 8px 20px rgba(0, 0, 0, 0.3),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -2px 0 rgba(0, 0, 0, 0.15),
-        /* 厚度效果 - 更明显 */
-        0 0 0 6px #bbb,
-        0 0 0 8px #aaa,
-        0 0 0 10px #999,
-        0 0 0 12px #888;
-}
-
-/* 硬币侧面 - 用于立起状态，竖着的薄条 */
-.coin-edge {
-    position: absolute;
-    width: 100%;
-    height: 24px;
-    background: linear-gradient(90deg, #aaa 0%, #ccc 50%, #aaa 100%);
-    border: 2px solid #888;
-    border-radius: 12px;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    /* 使用opacity替代display: none，避免渲染问题 */
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.1s;
+        /* 使用层叠阴影创造厚度感 */
+        0 0 0 1px #999, 0 0 0 2px #aaa, 0 0 0 3px #bbb,
+        0 0 0 4px #ccc, 0 0 0 5px #bbb, 0 0 0 6px #aaa,
+        0 0 0 7px #999,
+        /* 表面光泽和整体阴影 */
+        inset 0 3px 3px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 3px rgba(0, 0, 0, 0.1),
+        5px 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .coin-heads {
     transform: rotateY(0deg);
 }
-
 .coin-tails {
     transform: rotateY(180deg);
 }
@@ -191,39 +157,30 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* 翻转动画 */
+/* 翻转动画 - 统一为Y轴旋转，仅结束角度不同 */
 @keyframes flip-heads {
     from { transform: rotateY(0deg); }
-    to { transform: rotateY(1800deg); } /* 5圈 */
+    to { transform: rotateY(1800deg); } /* 5圈 -> 0deg */
 }
-
 @keyframes flip-tails {
     from { transform: rotateY(0deg); }
-    to { transform: rotateY(1980deg); } /* 5.5圈 */
+    to { transform: rotateY(1980deg); } /* 5.5圈 -> 180deg */
 }
-
-/* 立起动画：前面80%和普通翻转一样，最后20%倾倒 */
 @keyframes flip-standing {
-    from {
-        transform: rotateY(0deg) rotateX(0deg);
-    }
-    80% {
-        transform: rotateY(1800deg) rotateX(0deg); /* 保证过程统一 */
-    }
-    to {
-        transform: rotateY(1800deg) rotateX(90deg); /* 结尾立起 */
-    }
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(1890deg); } /* 5.25圈 -> 90deg */
 }
 
+/* 统一的动画属性 */
 .coin.flip-heads,
 .coin.flip-tails,
 .coin.flip-standing {
     animation-duration: 1.2s;
-    animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
-    /* 动画结束后停留在最后一帧，确保和最终状态无缝衔接 */
-    animation-fill-mode: forwards; 
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+    animation-fill-mode: forwards; /* 动画结束时停留在最后一帧 */
 }
 
+/* 分别应用动画 */
 .coin.flip-heads { animation-name: flip-heads; }
 .coin.flip-tails { animation-name: flip-tails; }
 .coin.flip-standing { animation-name: flip-standing; }
