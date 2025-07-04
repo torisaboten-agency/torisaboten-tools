@@ -98,13 +98,7 @@ body {
     margin: 0 auto;
 }
 
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 1rem;
-}
-
+/* 修复：恢复按钮样式 */
 .footer-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
@@ -114,12 +108,22 @@ body {
     transition: all 0.2s ease;
     font-size: 0.9rem;
     font-weight: 500;
+    display: inline-flex; /* 确保是按钮布局 */
+    align-items: center;
 }
 
 .footer-link:hover {
     background: rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
+}
+
+/* 修复：简化链接容器，解决换行问题 */
+.footer-links {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    /* 移除所有flex相关属性 */
 }
 
 .footer-text {
@@ -129,31 +133,33 @@ body {
     opacity: 0.9;
 }
 
-.app-footer .footer-main-link {
+/* 修复：为微博链接设置高优先级白色文本样式 */
+.app-footer .footer-main-link,
+.app-footer .footer-main-link:visited,
+.app-footer .footer-sub-link,
+.app-footer .footer-sub-link:visited {
     color: white !important;
     text-decoration: none;
     transition: color 0.2s ease;
-    font-size: 0.9rem;
-    font-weight: 500;
     opacity: 1 !important;
+    background: none;
+    padding: 0;
+    font-weight: normal;
 }
 
-.app-footer .footer-main-link:hover {
-    color: rgba(255, 255, 255, 0.8) !important;
-    text-decoration: underline;
-}
-
-.app-footer .footer-sub-link {
-    color: white !important;
-    text-decoration: none;
-    transition: color 0.2s ease;
-    font-size: 0.85rem;
-    opacity: 1 !important;
-}
-
+.app-footer .footer-main-link:hover,
 .app-footer .footer-sub-link:hover {
     color: rgba(255, 255, 255, 0.8) !important;
     text-decoration: underline;
+}
+
+.app-footer .footer-main-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.app-footer .footer-sub-link {
+    font-size: 0.85rem;
 }
 
 /* 页面切换 */

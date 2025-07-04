@@ -2009,57 +2009,5 @@ onUnmounted(() => {
   font-size: 0.9rem;
 }
 
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.3rem;
-  margin: 0.5rem 0;
-  font-size: 0.8rem;
-  line-height: 1.4;
-}
-
-.app-footer .footer-main-link {
-  color: white !important;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-  opacity: 1 !important;
-}
-
-.app-footer .footer-main-link:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: underline;
-}
-
-.app-footer .footer-sub-link {
-  color: white !important;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  font-size: 0.85rem;
-  opacity: 1 !important;
-}
-
-.app-footer .footer-sub-link:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: underline;
-}
-
-/* 移动端页脚链接样式 */
-@media (max-width: 480px) {
-  .app-footer .footer-sub-link {
-    white-space: normal !important;
-    font-size: 0.75rem !important;
-  }
-  
-  .app-footer .footer-main-link {
-    white-space: normal !important;
-    font-size: 0.8rem !important;
-  }
-  
-  .footer-links {
-    line-height: 1.6 !important;
-  }
-}
+/* 所有页脚链接和按钮样式均从 shared/styles.css 继承 */
 </style> 

@@ -397,109 +397,23 @@ const clearAllPlanners = () => {
   text-align: center;
 }
 
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1rem;
-}
-
-.footer-link {
-  color: #e2e8f0;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-}
-
-.footer-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
 .footer-text {
   margin: 0;
   opacity: 0.8;
   font-size: 0.9rem;
 }
 
-.app-footer .footer-main-link {
-  color: white !important;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-  opacity: 1 !important;
+/* 按钮样式从shared/styles.css继承，这里不再需要重复定义 */
+.footer-link {
+  /* 确保继承共享样式 */
 }
 
-.app-footer .footer-main-link:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: underline;
+/* 链接样式从shared/styles.css继承，这里不再需要重复定义 */
+.footer-links {
+   /* 确保继承共享样式 */
 }
 
-.app-footer .footer-sub-link {
-  color: white !important;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  font-size: 0.85rem;
-  opacity: 1 !important;
-}
-
-.app-footer .footer-sub-link:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .footer-links {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.3rem;
-    margin: 0.5rem 0;
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
-  
-  .footer-links a {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    font-size: 0.75rem;
-    transition: color 0.2s ease;
-  }
-  
-  .footer-links a:hover {
-    color: white;
-    text-decoration: underline;
-  }
-  
-  .app-footer .footer-sub-link {
-    font-size: 0.75rem !important;
-    white-space: nowrap;
-  }
-  
-  .app-footer .footer-main-link {
-    font-size: 0.8rem !important;
-    white-space: nowrap;
-  }
-  
-  /* 移动端移除强制不换行，让内容自然换行 */
-  .app-footer .footer-sub-link {
-    white-space: normal !important;
-  }
-  
-  .app-footer .footer-main-link {
-    white-space: normal !important;
-  }
-  
-  .footer-link {
-    display: inline-block;
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-  }
+@media (max-width: 768px) {
+  /* 移动端特定样式调整，大部分继承自shared/styles.css */
 }
 </style> 
