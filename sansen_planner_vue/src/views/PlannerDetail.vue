@@ -2040,7 +2040,6 @@ onUnmounted(() => {
   /* 用背景图像绘制完整的分割线 */
   background-image: linear-gradient(to bottom, #f1f3f4 1px, transparent 1px);
   background-size: 100% 36px; /* 36px 是每个 gantt-row 的紧凑高度 */
-  min-width: 920px; /* 增加最小宽度，确保扩展1小时后的时间轴完整显示 */
   border-top: 1px solid #f1f3f4; /* 保留顶部的第一条线 */
   border-bottom: 1px solid #f1f3f4; /* 添加一条永远完整的底线 */
 }
@@ -2060,9 +2059,8 @@ onUnmounted(() => {
   background: #e3f2fd;
   font-weight: 600;
   padding: 0;
-  /* 移除重复的边框，使用背景分割线统一处理 */
-  /* border-bottom: 1px solid #bbdefb; */
-  /* border-top: 1px solid #bbdefb; */
+  border-bottom: 1px solid #bbdefb;
+  border-top: 1px solid #bbdefb;
   min-height: 36px;
   color: #1565c0;
   display: flex;
@@ -2149,7 +2147,6 @@ onUnmounted(() => {
   height: 24px;
   background: #f8f9fa !important; /* 强制使用灰色背景，避免被覆盖 */
   width: 100%; /* 确保占满宽度 */
-  min-width: 920px; /* 确保时间轴头部有足够宽度显示扩展的时间 */
   overflow: visible; /* 允许分割线延伸到容器外 */
   z-index: 20; /* 确保时间头部在时间线之上 */
 }
@@ -2159,7 +2156,6 @@ onUnmounted(() => {
   flex: 1;
   position: relative;
   min-height: 36px;
-  min-width: 920px; /* 确保timeline区域有足够宽度显示扩展的时间 */
   padding: 4px 0; /* 减少内边距适应紧凑布局 */
   /* 移除白色背景，让垂直分割线自然贯穿 */
   /* background: #ffffff; */

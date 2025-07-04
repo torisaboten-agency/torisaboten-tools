@@ -190,14 +190,10 @@ function renderGanttHeader(timeRange: GanttTimeRange, leftPanelWidth: number = 1
   // }
 
   // 生成时间标记（仅时间标签，不包含竖线）
-  // 增加1小时的显示范围，让最后的活动不会戛然而止
-  const extendedEndTime = timeRange.end + 60
-  const extendedTotalMinutes = extendedEndTime - timeRange.start
-  
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
-       minutes <= extendedEndTime; 
+       minutes <= timeRange.end; 
        minutes += interval) {
-    const position = ((minutes - timeRange.start) / extendedTotalMinutes) * 100
+    const position = ((minutes - timeRange.start) / totalMinutes) * 100
     const timeLabel = minutesToTime(minutes)
     
     timeMarks += `
@@ -282,9 +278,6 @@ function renderGanttBody(teamData: GanttTeamData[], timeRange: GanttTimeRange, l
  */
 function generateTimeGridLines(timeRange: GanttTimeRange): string {
   const totalMinutes = timeRange.end - timeRange.start
-  // 增加1小时的显示范围，保持与时间轴头部一致
-  const extendedEndTime = timeRange.end + 60
-  const extendedTotalMinutes = extendedEndTime - timeRange.start
 
   // 根据时间范围决定时间标记的间隔（与头部保持一致）
   let interval = 60 // 默认1小时间隔
@@ -298,9 +291,9 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
 
   let timeGridLines = ''
   for (let minutes = Math.ceil(timeRange.start / interval) * interval; 
-       minutes <= extendedEndTime; 
+       minutes <= timeRange.end; 
        minutes += interval) {
-    const position = ((minutes - timeRange.start) / extendedTotalMinutes) * 100
+    const position = ((minutes - timeRange.start) / totalMinutes) * 100
     
     timeGridLines += `
       <div class="gantt-timeline-grid" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; background: #dadce0; z-index: 1;"></div>
@@ -310,11 +303,11 @@ function generateTimeGridLines(timeRange: GanttTimeRange): string {
   // 当使用2小时间隔时，为中间跳过的整点添加虚线参考线
   if (interval === 120) {
     for (let minutes = Math.ceil(timeRange.start / 60) * 60; 
-         minutes <= extendedEndTime; 
+         minutes <= timeRange.end; 
          minutes += 60) {
       // 只为不是2小时整点的1小时整点添加虚线
       if (minutes % 120 !== 0) {
-        const position = ((minutes - timeRange.start) / extendedTotalMinutes) * 100
+        const position = ((minutes - timeRange.start) / totalMinutes) * 100
         timeGridLines += `
           <div class="gantt-timeline-reference" style="left: ${position}%; position: absolute; top: 0; bottom: 0; width: 1px; border-left: 1px dashed #bdbdbd; z-index: 1; opacity: 0.6;"></div>
         `
@@ -337,16 +330,15 @@ function generateTimeBars(teamData: GanttTeamData, timeRange: GanttTimeRange): s
   // 检查重叠并调整位置
   const { hasOverlap, adjustedBars } = checkTimeOverlap(allBars)
   
-  // 使用扩展的时间范围，与时间轴头部保持一致
-  const extendedEndTime = timeRange.end + 60
-  const extendedTotalMinutes = extendedEndTime - timeRange.start
+  // 使用实际的时间范围，而不是固定的1440分钟
+  const totalMinutes = timeRange.end - timeRange.start
 
   // 生成时间竖线（只在当前行内）
   let barsHTML = generateTimeGridLines(timeRange)
   adjustedBars.forEach(bar => {
     // 使用百分比定位，与时间轴标记保持一致
-    const leftPercent = ((bar.startMinutes - timeRange.start) / extendedTotalMinutes) * 100
-    const widthPercent = (bar.duration / extendedTotalMinutes) * 100
+    const leftPercent = ((bar.startMinutes - timeRange.start) / totalMinutes) * 100
+    const widthPercent = (bar.duration / totalMinutes) * 100
     
     // 确保最小宽度百分比 - 移动端优化触摸体验
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
