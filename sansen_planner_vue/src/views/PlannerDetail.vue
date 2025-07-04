@@ -1995,7 +1995,7 @@ onUnmounted(() => {
 }
 
 .gantt-body {
-  min-width: 100%;
+  min-width: 800px; /* 确保最小宽度匹配时间轴内容 */
   background: #ffffff;
   overflow: visible !important; /* 确保内部元素不会产生滚动条 */
   /* 用背景图像绘制完整的分割线 */
@@ -2366,6 +2366,10 @@ onUnmounted(() => {
   
   .gantt-row {
     min-height: 35px;
+  }
+  
+  .gantt-body {
+    min-width: 520px; /* 确保手机端最小宽度匹配时间轴内容 */
   }
   
   .gantt-body .gantt-timeline {

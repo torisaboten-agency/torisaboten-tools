@@ -1477,7 +1477,7 @@ onUnmounted(() => {
 }
 
 .gantt-body {
-  min-width: 100%;
+  min-width: 800px; /* 确保最小宽度匹配时间轴内容 */
   background: #ffffff;
   /* 用背景图像绘制完整的分割线 */
   background-image: linear-gradient(to bottom, #f1f3f4 1px, transparent 1px);
@@ -1842,6 +1842,10 @@ onUnmounted(() => {
   /* 手机端背景线调整 */
   .gantt-body {
     background-size: 100% 40px; /* 手机端行高调整为40px */
+  }
+  
+  .gantt-body {
+    min-width: 520px; /* 确保手机端最小宽度匹配时间轴内容 */
   }
   
   .gantt-body .gantt-timeline {
