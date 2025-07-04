@@ -1913,13 +1913,12 @@ onUnmounted(() => {
   border: 1px solid #e1e5e9;
   border-radius: 6px;
   background: #ffffff;
-  overflow-x: auto;
-  overflow-y: visible; /* 改为visible，让sticky定位生效 */
+  overflow-x: auto; /* 统一负责水平滚动 */
+  overflow-y: auto; /* 统一负责垂直滚动 */
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   max-width: 100%; /* 限制最大宽度不超过父容器 */
-  /* 添加触摸拖动支持 */
-  touch-action: pan-x; /* 允许水平拖动 */
+  touch-action: pan-x pan-y; /* 优化触摸，允许双向原生滚动 */
   cursor: grab; /* 桌面端显示可拖动光标 */
 }
 
@@ -1977,14 +1976,15 @@ onUnmounted(() => {
 .gantt-chart-content {
   min-width: 100%;
   max-height: calc(100vh - 200px);
-  overflow-y: auto; /* 将垂直滚动移到内容层 */
+  overflow: visible !important; /* 确保内部元素不会产生滚动条 */
 }
 
 .gantt-header {
   position: sticky;
   top: 0;
-  background: #f8f9fa; /* 改回灰色，保持视觉统一 */
-  z-index: 30; /* 提高z-index确保置顶 */
+  left: 0;
+  z-index: 10;
+  background: #ffffff; /* 确保有背景色，防止滚动时下方内容透出 */
   height: 48px;
   display: flex;
   align-items: center;
@@ -1993,6 +1993,7 @@ onUnmounted(() => {
 .gantt-body {
   min-width: 100%;
   background: #ffffff;
+  overflow: visible !important; /* 确保内部元素不会产生滚动条 */
 }
 
 .gantt-row {
@@ -2322,13 +2323,15 @@ onUnmounted(() => {
     min-width: 100%;
     width: 100%;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
     border-radius: 6px;
   }
   
   .gantt-chart-content {
     min-width: 600px; /* 减少最小宽度要求 */
+    overflow: visible !important; /* 确保内部元素不会产生滚动条 */
   }
   
   .gantt-left-panel {
