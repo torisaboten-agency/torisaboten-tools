@@ -78,7 +78,7 @@
           <a href="/" class="footer-link">🏠 返回工具集首页</a>
           <router-link to="/docs" class="footer-link">📖 使用文档</router-link>
         </div>
-        <p class="footer-text">@ToriSaboten 2025</p>
+        <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
       </div>
     </footer>
   </div>
@@ -411,14 +411,14 @@ const clearAllPlanners = () => {
 }
 
 .footer-link:hover {
-  background-color: #3b82f6;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
 .footer-text {
-  margin-top: 16px;
-  font-size: 14px;
-  color: #ffffff;
-  text-align: center;
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 480px) {

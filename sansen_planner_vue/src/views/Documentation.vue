@@ -332,7 +332,7 @@
     <!-- 页脚 -->
     <footer class="doc-footer">
       <div class="container">
-        <p>@ToriSaboten 2025</p>
+        <p>&copy; 2025 Torisaboten. 本工具完全免费，欢迎分享使用。</p>
       </div>
     </footer>
   </div>
@@ -700,16 +700,16 @@ import logoSrc from '@/assets/logo.png'
 }
 
 .doc-footer {
+  background: #2d3748;
+  color: white;
+  padding: 2rem 0;
   text-align: center;
-  padding: 2rem 1rem;
-  background: #2c3e50; /* 深色背景 */
-  color: #ffffff; /* 白色文本 */
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
 
 .doc-footer p {
   margin: 0;
-  font-size: 14px;
+  opacity: 0.8;
 }
 
 /* 响应式设计 */

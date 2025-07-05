@@ -344,7 +344,7 @@
     <!-- 页脚 -->
     <footer class="app-footer">
       <div class="container">
-        <p class="footer-text">@ToriSaboten 2025</p>
+        <p class="footer-text">@Torisaboten 2025 | 完全免费，欢迎分享使用</p>
       </div>
     </footer>
     
@@ -1992,15 +1992,16 @@ onUnmounted(() => {
 
 /* 页脚样式 */
 .app-footer {
+  background: #2d3748;
+  color: white;
+  padding: 2rem 0;
+  margin-top: 4rem;
   text-align: center;
-  padding: 20px 0;
-  background: #2c3e50; /* 深色背景 */
-  width: 100%;
 }
 
 .footer-text {
   margin: 0;
-  color: #ffffff; /* 白色文本 */
-  font-size: 14px;
+  opacity: 0.8;
+  font-size: 0.9rem;
 }
 </style> 
